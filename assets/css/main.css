@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.nested-enter-active, .nested-leave-active {
+	transition: all 0.3s ease-in-out;
+}
+/* delay leave of parent element */
+.nested-enter-from,
+.nested-leave-to {
+  transform: translateY(-60px);
+  opacity: 0;
+}
+
+/* we can also transition nested elements using nested selectors */
+.nested-enter-active .inner,
+.nested-leave-active .inner { 
+  transition: all 0.3s ease-in-out;
+}
+/* delay enter of nested element */
+.nested-enter-active .inner {
+	transition-delay: 0.1s;
+}
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+  transform: translateX(-60px);
+  /*
+  	Hack around a Chrome 96 bug in handling nested opacity transitions.
+    This is not needed in other browsers or Chrome 99+ where the bug
+    has been fixed.
+  */
+  opacity: 0.001;
+}
+
+
+
+.drawer-enter-active, .drawer-leave-active {
+	transition: all 0.3s ease-in-out;
+}
+/* delay leave of parent element */
+.drawer-enter-from,
+.drawer-leave-to {
+  transform: translateX(600px);
+}
+
+/* we can also transition drawer elements using drawer selectors */
+.drawer-enter-active .inner,
+.drawer-leave-active .inner { 
+  transition: all 0.3s ease-in-out;
+}
+/* delay enter of drawer element */
+.drawer-enter-active .inner {
+	transition-delay: 0.1s;
+}
+.drawer-enter-from .inner,
+.drawer-leave-to .inner {
+  transform: translateY(600px);
+}
+
