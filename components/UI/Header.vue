@@ -1,10 +1,7 @@
 <template>
   <header>
     <nav>
-      <div
-        class="flex p-3 text-white text-sm items-center font-light"
-        style="background-color: #33475b"
-      >
+      <div class="flex p-3 text-white text-sm items-center font-light" style="background-color: #33475b">
         <div class="flex-1 w-full">
           <div class="flex space-x-4">
             <NuxtLink to="/dashboard">
@@ -15,8 +12,8 @@
           </div>
         </div>
         <div class="flex space-x-4 items-center">
-          <SearchIcon class="h-4 cursor-pointer hover:text-slate-500 mr-2" @click="uiStore.toggleSearchBox"/>
-          <UIDropdownMenuUser/>
+          <SearchIcon class="h-4 cursor-pointer hover:text-slate-500 mr-2" @click="uiStore.toggleSearchBox" />
+          <UIDropdownMenuUser />
         </div>
       </div>
     </nav>

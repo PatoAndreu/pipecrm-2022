@@ -4,6 +4,7 @@ export const useUIStore = defineStore('ui', {
   state: () => ({
     showSearchBox: false,
     showCreateContactDrawer: false,
+
   }),
   actions: {
     toggleSearchBox() {
@@ -12,5 +13,7 @@ export const useUIStore = defineStore('ui', {
     toggleCreateContactDrawer() {
       this.showCreateContactDrawer = !this.showCreateContactDrawer
     },
-  }
+
+  },
+
 })

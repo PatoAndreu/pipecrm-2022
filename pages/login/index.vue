@@ -9,8 +9,7 @@
             h-10
             rounded-sm
             bg-slate-100
-            border border-slate-200
-            p-2
+            border border-slate-200 p-2
           " />
       </div>
 

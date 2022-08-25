@@ -1,6 +1,6 @@
 <template>
   <Transition duration="550" name="nested" appear>
-    <div v-show="uiStore.showSearchBox" class="inner w-full h-full bg-slate-50 absolute top-15">
+    <div v-show="uiStore.showSearchBox" class="inner z-10 w-full h-full bg-slate-50 absolute top-15">
       <XIcon class="
         h-8
         ml-2
@@ -11,6 +11,7 @@
         cursor-pointer
         transition-all
         hover:text-slate-300
+      
       " @click="uiStore.toggleSearchBox" />
 
       <div class="flex justify-center items-center mt-4">

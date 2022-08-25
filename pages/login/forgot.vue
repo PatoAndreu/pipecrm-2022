@@ -12,24 +12,18 @@
     </div>
     <form action="" class="mt-10">
       <div class="mb-6">
-        <label class="block text-sm text-slate-500 mb-2"
-          >Dirección de correo</label
-        >
-        <input
-          type="text"
-          class="
+        <label class="block text-sm text-slate-500 mb-2">Dirección de correo</label>
+        <input type="text" class="
             w-full
             h-10
             rounded-sm
             bg-slate-100
             border border-slate-200
             p-2
-          "
-        />
+          " />
       </div>
 
-      <div
-        class="
+      <div class="
           mt-6
           w-full
           h-10
@@ -38,8 +32,7 @@
           leading-10
           text-white
           rounded-sm
-        "
-      >
+        ">
         Restablece tu contraseña
       </div>
     </form>
@@ -51,8 +44,7 @@
       </nuxt-link>
     </div>
 
-    <div
-      class="
+    <div class="
         text-center
         font-light
         text-xs
@@ -62,16 +54,12 @@
         mx-auto
         inset-x-0
         text-slate-500
-      "
-    >
+      ">
       ©2022 PipeCrm, Inc. Todos los derechos reservados.
       <div class="h-2"></div>
       <a href="" class="text-cyan-600 font-semibold">
         Política de Privacidad
-        <ExternalLinkIcon
-          class="h-4 text-cyan-600 inline"
-          style="margin-top: -2px"
-        />
+        <ExternalLinkIcon class="h-4 text-cyan-600 inline" style="margin-top: -2px" />
       </a>
     </div>
   </div>
