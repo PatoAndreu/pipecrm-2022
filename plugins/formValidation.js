@@ -9,8 +9,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         return eval(type).test(field);
       },
       formatPhoneNumber: (str) => {
-        console.log(str);
-        
         //Filter only numbers from the input
         let cleaned = ('' + str).replace(/\D/g, '');
         

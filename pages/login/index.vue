@@ -73,6 +73,7 @@
 </template>
 
 <script setup>
+import { ExternalLinkIcon } from "@heroicons/vue/solid";
 
 definePageMeta({
   layout: "guest",
@@ -84,5 +85,4 @@ useHead({
 
 const showPassword = ref(false);
 
-import { ExternalLinkIcon } from "@heroicons/vue/solid";
 </script>

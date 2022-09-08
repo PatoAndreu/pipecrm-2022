@@ -4,11 +4,11 @@
     <div class="flex justify-between px-8 py-6">
       <h1 class="font-bold text-cyan-600">Contactos</h1>
       <div>
-        <UIButton @click="uiStore.toggleCreateContactDrawer" :active="true">
+        <UIButton @click="addContact" :active="true">
           Crear contacto
         </UIButton>
       </div>
-      <UICreateContactDrawer />
+
     </div>
 
     <!-- Tabs -->
@@ -58,78 +58,24 @@
           <ChevronDownIcon class="h-5 text-cyan-500 ml-2" />
         </button>
       </div>
-
-      <UIDataTable :columns="columns" :data="contactsStore.contacts" :searchColumns="searchColumns" />
+      <ContactsTable />
     </div>
 
+    <ContactsCreateDrawer />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+
+import { ChevronDownIcon } from '@heroicons/vue/outline'
+import { useUIStore } from '@/stores/ui'
+import { useContacts } from '@/composables/useContacts'
+
 useHead({
-  title: " Contactos",
-});
+          title: ' Contactos'
+        })
 
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/outline";
-
-import { useUIStore } from "@/stores/ui";
-import { useContactsStore } from "~~/stores/contacts";
-
-const uiStore = useUIStore();
-const contactsStore = useContactsStore();
-
-const columns = ref([
-  {
-    column: "name",
-    title: "Nombre",
-    type: "text",
-  },
-  {
-    column: "email",
-    title: "Correo",
-    type: "email",
-  },
-  {
-    column: "associatedBusiness",
-    title: "Negocios asociados",
-    type: "text",
-  },
-  {
-    column: "phoneNumber",
-    title: "Número de teléfono",
-    type: "phone",
-  },
-  {
-    column: "contactOwner",
-    title: "Propietario contacto",
-    type: "text",
-  },
-  {
-    column: "company",
-    title: "Empresa principal",
-    type: "text",
-  },
-  {
-    column: "lastActivityDate",
-    title: "Fecha última actividad",
-    type: "date",
-  },
-  {
-    column: "leadStatus",
-    title: "Estado del lead",
-  },
-  {
-    column: "creationDate",
-    title: "Fecha creación",
-    type: "date",
-  },
-  {
-    column: "status",
-    title: "Estado",
-    type: "text",
-  },
-]);
-
-const searchColumns = ["name", "email", "company"];
+const { addContact } = useContacts()
+const uiStore = useUIStore()
 
 </script>
