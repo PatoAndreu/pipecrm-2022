@@ -24,10 +24,10 @@
 <script setup>
 
 import { useUIStore } from "@/stores/ui";
+import { SearchIcon } from "@heroicons/vue/outline";
 
 const uiStore = useUIStore();
 
-import { SearchIcon } from "@heroicons/vue/outline";
 const menu = [
   {
     name: "Contactos",

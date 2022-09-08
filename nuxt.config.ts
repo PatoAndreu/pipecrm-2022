@@ -5,16 +5,16 @@ export default defineNuxtConfig({
   build: {
     postcss: {
       postcssOptions: {
-      plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
-      },
+        plugins: {
+          tailwindcss: {},
+          autoprefixer: {},
+        },
       }
     },
     transpile: ["@heroicons/vue"],
-  }, 
-  css: ['@/assets/css/main.css'], 
+  },
+  css: ['@/assets/css/main.css'],
   modules: [
     '@pinia/nuxt',
-  ]
+  ],
 })
