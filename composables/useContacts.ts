@@ -6,14 +6,15 @@ import { ContactInterface } from '@/interfaces/IContacts'
 export const useContacts = () => {
 
   const contactsStore = useContactsStore()
-  const { pending, contact, contacts, errorMessages, showDrawer } = storeToRefs(contactsStore)
+  const { filteredContacts, contact, contacts, errorMessages, showDrawer, tabSelected } = storeToRefs(contactsStore)
 
   const loadContacts = (): Promise<void> => contactsStore.getContacts()
   const addContact = () => contactsStore.addContact()
-  const editContact = (contact: ContactInterface) => contactsStore.editContact(contact)
+  const editContact = (contact: ContactInterface): Promise<void> => contactsStore.editContact(contact)
+  const setTabSelected = (tab: string) => contactsStore.setTabSelected(tab)
 
   return {
-    pending, contact, contacts, errorMessages, showDrawer,
-    loadContacts, addContact, editContact
+    filteredContacts, contact, contacts, errorMessages, showDrawer, tabSelected,
+    loadContacts, addContact, editContact, setTabSelected
   }
 }

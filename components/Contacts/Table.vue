@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="contacts.length > 0">
+    <div v-if="filteredContacts.length > 0">
 
       <!-- Buscador -->
       <div
@@ -46,7 +46,7 @@
               >
                 Preview
               </div>
-              <nuxt-link :to="'/contacts/'+row.id">
+              <nuxt-link :to="'/filteredContacts/'+row.id">
                 {{ row.firstName }} {{ row.lastName }}
               </nuxt-link>
             </div>
@@ -216,16 +216,16 @@
       <div class="grid grid-cols-3 gap-4 h-full mt-6 mb-40">
         <div class="text-center text-sm text-slate-400">
           Mostrando {{ indexStart + 1 }} a {{ indexEnd }}
-          de <b> {{ (!searchInput) ? contacts.length : paginated.length }} registros </b>
+          de <b> {{ (!searchInput) ? filteredContacts.length : paginated.length }} registros </b>
         </div>
         <div class="flex justify-center items-center">
 
           <!-- Anterior -->
           <div class="group flex cursor-pointer">
             <ChevronLeftIcon class="h-5  ml-2"
-                             :class="currentPage == 1 ? 'cursor-not-allowed text-slate-300' : 'text-cyan-600 group-hover:text-cyan-400 cursor-pointer'" />
+                             :class="currentPage === 1 ? 'cursor-not-allowed text-slate-300' : 'text-cyan-600 group-hover:text-cyan-400 cursor-pointer'" />
             <div class="text-sm"
-                 :class="currentPage == 1 ? 'cursor-not-allowed text-slate-300' : 'text-cyan-600 group-hover:text-cyan-400 cursor-pointer'"
+                 :class="currentPage === 1 ? 'cursor-not-allowed text-slate-300' : 'text-cyan-600 group-hover:text-cyan-400 cursor-pointer'"
                  @click="prevPage">Anterior
             </div>
           </div>
@@ -749,11 +749,11 @@ let searchInput = ref('')
 
 const dropdownPerPageValues = ref([5, 10, 20, 50, 100])
 
-const { contacts, loadContacts, editContact } = useContacts()
+const { filteredContacts, loadContacts, editContact } = useContacts()
 
 await loadContacts()
 
-rowsLeft.value = (contacts.value.length) - (perPage.value * currentPage.value)
+rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value)
 showNextPageArrow.value = (rowsLeft.value > 0) ? showNextPageArrow.value = true : showNextPageArrow.value = false
 
 
@@ -772,16 +772,16 @@ const indexEnd = computed((): number => {
 
 const paginated = computed((): ContactInterface[] => {
 
-  if (contacts.value.length > 0) {
+  if (filteredContacts.value.length > 0) {
     if (searchInput.value.length >= 1) {
-      return contacts.value.filter(
+      return filteredContacts.value.filter(
         field =>
           field.firstName.toLowerCase().includes(searchInput.value.toLowerCase())
           || field.lastName.toLowerCase().includes(searchInput.value.toLowerCase())
           || field.email.toLowerCase().includes(searchInput.value.toLowerCase())
       ).slice(indexStart.value, indexEnd.value)
     } else {
-      return contacts.value.slice(indexStart.value, indexEnd.value)
+      return filteredContacts.value.slice(indexStart.value, indexEnd.value)
     }
   }
 })
@@ -804,7 +804,7 @@ const toggleTablePerPage = () => {
 
 watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPageNewV, perPageNewV], [currentPageOldV, perPageOldV]) => {
 
-  rowsLeft.value = (contacts.value.length) - (perPage.value * currentPage.value)
+  rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value)
 
   if (perPageNewV != perPageOldV) currentPage.value = 1
 

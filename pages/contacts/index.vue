@@ -16,33 +16,34 @@
       <div class="flex text-sm text-slate-600">
         <button class="
             min-w-[300px]
-            font-semibold
-            border-t border-x border-b-white border-b-2
             px-4
             py-2
-          ">
+            hover:bg-slate-50
+          "
+                :class="tabSelected === 'all' ? 'border-t border-x border-b-white border-b-2 font-semibold':'border bg-slate-100'"
+                @click="setTabSelected('all')">
           Todos los contactos
         </button>
         <button class="
             min-w-[300px]
-            bg-slate-100
-            border
-            -ml-1
+            -ml-0.5
             px-4
             py-2
             hover:bg-slate-50
-          ">
+          "
+                :class="tabSelected === 'myContacts' ? 'border-t border-x border-b-white border-b-2 font-semibold':'border bg-slate-100'"
+                @click="setTabSelected('myContacts')">
           Mis contactos
         </button>
         <button class="
-            min-w-[300px]
-            bg-slate-100
-            border
-            -ml-1
+             min-w-[300px]
+            -ml-0.5
             px-4
             py-2
             hover:bg-slate-50
-          ">
+          "
+                :class="tabSelected === 'unassigned' ? 'border-t border-x border-b-white border-b-2 font-semibold':'border bg-slate-100'"
+                @click="setTabSelected('unassigned')">
           Contactos sin asignar
         </button>
       </div>
@@ -75,7 +76,7 @@ useHead({
           title: ' Contactos'
         })
 
-const { addContact } = useContacts()
+const { addContact, setTabSelected, tabSelected } = useContacts()
 const uiStore = useUIStore()
 
 </script>

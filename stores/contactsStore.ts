@@ -93,7 +93,8 @@ export const useContactsStore = defineStore('contacts', {
     ],
     errorMessages: [],
     showDrawer   : false,
-    isEditing    : false
+    isEditing    : false,
+    tabSelected  : 'all'
   }),
   actions: {
     addContact() {
@@ -112,7 +113,7 @@ export const useContactsStore = defineStore('contacts', {
     },
     async saveContact() {
       try {
-        const url = this.isEditing ? `http://pipecrm-api.test/api/contacts/${this.contact.id}` : 'http://pipecrm-api.test/api/contacts'
+        const url = this.isEditing ? `http://pipecrm-api.test/api/contacts/${ this.contact.id }` : 'http://pipecrm-api.test/api/contacts'
         const method = this.isEditing ? 'PATCH' : 'POST'
         await $fetch(url, {
           method: method,
@@ -154,12 +155,23 @@ export const useContactsStore = defineStore('contacts', {
       this.isEditing = true
       this.showDrawer = true
       this.contact = await { ...contact }
+    },
+    setTabSelected(tab) {
+      this.tabSelected = tab
     }
-
   },
   getters: {
     disabledFormContact: (state) => {
       return (!state.contact.email || !state.contact.firstName || !state.contact.lastName)
+    },
+    filteredContacts(state) {
+      if (state.tabSelected == 'myContacts') {
+        return this.contacts.filter(contact => contact.owner?.id === 1)
+      }
+      if (state.tabSelected == 'unassigned') {
+        return this.contacts.filter(contact => contact.owner === null)
+      }
+      return this.contacts
     }
   }
 })

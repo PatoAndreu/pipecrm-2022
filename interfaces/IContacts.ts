@@ -54,5 +54,6 @@ export interface ContactState {
   contactStage: ContactStage[]
   errorMessages: [],
   showDrawer: boolean,
-  isEditing: boolean
+  isEditing: boolean,
+  tabSelected: string
 }
