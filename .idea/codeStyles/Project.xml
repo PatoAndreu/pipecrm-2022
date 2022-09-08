@@ -34,6 +34,8 @@
       <option name="SPACES_WITHIN_INTERPOLATION_EXPRESSIONS" value="true" />
     </TypeScriptCodeStyleSettings>
     <VueCodeStyleSettings>
+      <option name="UNIFORM_INDENT" value="false" />
+      <option name="INTERPOLATION_WRAP" value="1" />
       <option name="INTERPOLATION_NEW_LINE_AFTER_START_DELIMITER" value="false" />
       <option name="INTERPOLATION_NEW_LINE_BEFORE_END_DELIMITER" value="false" />
     </VueCodeStyleSettings>
@@ -72,6 +74,8 @@
     <codeStyleSettings language="Vue">
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="USE_TAB_CHARACTER" value="true" />
+        <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
   </code_scheme>

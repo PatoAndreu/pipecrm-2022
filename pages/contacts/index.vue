@@ -50,7 +50,6 @@
     </div>
 
     <!-- Contenido central -->
-
     <div class="w-full border-t -mt-[1px]">
       <!-- Filtros -->
       <div class="px-10 py-5 flex space-x-10">

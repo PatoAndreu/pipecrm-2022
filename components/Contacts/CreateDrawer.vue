@@ -75,7 +75,7 @@
 
         <div class="mb-6">
           <UISelectBox name="Etapa del ciclo de vida" :options="contactsStore.contactStage"
-                       v-model:modelValue="contactsStore.contact.lifeCycleStage"
+                       v-model:modelValue="contactsStore.contact.contactLifeCycleStage"
                        :disabled="contactsStore.disabledFormContact" />
         </div>
 

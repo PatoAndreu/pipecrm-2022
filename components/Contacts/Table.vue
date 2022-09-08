@@ -64,7 +64,7 @@
               {{ row.contactStatus?.name }}
             </div>
             <div class="cell-info">
-              {{ row.lifeCycleStage?.name }}
+              {{ row.contactLifeCycleStage?.name }}
             </div>
             <div class="cell-info">
               {{ row.mobilePhoneNumber }}

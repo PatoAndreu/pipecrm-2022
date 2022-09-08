@@ -1,6 +1,6 @@
 import { IDeal } from '@/interfaces/IDeals'
 
-interface LifecycleStage {
+interface ContactLifecycleStage {
   id: number,
   name: string,
 }
@@ -16,14 +16,9 @@ interface Company {
   name: string,
 }
 
-interface ContactStage {
-  id: number,
-  name: string,
-}
-
 interface ContactStatus {
-  id: number,
-  name: string,
+  id: number | undefined,
+  name: string | undefined,
 }
 
 export interface ContactInterface {
@@ -37,7 +32,7 @@ export interface ContactInterface {
   firstName: string,
   jobTitle: string | undefined,
   lastName: string,
-  lifeCycleStage: LifecycleStage,
+  contactLifeCycleStage: ContactLifecycleStage,
   mobilePhoneNumber: number | undefined,
   owner: Owner,
   phoneNumber: string | undefined,
@@ -51,7 +46,7 @@ export interface ContactState {
   contact: ContactInterface,
   contacts: ContactInterface[],
   contactStatus: ContactStatus[],
-  contactStage: ContactStage[]
+  contactLifeCycleStage: ContactLifecycleStage[]
   errorMessages: [],
   showDrawer: boolean,
   isEditing: boolean,

@@ -2,23 +2,23 @@ import { defineStore } from 'pinia'
 import { ContactInterface, ContactState } from '@/interfaces/IContacts'
 
 const initialContact: ContactInterface = {
-  city             : null,
-  company          : null,
-  contactStatus    : null,
-  created_at       : '',
-  updated_at       : '',
-  deals            : [],
-  email            : '',
-  firstName        : '',
-  jobTitle         : '',
-  lastName         : '',
-  lifeCycleStage   : null,
-  mobilePhoneNumber: null,
-  owner            : null,
-  phoneNumber      : null,
-  region           : null,
-  address          : '',
-  websiteUrl       : ''
+  city                   : null,
+  company                : null,
+  contactStatus          : null,
+  created_at             : '',
+  updated_at             : '',
+  deals                  : [],
+  email                  : '',
+  firstName               : '',
+  jobTitle               : '',
+  lastName               : '',
+  contactLifeCycleStageId: null,
+  mobilePhoneNumber      : null,
+  owner                  : null,
+  phoneNumber            : null,
+  region                 : null,
+  address                : '',
+  websiteUrl             : ''
 }
 
 
@@ -27,70 +27,8 @@ export const useContactsStore = defineStore('contacts', {
     pending      : true,
     contact      : { ...initialContact },
     contacts     : [],
-    contactStage : [
-      {
-        id  : 1,
-        name: 'Suscriptor'
-      },
-      {
-        id  : 2,
-        name: 'Lead'
-      },
-      {
-        id  : 3,
-        name: 'Lead calificado por marketing'
-      },
-      {
-        id  : 4,
-        name: 'Lead calificado por ventas'
-      },
-      {
-        id  : 5,
-        name: 'Oportunidad'
-      },
-      {
-        id  : 6,
-        name: 'Cliente'
-      },
-      {
-        id  : 7,
-        name: 'Otra'
-      }
-    ],
-    contactStatus: [
-      {
-        id  : 1,
-        name: 'Nuevo'
-      },
-      {
-        id  : 2,
-        name: 'Abierto'
-      },
-      {
-        id  : 3,
-        name: 'En curso'
-      },
-      {
-        id  : 4,
-        name: 'Negocio abierto'
-      },
-      {
-        id  : 5,
-        name: 'Sin calificar'
-      },
-      {
-        id  : 6,
-        name: 'Intento de contacto'
-      },
-      {
-        id  : 7,
-        name: 'Contactado'
-      },
-      {
-        id  : 8,
-        name: 'Mal momento'
-      }
-    ],
+    contactStage : [],
+    contactStatus: [],
     errorMessages: [],
     showDrawer   : false,
     isEditing    : false,
@@ -106,10 +44,31 @@ export const useContactsStore = defineStore('contacts', {
       try {
         // @ts-ignore
         const { data } = await $fetch('http://pipecrm-api.test/api/contacts')
+        await this.getContactStatus()
+        await this.getContactStages()
         this.contacts = data
       } catch (error) {
         console.log(error)
       }
+    },
+    async getContactStatus() {
+      try {
+        // @ts-ignore
+        const { data } = await $fetch('http://pipecrm-api.test/api/contact/status')
+        this.contactStatus = data
+      } catch (error) {
+        console.log(error)
+      }
+
+    }, async getContactStages() {
+      try {
+        // @ts-ignore
+        const { data } = await $fetch('http://pipecrm-api.test/api/contact/stages')
+        this.contactStage = data
+      } catch (error) {
+        console.log(error)
+      }
+
     },
     async saveContact() {
       try {
@@ -137,10 +96,10 @@ export const useContactsStore = defineStore('contacts', {
     beforePost(): object {
       return {
         ...this.contact,
-        ownerId         : this.contact.owner?.id,
-        companyId       : this.contact.company?.id,
-        lifeCycleStageId: this.contact.lifeCycleStage?.id,
-        contactStatusId : this.contact.contactStatus?.id
+        ownerId                : this.contact.owner?.id,
+        companyId              : this.contact.company?.id,
+        contactLifeCycleStageId: this.contact.contactLifeCycleStageId?.id,
+        contactStatusId        : this.contact.contactStatus?.id
       }
     },
     afterPost() {
