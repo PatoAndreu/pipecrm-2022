@@ -23,18 +23,18 @@ interface ContactStatus {
 
 export interface ContactInterface {
   city: number | undefined,
-  company?: Company,
-  contactStatus?: ContactStatus | undefined
-  created_at: string,
-  updated_at: string,
+  company: Company,
+  contactStatus: ContactStatus | undefined
+  createdAt: string,
+  updatedAt: string,
   deals: Array<IDeal> | undefined,
   email: string,
   firstName: string,
   jobTitle: string | undefined,
   lastName: string,
-  contactLifeCycleStage: ContactLifecycleStage,
+  contactLifeCycleStage?: ContactLifecycleStage | undefined,
   mobilePhoneNumber: number | undefined,
-  owner: Owner,
+  owner: Owner | undefined,
   phoneNumber: string | undefined,
   region: number | undefined,
   address: string | undefined,
@@ -50,5 +50,12 @@ export interface ContactState {
   errorMessages: [],
   showDrawer: boolean,
   isEditing: boolean,
-  tabSelected: string
+  tabSelected: string,
+  filterUser: Owner,
+  filterDate:
+    {
+      id: number,
+      name: string
+    },
 }
+

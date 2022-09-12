@@ -57,7 +57,7 @@
         </div>
 
         <div class="mb-6">
-          <label class="block mb-2">Número de teléfono</label>
+          <label class="block mb-2">Número de teléfono (opcional)</label>
           <input type="text" class="
               w-full
               h-10
@@ -69,18 +69,18 @@
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Propietario del contacto" :options="usersStore.users" field="firstName" type="user"
+          <UISelectBox name="Propietario del contacto (opcional)" :options="usersStore.users" field="firstName" type="user"
                        v-model:modelValue="contactsStore.contact.owner" :disabled="contactsStore.disabledFormContact" />
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Etapa del ciclo de vida" :options="contactsStore.contactStage"
+          <UISelectBox name="Etapa del ciclo de vida (opcional)" :options="contactsStore.contactLifeCycleStage"
                        v-model:modelValue="contactsStore.contact.contactLifeCycleStage"
                        :disabled="contactsStore.disabledFormContact" />
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Estado del lead" :options="contactsStore.contactStatus"
+          <UISelectBox name="Estado del lead (opcional)" :options="contactsStore.contactStatus"
                        v-model:modelValue="contactsStore.contact.contactStatus"
                        :disabled="contactsStore.disabledFormContact" />
         </div>
@@ -100,7 +100,7 @@
           space-x-5
         "
            :class="!contactsStore.isEditing ? ' justify-center':'justify-between'">
-        <UIButton @click="showDrawer = false" :disabled="contactsStore.disabledFormContact">
+        <UIButton @click="showDrawer = false" >
           Cancelar
         </UIButton>
 
@@ -109,7 +109,7 @@
           Crear y agregar otro
         </UIButton>
 
-        <UIButton @click="saveContact" :active="true">
+        <UIButton @click="saveContact" :active="contactsStore.disabledFormContact ? false: true" :disabled="contactsStore.disabledFormContact">
           {{ !contactsStore.isEditing ? 'Crear' : 'Actualizar' }}
         </UIButton>
 

@@ -1,7 +1,20 @@
 <template>
-  <div class="relative" :class="disabled ? 'opacity-50 cursor-not-allowed' : ''">
+  <div class="relative w-full" :class="disabled ? 'opacity-50 cursor-not-allowed' : ''">
+
+    <div>
+      <label class="block mb-2">{{ name }}</label>
+      <button class="h-12 w-full border rounded text-left p-2" @click="showSelectBox = !showSelectBox"
+              :disabled="disabled">
+        {{ selectedOption.name }}
+        <template v-if="type === 'user'">
+          {{ selectedOption.firstName }} {{ selectedOption.lastName }}
+        </template>
+        <ChevronDownIcon class="h-5 absolute right-4 bottom-3" v-if="!showSelectBox" />
+        <ChevronUpIcon class="h-5 absolute right-4 bottom-3" v-else />
+      </button>
+    </div>
     <Transition name="fade">
-      <div v-if="showSelectBox" class="w-full bg-white border absolute bottom-14">
+      <div v-if="showSelectBox" class="w-full bg-white border absolute z-10" :class="top ? 'bottom-14':''">
         <div class="w-full h-16 p-3 relative bg-sky-100">
           <SearchIcon class="h-6 text-cyan-400 absolute pointer-events-none right-6 mt-2" v-if="!searchInput" />
           <XIcon class="h-6 text-cyan-400 absolute  right-6 mt-2 cursor-pointer" v-else @click="searchInput = ''" />
@@ -13,7 +26,7 @@
           </div>
 
           <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
-            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer" @click="setOption(option)">
+            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer" @click="setOption(option)" :class="selectedOption.id == option.id ? 'bg-cyan-50': ''">
               <span v-if="type === 'user'">
                 {{ option.firstName }} {{ option.lastName }}
               </span>
@@ -32,18 +45,6 @@
         </div>
       </div>
     </Transition>
-    <div>
-      <label class="block mb-2">{{ name }}</label>
-      <button class="h-12 w-full border rounded text-left p-2" @click="showSelectBox = !showSelectBox"
-              :disabled="disabled">
-        {{ selectedOption.name }}
-        <template v-if="type === 'user'">
-          {{ selectedOption.firstName }} {{ selectedOption.lastName }}
-        </template>
-        <ChevronDownIcon class="h-5 absolute right-4 bottom-3" v-if="!showSelectBox" />
-        <ChevronUpIcon class="h-5 absolute right-4 bottom-3" v-else />
-      </button>
-    </div>
   </div>
 
 </template>
@@ -60,11 +61,12 @@ const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
   name      : { type: String, required: true, default: null },
-  field     : { type: String, required: false, default: 'name' },
+  field      : { type: String, required: false, default: 'name' },
   type      : { type: String, required: false, default: 'other' },
   options   : { type: Array, required: true, default: [] },
   disabled  : { type: Boolean, required: true, default: true },
-  modelValue: { type: Object, required: true, default: null }
+  modelValue: { type: Object, required: false, default: null },
+  top       : { type: Boolean, required: false, default: true }
 })
 
 onMounted(async () => {
@@ -75,6 +77,11 @@ onMounted(async () => {
     }
   }
   document.addEventListener('keydown', handleEscape)
+
+	await props
+	if (props.modelValue) {
+		selectedOption.value = props.modelValue
+	}
 })
 
 onUpdated(async () => {

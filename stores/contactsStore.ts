@@ -1,49 +1,54 @@
 import { defineStore } from 'pinia'
 import { ContactInterface, ContactState } from '@/interfaces/IContacts'
+import dayjs from 'dayjs'
+import quarterOfYear from 'dayjs/plugin/quarterOfYear.js'
+
+dayjs.extend(quarterOfYear)
 
 const initialContact: ContactInterface = {
-  city                   : null,
-  company                : null,
-  contactStatus          : null,
-  created_at             : '',
-  updated_at             : '',
-  deals                  : [],
-  email                  : '',
-  firstName               : '',
-  jobTitle               : '',
-  lastName               : '',
-  contactLifeCycleStageId: null,
-  mobilePhoneNumber      : null,
-  owner                  : null,
-  phoneNumber            : null,
-  region                 : null,
-  address                : '',
-  websiteUrl             : ''
+  city                 : null,
+  company              : null,
+  contactStatus        : null,
+  createdAt            : '',
+  updatedAt            : '',
+  deals                : [],
+  email                : '',
+  firstName            : '',
+  jobTitle             : '',
+  lastName             : '',
+  contactLifeCycleStage: null,
+  mobilePhoneNumber    : null,
+  owner                : null,
+  phoneNumber          : null,
+  region               : null,
+  address              : '',
+  websiteUrl           : ''
 }
-
 
 export const useContactsStore = defineStore('contacts', {
   state  : (): ContactState => ({
-    pending      : true,
-    contact      : { ...initialContact },
-    contacts     : [],
-    contactStage : [],
-    contactStatus: [],
-    errorMessages: [],
-    showDrawer   : false,
-    isEditing    : false,
-    tabSelected  : 'all'
+    pending              : true,
+    contact              : { ...initialContact },
+    contacts             : [],
+    contactLifeCycleStage: [],
+    contactStatus        : [],
+    errorMessages        : [],
+    showDrawer           : false,
+    isEditing            : false,
+    tabSelected          : 'all',
+    filterUser           : null,
+    filterDate           : null
   }),
   actions: {
-    addContact() {
-      this.contact = { ...initialContact }
-      this.isEditing = false
+    addContact(): void {
+      this.contact    = { ...initialContact }
+      this.isEditing  = false
       this.showDrawer = true
     },
-    async getContacts() {
+    async getContacts(): Promise<void> {
       try {
-        // @ts-ignore
-        const { data } = await $fetch('http://pipecrm-api.test/api/contacts')
+        let data: ContactInterface[]
+        ({ data } = await $fetch('http://pipecrm-api.test/api/contacts'))
         await this.getContactStatus()
         await this.getContactStages()
         this.contacts = data
@@ -51,28 +56,29 @@ export const useContactsStore = defineStore('contacts', {
         console.log(error)
       }
     },
-    async getContactStatus() {
+    async getContactStatus(): Promise<void> {
       try {
         // @ts-ignore
-        const { data } = await $fetch('http://pipecrm-api.test/api/contact/status')
+        const { data }     = await $fetch('http://pipecrm-api.test/api/contact/status')
         this.contactStatus = data
       } catch (error) {
         console.log(error)
       }
 
-    }, async getContactStages() {
+    },
+    async getContactStages(): Promise<void> {
       try {
         // @ts-ignore
-        const { data } = await $fetch('http://pipecrm-api.test/api/contact/stages')
-        this.contactStage = data
+        const { data }             = await $fetch('http://pipecrm-api.test/api/contact/stages')
+        this.contactLifeCycleStage = data
       } catch (error) {
         console.log(error)
       }
 
     },
-    async saveContact() {
+    async saveContact(): Promise<void> {
       try {
-        const url = this.isEditing ? `http://pipecrm-api.test/api/contacts/${ this.contact.id }` : 'http://pipecrm-api.test/api/contacts'
+        const url    = this.isEditing ? `http://pipecrm-api.test/api/contacts/${ this.contact.id }` : 'http://pipecrm-api.test/api/contacts'
         const method = this.isEditing ? 'PATCH' : 'POST'
         await $fetch(url, {
           method: method,
@@ -96,26 +102,26 @@ export const useContactsStore = defineStore('contacts', {
     beforePost(): object {
       return {
         ...this.contact,
-        ownerId                : this.contact.owner?.id,
-        companyId              : this.contact.company?.id,
-        contactLifeCycleStageId: this.contact.contactLifeCycleStageId?.id,
-        contactStatusId        : this.contact.contactStatus?.id
+        owner                : this.contact.owner,
+        company              : this.contact.company,
+        contactLifeCycleStage: this.contact.contactLifeCycleStage,
+        contactStatus        : this.contact.contactStatus
       }
     },
-    afterPost() {
+    afterPost(): void {
       this.resetContact()
       this.getContacts()
       this.showDrawer = false
     },
-    resetContact() {
+    resetContact(): void {
       this.contact = { ...initialContact }
     },
-    async editContact(contact) {
-      this.isEditing = true
+    async editContact(contact): Promise<void> {
+      this.isEditing  = true
       this.showDrawer = true
-      this.contact = await { ...contact }
+      this.contact    = await { ...contact }
     },
-    setTabSelected(tab) {
+    setTabSelected(tab): void {
       this.tabSelected = tab
     }
   },
@@ -124,13 +130,59 @@ export const useContactsStore = defineStore('contacts', {
       return (!state.contact.email || !state.contact.firstName || !state.contact.lastName)
     },
     filteredContacts(state) {
+
       if (state.tabSelected == 'myContacts') {
-        return this.contacts.filter(contact => contact.owner?.id === 1)
+        return state.contacts.filter(contact => contact.owner?.id === 1)
       }
+
       if (state.tabSelected == 'unassigned') {
-        return this.contacts.filter(contact => contact.owner === null)
+        return state.contacts.filter(contact => contact.owner === null)
       }
-      return this.contacts
+
+      /*
+       - Filtros --------------------------------------------------------
+       */
+
+      //--- Por usuario -------->
+
+      if (state.filterUser?.id) {
+        return state.contacts.filter(contact => contact.owner.id === this.filterUser.id)
+      }
+
+      //--- Por Fecha -------->
+
+      const formatDate: string = 'YYYY-MM-DD'
+
+      const hoy: string  = dayjs().format(formatDate)
+      const ayer: string = dayjs().subtract(1, 'days').format(formatDate)
+
+      const primerDiaDeLaSemana: string       = dayjs().startOf('week').format(formatDate)
+      const primerDiaDeLaSemanaPasada: string = dayjs().subtract(1, 'weeks').startOf('week').format(formatDate)
+      const ultimoDiaDeLaSemanaPasada: string = dayjs().subtract(1, 'weeks').endOf('week').format(formatDate)
+
+      const primerDiaDelMes: string = dayjs().startOf('month').format(formatDate)
+      const ultimoDiaDelMes: string = dayjs().endOf('month').format(formatDate)
+
+      const primerDiaDelMesPasado: string = dayjs().subtract(1, 'months').startOf('month').format(formatDate)
+      const ultimoDiaDelMesPasado: string = dayjs().subtract(1, 'months').endOf('month').format(formatDate)
+
+
+      switch (state.filterDate?.id) {
+        case 1:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) === hoy)
+        case 2:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) === ayer)
+        case 3:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) <= hoy && dayjs(contact.createdAt).format(formatDate) >= primerDiaDeLaSemana)
+        case 4:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) >= primerDiaDeLaSemanaPasada && dayjs(contact.createdAt).format(formatDate) <= ultimoDiaDeLaSemanaPasada)
+        case 5:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) >= primerDiaDelMes && dayjs(contact.createdAt).format(formatDate) <= ultimoDiaDelMes)
+        case 6:
+          return state.contacts.filter(contact => dayjs(contact.createdAt).format(formatDate) >= primerDiaDelMesPasado && dayjs(contact.createdAt).format(formatDate) <= ultimoDiaDelMesPasado)
+      }
+
+      return state.contacts
     }
   }
 })
