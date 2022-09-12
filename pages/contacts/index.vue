@@ -65,7 +65,7 @@
         </div>
 
       </div>
-      <ContactsTable />
+      <ContactsIndexTable />
     </div>
 
     <ContactsCreateDrawer />

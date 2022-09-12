@@ -737,8 +737,8 @@
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from '@heroicons/vue/outline'
 
-import { ContactInterface } from '~/interfaces/IContacts'
-import { useContacts } from '@/composables/useContacts'
+import { ContactInterface } from '../../../interfaces/IContacts'
+import { useContacts } from '../../../composables/useContacts'
 
 let rowsLeft            = ref()
 let showNextPageArrow   = ref(true)
