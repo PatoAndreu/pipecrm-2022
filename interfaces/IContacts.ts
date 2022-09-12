@@ -1,6 +1,6 @@
 import { IDeal } from '@/interfaces/IDeals'
 
-interface LifecycleStage {
+interface ContactLifecycleStage {
   id: number,
   name: string,
 }
@@ -16,30 +16,25 @@ interface Company {
   name: string,
 }
 
-interface ContactStage {
-  id: number,
-  name: string,
-}
-
 interface ContactStatus {
-  id: number,
-  name: string,
+  id: number | undefined,
+  name: string | undefined,
 }
 
 export interface ContactInterface {
   city: number | undefined,
-  company?: Company,
-  contactStatus?: ContactStatus | undefined
-  created_at: string,
-  updated_at: string,
+  company: Company,
+  contactStatus: ContactStatus | undefined
+  createdAt: string,
+  updatedAt: string,
   deals: Array<IDeal> | undefined,
   email: string,
   firstName: string,
   jobTitle: string | undefined,
   lastName: string,
-  lifeCycleStage: LifecycleStage,
+  contactLifeCycleStage?: ContactLifecycleStage | undefined,
   mobilePhoneNumber: number | undefined,
-  owner: Owner,
+  owner: Owner | undefined,
   phoneNumber: string | undefined,
   region: number | undefined,
   address: string | undefined,
@@ -51,8 +46,16 @@ export interface ContactState {
   contact: ContactInterface,
   contacts: ContactInterface[],
   contactStatus: ContactStatus[],
-  contactStage: ContactStage[]
+  contactLifeCycleStage: ContactLifecycleStage[]
   errorMessages: [],
   showDrawer: boolean,
-  isEditing: boolean
+  isEditing: boolean,
+  tabSelected: string,
+  filterUser: Owner,
+  filterDate:
+    {
+      id: number,
+      name: string
+    },
 }
+
