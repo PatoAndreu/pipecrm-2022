@@ -17,6 +17,7 @@
   "dependencies": {
     "@headlessui/vue": "0.0.0-insiders.486ac80",
     "@heroicons/vue": "^1.0.6",
-    "@pinia/nuxt": "^0.4.1"
+    "@pinia/nuxt": "^0.4.1",
+    "dayjs": "^1.11.5"
   }
 }

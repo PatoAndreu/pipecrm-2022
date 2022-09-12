@@ -2,19 +2,23 @@ import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  build: {
-    postcss: {
+  build  : {
+    postcss  : {
       postcssOptions: {
         plugins: {
-          tailwindcss: {},
-          autoprefixer: {},
-        },
+          tailwindcss : {},
+          autoprefixer: {}
+        }
       }
     },
-    transpile: ["@heroicons/vue"],
+    transpile: [ '@heroicons/vue' ]
   },
-  css: ['@/assets/css/main.css'],
+  css    : [ '@/assets/css/main.css' ],
   modules: [
     '@pinia/nuxt',
   ],
+  plugins: [
+    '@/plugins/dayjs.ts'
+  ]
+
 })
