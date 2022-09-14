@@ -55,13 +55,21 @@
       <div class="flex">
 
         <div class="px-10 py-5 flex space-x-10 w-72 text-sm" v-show="tabSelected !== 'myContacts'">
-          <UISelectBox name="Propietario del contacto" :options="usersStore.users" v-model:modelValue="filterUser"
-                       type="user" :disabled="false" :top="false" />
+          <UISelectBox :options="usersStore.users" v-model:modelValue="filterUser"
+                       type="user" :disabled="false" :top="false">
+            <template #label>
+              <label class="block mb-2">Propietario del contacto</label>
+            </template>
+          </UISelectBox>
         </div>
 
         <div class="px-10 py-5 flex space-x-10 w-72 text-sm">
-          <UISelectBox name="Fecha de creación" :options="createdAtFilters" v-model:modelValue="filterDate"
-                       :disabled="false" :top="false" />
+          <UISelectBox :options="createdAtFilters" v-model:modelValue="filterDate"
+                       :disabled="false" :top="false">
+            <template #label>
+              <label class="block mb-2">Fecha de creación</label>
+            </template>
+          </UISelectBox>
         </div>
 
       </div>
@@ -74,23 +82,25 @@
 
 <script setup lang="ts">
 
-import { useContacts } from '@/composables/useContacts'
-import { useUsersStore } from '@/stores/usersStore'
+import { useUsersStore } from "@/stores/usersStore";
 
 useHead({
-          title: ' Contactos'
-        })
+  title: " Contactos"
+});
 
-const { addContact, setTabSelected, tabSelected, filterUser, filterDate } = useContacts()
-const usersStore = useUsersStore()
+const { addContact, setTabSelected, tabSelected, filterUser, filterDate } = useContacts();
+
+const usersStore = useUsersStore();
+
 
 const createdAtFilters = ref([
-                               { id: 1, name: 'Hoy' },
-                               { id: 2, name: 'Ayer' },
-                               { id: 3, name: 'Esta semana' },
-                               { id: 4, name: 'Semana pasada' },
-                               { id: 5, name: 'Este mes' },
-                               { id: 6, name: 'Mes pasado' },
-                             ])
+  { id: 1, name: "Hoy" },
+  { id: 2, name: "Ayer" },
+  { id: 3, name: "Esta semana" },
+  { id: 4, name: "Semana pasada" },
+  { id: 5, name: "Este mes" },
+  { id: 6, name: "Mes pasado" }
+]);
+
 
 </script>

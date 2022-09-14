@@ -1,4 +1,4 @@
-import { IDeal } from '@/interfaces/IDeals'
+import { IDeal } from "@/interfaces/IDeals";
 
 interface ContactLifecycleStage {
   id: number,
@@ -7,8 +7,8 @@ interface ContactLifecycleStage {
 
 interface Owner {
   id: number,
-  first_name: string,
-  last_name: string,
+  firstName: string,
+  lastName: string,
 }
 
 interface Company {
@@ -22,6 +22,7 @@ interface ContactStatus {
 }
 
 export interface ContactInterface {
+  id: number,
   city: number | undefined,
   company: Company,
   contactStatus: ContactStatus | undefined

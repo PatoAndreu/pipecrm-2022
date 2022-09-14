@@ -21,7 +21,7 @@
   <UISearchBox />
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import { useUIStore } from "@/stores/ui";
 import { SearchIcon } from "@heroicons/vue/outline";

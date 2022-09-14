@@ -1,12 +1,13 @@
-export interface User{
-  id            : number;
-  firstName    : string,
-  lastName     : string,
-  email         : string,
-  mobilePhoneNumber?        : number,
+export interface UserInterface {
+  id: number,
+  firstName: string,
+  lastName: string,
+  email: string,
+  mobilePhoneNumber?: number,
+  createdAt: Date,
 }
 
 export interface UserState {
-  user    : User,
-  users   : User[]
+  user: UserInterface,
+  users: UserInterface[]
 }
