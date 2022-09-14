@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 
 let isOpen = ref(false);

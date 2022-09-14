@@ -5,7 +5,8 @@
 
       <!-- Header -->
       <div class="flex justify-between bg-cyan-500 h-16 items-center">
-        <div class="text-white text-lg font-semibold pl-4">{{ !contactsStore.isEditing ? 'Agregar' : 'Actualizar' }}
+        <div class="text-white text-lg font-semibold pl-4">
+          {{ !isEditing ? "Agregar" : "Actualizar" }}
           contacto
         </div>
         <XIcon class="
@@ -30,7 +31,7 @@
               bg-slate-100
               border border-slate-200
               p-2
-            " v-model="contactsStore.contact.email" />
+            " v-model="contact.email" />
         </div>
 
         <div class="mb-6">
@@ -42,7 +43,7 @@
               bg-slate-100
               border border-slate-200
               p-2
-            " v-model="contactsStore.contact.firstName" />
+            " v-model="contact.firstName" />
         </div>
         <div class="mb-6">
           <label class="block mb-2">Apellido</label>
@@ -53,7 +54,7 @@
               bg-slate-100
               border border-slate-200
               p-2
-            " v-model="contactsStore.contact.lastName" />
+            " v-model="contact.lastName" />
         </div>
 
         <div class="mb-6">
@@ -65,24 +66,37 @@
               bg-slate-100
               border border-slate-200
               p-2
-            " v-model="contactsStore.contact.mobilePhoneNumber" />
+            " v-model="contact.mobilePhoneNumber" />
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Propietario del contacto (opcional)" :options="usersStore.users" field="firstName" type="user"
-                       v-model:modelValue="contactsStore.contact.owner" :disabled="contactsStore.disabledFormContact" />
+          <UISelectBox :options="usersStore.users" field="firstName" type="user"
+                       v-model:modelValue="contact.owner" :disabled="disabledFormContact">
+            <template #label>
+              <label class="block mb-2">Propietario del contacto (opcional)</label>
+            </template>
+          </UISelectBox>
+
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Etapa del ciclo de vida (opcional)" :options="contactsStore.contactLifeCycleStage"
-                       v-model:modelValue="contactsStore.contact.contactLifeCycleStage"
-                       :disabled="contactsStore.disabledFormContact" />
+          <UISelectBox :options="contactLifeCycleStage"
+                       v-model:modelValue="contact.contactLifeCycleStage"
+                       :disabled="disabledFormContact">
+            <template #label>
+              <label class="block mb-2">Etapa del ciclo de vida (opcional)</label>
+            </template>
+          </UISelectBox>
         </div>
 
         <div class="mb-6">
-          <UISelectBox name="Estado del lead (opcional)" :options="contactsStore.contactStatus"
-                       v-model:modelValue="contactsStore.contact.contactStatus"
-                       :disabled="contactsStore.disabledFormContact" />
+          <UISelectBox :options="contactStatus"
+                       v-model:modelValue="contact.contactStatus"
+                       :disabled="disabledFormContact">
+            <template #label>
+              <label class="block mb-2">Estado del lead (opcional)</label>
+            </template>
+          </UISelectBox>
         </div>
         <div class="h-32"></div>
       </div>
@@ -99,18 +113,18 @@
           text-sm
           space-x-5
         "
-           :class="!contactsStore.isEditing ? ' justify-center':'justify-between'">
-        <UIButton @click="showDrawer = false" >
+           :class="!isEditing ? ' justify-center':'justify-between'">
+        <UIButton @click="showDrawer = false">
           Cancelar
         </UIButton>
 
-        <UIButton @click="showDrawer = false" :disabled="contactsStore.disabledFormContact"
-                  v-if="!contactsStore.isEditing">
+        <UIButton @click="showDrawer = false" :disabled="disabledFormContact"
+                  v-if="!isEditing">
           Crear y agregar otro
         </UIButton>
 
-        <UIButton @click="saveContact" :active="contactsStore.disabledFormContact ? false: true" :disabled="contactsStore.disabledFormContact">
-          {{ !contactsStore.isEditing ? 'Crear' : 'Actualizar' }}
+        <UIButton @click="saveOrUpdateContact" :active="!disabledFormContact" :disabled="disabledFormContact">
+          {{ !isEditing ? "Crear" : "Actualizar" }}
         </UIButton>
 
 
@@ -120,26 +134,32 @@
   </Transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import { XIcon } from '@heroicons/vue/outline'
+import { XIcon } from "@heroicons/vue/outline";
+import { useUsersStore } from "@/stores/usersStore";
 
-import { useContactsStore } from '@/stores/contactsStore'
-import { useContacts } from '@/composables/useContacts'
+const {
+        showDrawer,
+        isEditing,
+        contact,
+        contactStatus,
+        contactLifeCycleStage,
+        disabledFormContact,
+        saveContact,
+        updateContact
+      } = useContacts();
 
-import { useUsersStore } from '@/stores/usersStore'
+const usersStore = useUsersStore();
 
+await usersStore.getUsers();
 
-const contactsStore = useContactsStore()
-const { showDrawer } = useContacts()
-
-const usersStore = useUsersStore()
-
-await usersStore.getUsers()
-
-const saveContact = async () => {
-  await contactsStore.saveContact()
-}
+const saveOrUpdateContact = async () => {
+  if (!isEditing)
+    await saveContact();
+  else
+    await updateContact(contact);
+};
 
 
 </script>

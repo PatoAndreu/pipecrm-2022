@@ -36,7 +36,7 @@
   </Transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { SearchIcon, XIcon } from "@heroicons/vue/outline";
 import { useUIStore } from "@/stores/ui";
 
