@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-10" v-if="!pending && contact.firstName">
+  <div class="max-w-7xl mx-auto px-10" v-if="contact.firstName">
     <!--  Header  -->
     <ContactsDetailHeader />
 
@@ -24,13 +24,11 @@
 
 <script lang="ts" setup>
 
-import { useContacts } from "@/composables/useContacts";
-
-const { loadContact, contact, pending } = useContacts();
+const { loadContact, contact } = useContacts();
 
 const route = useRoute();
 
-onMounted(async () => {
+onBeforeMount(async () => {
 
   await loadContact(Number(route.params.id));
 

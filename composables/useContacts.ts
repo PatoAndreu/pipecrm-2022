@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 
 import { ContactInterface } from "~/interfaces/IContacts";
 
-export const useContacts = () => {
+export default function  useContacts() {
 
   const contactsStore = useContactsStore();
   const {
@@ -25,12 +25,14 @@ export const useContacts = () => {
   const loadContacts     = (): Promise<void> => contactsStore.getContacts();
   const loadContact      = (id: number): Promise<void> => contactsStore.getContact(id);
   const addContact       = () => contactsStore.addContact();
-  const saveContact      = () => contactsStore.saveContact();
+  const saveContact      = (): Promise<void> => contactsStore.saveContact();
   const updateContact    = (contact) => contactsStore.updateContact(contact);
   const editContact      = (contact: ContactInterface): Promise<void> => contactsStore.editContact(contact);
   const setTabSelected   = (tab: string) => contactsStore.setTabSelected(tab);
   const getContactStatus = () => contactsStore.getContactStatus();
   const getContactStages = () => contactsStore.getContactStages();
+  const resetContact     = () => contactsStore.resetContact();
+  const deleteContact    = () => contactsStore.deleteContact();
 
   return {
     pending,
@@ -54,6 +56,8 @@ export const useContacts = () => {
     editContact,
     setTabSelected,
     getContactStatus,
-    getContactStages
+    getContactStages,
+    resetContact,
+    deleteContact
   };
 };

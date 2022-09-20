@@ -51,7 +51,7 @@
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
 
-let selectedOption = ref({ id: null, name: null });
+let selectedOption = ref({});
 let searchInput    = ref("");
 let showSelectBox  = ref(false);
 

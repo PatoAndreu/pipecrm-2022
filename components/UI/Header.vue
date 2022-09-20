@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import { useUIStore } from "@/stores/ui";
+import { SearchIcon } from "@heroicons/vue/outline";
+import { Link } from "@/interfaces/IUi";
+
+const uiStore = useUIStore();
+
+const menu: Link[] = [
+  {
+    name: "Contactos",
+    url: "/contacts"
+  },
+  {
+    name: "Login",
+    url: "/login"
+  },
+  {
+    name: "Contact",
+    url: "/"
+  }
+];
+</script>
+
 <template>
   <header>
     <nav>
@@ -20,26 +43,3 @@
   </header>
   <UISearchBox />
 </template>
-
-<script setup lang="ts">
-
-import { useUIStore } from "@/stores/ui";
-import { SearchIcon } from "@heroicons/vue/outline";
-
-const uiStore = useUIStore();
-
-const menu = [
-  {
-    name: "Contactos",
-    url: "/contacts",
-  },
-  {
-    name: "Login",
-    url: "/login",
-  },
-  {
-    name: "Contact",
-    url: "/",
-  },
-];
-</script>

@@ -1,9 +1,41 @@
+<script setup lang="ts">
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { Link } from "@/interfaces/IUi";
+
+interface Props {
+  name: string;
+  links: [Link] | undefined;
+  right: boolean;
+  avatar?: boolean | undefined;
+  avatarImage?: string | undefined;
+}
+
+let isOpen = ref(false);
+
+withDefaults(defineProps<Props>(), {
+  name: null,
+  links: null,
+  right: false,
+  avatar: null,
+  avatarImage: null
+});
+
+onMounted(() => {
+  const handleEscape = (e) => {
+    if (e.key === "Esc" || e.key === "Escape") {
+      isOpen.value = false;
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+});
+</script>
+
 <template>
   <div class="relative">
     <div class="flex items-center hover:text-slate-300 mx-1 hover:opacity-70 transition-all cursor-pointer"
          @mouseover="isOpen = true">
       <button>{{ name }}</button>
-      <img :src="avatarImage" class="h-8 w-8 rounded-full  mr-1 " v-if="avatar">
+      <img :src="avatarImage" class="h-8 w-8 rounded-full  mr-1 " v-if="avatar" alt="">
       <ChevronDownIcon class="h-4 ml-1" />
     </div>
     <button v-if="isOpen" @click="isOpen = false" @mouseover="isOpen = false"
@@ -29,25 +61,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ChevronDownIcon } from "@heroicons/vue/outline";
-
-let isOpen = ref(false);
-
-defineProps({
-  name: { type: String, required: true, default: null },
-  links: { type: Array, required: true, default: [] },
-  right: { type: Boolean, required: false, default: false },
-  avatar: { type: Boolean, required: false, default: null },
-  avatarImage: { type: String, required: false, default: null }
-});
-
-onMounted(() => {
-  const handleEscape = (e) => {
-    if (e.key === "Esc" || e.key === "Escape") {
-      isOpen.value = false;
-    }
-  };
-  document.addEventListener("keydown", handleEscape);
-});
-</script>

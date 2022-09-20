@@ -1,3 +1,15 @@
+<script setup lang="ts">
+interface Props {
+  pending: boolean;
+  showText: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  pending: false,
+  showText: false
+});
+</script>
+
 <template>
   <div v-if="pending">
     <div role="status">
@@ -15,10 +27,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-defineProps({
-  pending: { type: Boolean, required: true, default: false },
-  showText: { type: Boolean, required: false, default: false },
-});
-</script>

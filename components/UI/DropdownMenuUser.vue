@@ -1,3 +1,41 @@
+<script setup lang="ts">
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+
+let isOpen = ref(false);
+
+interface Link {
+  name:string
+  url: string
+}
+const links: Link[] = [
+  {
+    name: "Cuenta y facturación",
+    url: "/contacts",
+  },
+  {
+    name: "PipeCrm Academy",
+    url: "/login",
+  },
+  {
+    name: "Precios y características",
+    url: "/",
+  },
+  {
+    name: "Formación y servicios",
+    url: "/",
+  },
+];
+
+onMounted(() => {
+  const handleEscape = (e) => {
+    if (e.key === "Esc" || e.key === "Escape") {
+      isOpen.value = false;
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+});
+</script>
+
 <template>
 
   <div class="relative">
@@ -56,37 +94,3 @@
     </Transition>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ChevronDownIcon } from "@heroicons/vue/outline";
-
-let isOpen = ref(false);
-
-const links = [
-  {
-    name: "Cuenta y facturación",
-    url: "/contacts",
-  },
-  {
-    name: "PipeCrm Academy",
-    url: "/login",
-  },
-  {
-    name: "Precios y características",
-    url: "/",
-  },
-  {
-    name: "Formación y servicios",
-    url: "/",
-  },
-];
-
-onMounted(() => {
-  const handleEscape = (e) => {
-    if (e.key === "Esc" || e.key === "Escape") {
-      isOpen.value = false;
-    }
-  };
-  document.addEventListener("keydown", handleEscape);
-});
-</script>

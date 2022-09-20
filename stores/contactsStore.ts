@@ -67,7 +67,12 @@ export const useContactsStore = defineStore("contacts", {
         this.contact = { ...data };
         this.pending = false;
       } catch (error) {
-        console.log(error);
+        console.log({ error });
+        throw createError({
+          statusCode: error.response.status,
+          fatal: true,
+          statusMessage: error.response.statusText
+        });
       }
     },
     async getContactStatus(): Promise<void> {
@@ -92,62 +97,53 @@ export const useContactsStore = defineStore("contacts", {
     },
     async saveContact(): Promise<void> {
       try {
-        await $fetch("http://pipecrm-api.test/api/contacts", {
-          method: "POST",
-          body: this.contact
-        })
-          .then(({ status }) => {
-            if (status === 200) {
-              this.resetContact();
-              this.getContacts();
-              this.showDrawer = false;
-            }
-          })
-          .catch(error => {
-            this.errorMessages = [];
-            this.errorMessages.push(error.data.errors);
-            console.log(error.data.errors);
+        return await $fetch("http://pipecrm-api.test/api/contacts",
+          {
+            method: "POST",
+            body: this.contact
           });
-      } catch (err) {
-        console.log({ err });
+      } catch (error) {
+        return error;
       }
     },
-    async updateContact(contact): Promise<void> {
+    async updateContact(contact): Promise<any> {
       try {
-        let response = await $fetch(`http://pipecrm-api.test/api/contacts/${contact.id}`, {
-          method: "PATCH",
-          body: {...contact}
-        });
-        this.contact = response["data"]
-        // @ts-ignore
-        return await response;
-        // .then((response) => {
-        //   return 'response'
-        //   // if (status === 200 && this.showDrawer) {
-        //   //   this.resetContact();
-        //   //   this.getContacts();
-        //   //   this.showDrawer = false;
-        //   // }
-        // })
-        // .catch(error => {
-        //   this.errorMessages = [];
-        //   this.errorMessages.push(error.data.errors);
-        //   console.log(error.data.errors);
-        // });
-      } catch (err) {
-        console.log({ err });
+        this.pending   = true;
+        const response = await $fetch(`http://pipecrm-api.test/api/contacts/${contact.id}`,
+          {
+            method: "PATCH",
+            body: { ...contact }
+          });
+        this.pending   = false;
+        this.contact   = { ...response["data"] };
+        return response;
+      } catch (error) {
+        return error;
       }
-    },
-    resetContact(): void {
-      this.contact = { ...initialContact };
     },
     async editContact(contact): Promise<void> {
       this.isEditing  = true;
       this.showDrawer = true;
       this.contact    = await { ...contact };
     },
+    async deleteContact() {
+      try {
+        this.pending   = true;
+        const response = await $fetch(`http://pipecrm-api.test/api/contacts/${this.contact.id}`,
+          {
+            method: "DELETE"
+          });
+        this.pending   = false;
+        return response;
+      } catch (error) {
+        return error;
+      }
+    },
     setTabSelected(tab): void {
       this.tabSelected = tab;
+    },
+    resetContact(): void {
+      this.contact = { ...initialContact };
     }
   },
   getters: {
