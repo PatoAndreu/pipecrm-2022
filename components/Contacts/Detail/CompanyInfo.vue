@@ -9,8 +9,8 @@ import { PencilAltIcon } from "@heroicons/vue/outline";
       <PencilAltIcon class="h-5 text-cyan-600 cursor-pointer hover:text-cyan-500" @click="isEditing = true" />
     </div>
     <hr>
-    <div class="mt-2">
-      <p class="text-sm text-slate-500">No hay organizaciones vinculadas a esta persona.</p>
+    <div class="mt-3">
+      <p class="text-sm text-slate-500">No hay organizaciones vinculadas a este contacto.</p>
       <button class="text-sm text-left my-4 text-cyan-600 font-bold hover:text-cyan-500">+ Vincular una empresa</button>
     </div>
   </div>

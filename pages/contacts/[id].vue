@@ -28,6 +28,7 @@ onUpdated(() => {
         <ContactsDetailContactInfo />
         <ContactsDetailCompanyInfo />
         <ContactsDetailDealsInfo />
+        <ContactsDetailFollowersInfo />
       </div>
 
       <!--  Panel derecho  -->
