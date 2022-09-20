@@ -1,3 +1,44 @@
+<script setup lang="ts">
+
+import { PencilAltIcon } from "@heroicons/vue/outline";
+
+const {
+        contact,
+        contactStatus,
+        contactLifeCycleStage,
+        updateContact,
+        getContactStatus,
+        getContactStages
+      } = useContacts();
+
+const contactLocal = ref({ ...contact.value });
+const isEditing    = ref(false);
+const pending      = ref(false);
+
+onBeforeMount(async () => {
+  await getContactStatus();
+  await getContactStages();
+});
+
+const cancelEdit = () => {
+  contactLocal.value = { ...contact.value };
+  isEditing.value    = false;
+};
+
+const updateContactInfo = async () => {
+  pending.value = true;
+  const res     = await updateContact(contactLocal.value);
+
+  const { data: { errors }, response: { status } }: any = res;
+
+  if (status === 200) {
+    isEditing.value = false;
+    pending.value   = false;
+  }
+
+};
+</script>
+
 <template>
   <div class="border rounded h-full px-3 py-2">
     <div class="flex justify-between items-center py-2">
@@ -71,44 +112,3 @@
     </form>
   </div>
 </template>
-
-<script setup lang="ts">
-
-import { PencilAltIcon } from "@heroicons/vue/outline";
-
-const {
-        contact,
-        contactStatus,
-        contactLifeCycleStage,
-        updateContact,
-        getContactStatus,
-        getContactStages
-      } = useContacts();
-
-const contactLocal = ref({ ...contact.value });
-const isEditing    = ref(false);
-const pending      = ref(false);
-
-onBeforeMount(async () => {
-  await getContactStatus();
-  await getContactStages();
-});
-
-const cancelEdit = () => {
-  contactLocal.value = { ...contact.value };
-  isEditing.value    = false;
-};
-
-const updateContactInfo = async () => {
-  pending.value = true;
-    const res = await updateContact(contactLocal.value);
-
-    const { data: { errors }, response: { status } }: any = res;
-
-    if (status === 200) {
-      isEditing.value = false;
-      pending.value   = false;
-    }
-
-};
-</script>
