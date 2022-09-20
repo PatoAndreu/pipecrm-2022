@@ -27,6 +27,7 @@ onUpdated(() => {
       <div class="w-[400px] h-full space-y-2">
         <ContactsDetailContactInfo />
         <ContactsDetailCompanyInfo />
+        <ContactsDetailDealsInfo />
       </div>
 
       <!--  Panel derecho  -->
