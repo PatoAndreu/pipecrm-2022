@@ -40,7 +40,7 @@ onMounted(() => {
 
   <div class="relative">
 
-    <div class="flex items-center hover:text-slate-300 mx-1 hover:opacity-80 transition-all cursor-pointer"
+    <div class="flex items-center hover:text-slate-300 mx-1 hover:opacity-80  cursor-pointer"
       @click="isOpen = !isOpen">
       <img src="/img/avatar.jpg" class="h-8 w-8 rounded-full  mr-1 object-cover">
       <div class="text-xs ml-1">Patricio Andreu</div>

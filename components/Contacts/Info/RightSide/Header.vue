@@ -41,7 +41,7 @@ const deleteContactLocal = async () => {
 </script>
 
 <template>
-  <div class="mt-2 h-20 border border-slate-200 rounded flex items-center justify-between">
+  <div class="mt-2 h-20 border border-slate-200 rounded flex items-center justify-between bg-white">
 
     <div>
       <div class="ml-4 text-cyan-600 font-semibold flex text-xl items-center">
@@ -113,7 +113,7 @@ const deleteContactLocal = async () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 
 .dropdown-container:after {
   position: absolute;

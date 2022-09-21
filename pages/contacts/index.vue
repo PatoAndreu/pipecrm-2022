@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white">
     <!-- Header -->
     <div class="flex justify-between px-8 py-6">
       <h1 class="font-bold text-cyan-600">Contactos</h1>

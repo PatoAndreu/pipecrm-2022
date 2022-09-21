@@ -77,7 +77,7 @@ watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPage
 });
 </script>
 <template>
-  <div>
+  <div class="bg-white">
     <div v-if="filteredContacts.length > 0">
 
       <!-- Buscador -->

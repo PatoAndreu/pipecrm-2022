@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 
 import { ContactInterface } from "~/interfaces/IContacts";
 
-export default function  useContacts() {
+export default function useContacts() {
 
   const contactsStore = useContactsStore();
   const {
@@ -18,6 +18,7 @@ export default function  useContacts() {
           tabSelected,
           filterUser,
           filterDate,
+          activeTab,
           filteredContacts,
           disabledFormContact
         }             = storeToRefs(contactsStore);
@@ -46,6 +47,7 @@ export default function  useContacts() {
     tabSelected,
     filterUser,
     filterDate,
+    activeTab,
     disabledFormContact,
     filteredContacts,
     loadContacts,

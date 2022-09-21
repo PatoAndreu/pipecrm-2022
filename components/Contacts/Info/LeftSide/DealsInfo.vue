@@ -3,7 +3,7 @@ import { PlusCircleIcon } from "@heroicons/vue/outline";
 </script>
 
 <template>
-  <div class="border rounded h-full px-3 py-2">
+  <div class="border rounded h-auto px-3 py-2 bg-white">
     <div class="flex justify-between items-center py-2">
       <div class="text-xs font-medium text-cyan-700">DEALS</div>
       <PlusCircleIcon class="h-5 text-cyan-600 cursor-pointer hover:text-cyan-500" @click="isEditing = true" />

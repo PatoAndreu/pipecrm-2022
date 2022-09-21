@@ -22,7 +22,7 @@ const menu: Link[] = [
 </script>
 
 <template>
-  <header>
+  <header class="sticky top-0 z-50">
     <nav>
       <div class="flex p-3 text-white text-sm items-center font-light" style="background-color: #33475b">
         <div class="flex-1 w-full">

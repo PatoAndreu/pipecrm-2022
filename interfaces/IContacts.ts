@@ -58,5 +58,6 @@ export interface ContactState {
       id: number,
       name: string
     },
+  activeTab: string
 }
 
