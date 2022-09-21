@@ -10,11 +10,13 @@ import {
 } from "@heroicons/vue/outline";
 
 interface Props {
+  activity: object;
   pinned: boolean;
   note: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  activity: null,
   pinned: false,
   note: false
 });
@@ -33,7 +35,10 @@ const props = withDefaults(defineProps<Props>(), {
       <CheckCircleIcon class="h-8 w-8 text-slate-400 cursor-pointer hover:text-green-600 " v-if="!note" />
 
       <button class="flex text-sm w-full justify-between px-2 hover:text-cyan-600">
-        <div><span class="font-bold">{{ !note ? "Tarea" : "Nota" }}</span> {{ !note ? "asignada a" : "por" }}   Patricio Andreu</div>
+        <div>
+          <span class="font-bold">{{ !note ? "Tarea" : "Nota" }}</span>
+          {{ !note ? "asignada a" : "por" }} Patricio Andreu
+        </div>
       </button>
 
       <button class="relative h-6 w-6 border rounded border-slate-300 text-slate-400 text-sm hover:bg-slate-100 group mr-2">
@@ -56,7 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
     <hr>
     <!--  Body    -->
     <div class="p-4 text-slate-600">
-      <p>Llamar por presupuesto enviado</p>
+      <p>{{ activity?.text }}</p>
     </div>
     <!--  Footer    -->
     <div class="flex px-4 text-xs space-x-4 items-center h-10" v-if="!note">

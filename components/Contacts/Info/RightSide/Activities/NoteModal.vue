@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ChevronDownIcon,ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
 
-const { note, noteModalOpen, isEditing, saveNote, closeNoteModal, minimize } = useActivities();
+const { activity, activityModalOpen, isEditing, saveActivity, closeNoteModal, minimize } = useActivities();
 
 const disabledForm = computed(() => {
-  return note.value?.length > 0;
+  return activity.value.text?.length > 0;
 });
 </script>
 
 
 <template>
-  <form class="w-[650px] bg-white absolute bottom-2 right-10 h-auto shadow-2xl" @submit.prevent="saveNote" v-show="noteModalOpen">
+  <form class="w-[650px] bg-white absolute bottom-2 right-10 h-auto shadow-2xl" @submit.prevent="saveActivity" v-show="activityModalOpen">
     <!--  Header  -->
     <div class="w-full bg-indigo-800 text-white py-2 px-4 flex items-center justify-between">
       <div class="flex items-center justify-center">
@@ -28,7 +28,7 @@ const disabledForm = computed(() => {
     </div>
     <!--  Content  -->
     <div v-show="!minimize">
-      <textarea rows="6" placeholder="Empieza a escribir una nota...." class="w-full p-4 focus:outline-none" v-model="note"></textarea>
+      <textarea rows="6" placeholder="Empieza a escribir una nota...." class="w-full p-4 focus:outline-none" v-model="activity.text"></textarea>
       <!--  Footer  -->
       <hr>
       <div class="p-4">

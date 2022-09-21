@@ -5,12 +5,16 @@ export default function useActivities() {
 
   const activitiesStore = useActivitiesStore();
 
-  const { note, noteModalOpen, isEditing, minimize } = storeToRefs(activitiesStore);
-  const saveNote = (): Promise<void> => activitiesStore.saveNote()
-  const closeNoteModal = () => activitiesStore.closeNoteModal()
+  const { activities, activity, activityModalOpen, isEditing, minimize } = storeToRefs(activitiesStore);
+
+  const saveActivity     = async (): Promise<void> => activitiesStore.saveActivity();
+  const closeNoteModal   = (): void => activitiesStore.closeNoteModal();
+  const setActivity      = async (activity): Promise<void> => activitiesStore.setActivity(activity);
+  const filteredNotes     =  activitiesStore.filteredNotes;
+  const filterActivities  = activitiesStore.filterActivities;
 
   return {
-    note, noteModalOpen, isEditing, minimize,
-    saveNote, closeNoteModal
-  }
+    activities, activity, activityModalOpen, isEditing, minimize,
+    saveActivity, closeNoteModal, setActivity, filteredNotes, filterActivities
+  };
 }
