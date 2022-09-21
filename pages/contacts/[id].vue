@@ -1,47 +1,45 @@
-<template>
-  <div class="max-w-7xl mx-auto px-10" v-if="!pending && contact.firstName">
-    <!--  Header  -->
-    <ContactsDetailHeader />
-
-    <!--  Contenido central  -->
-    <div class="flex mt-6">
-
-      <!--  Panel izquierdo  -->
-      <div class="w-[400px] h-full">
-        <ContactsDetailInfo />
-      </div>
-
-      <!--  Panel derecho  -->
-      <div class="w-full border h-full ml-4">
-        <UIDropDownMenu2>
-          <li class="px-6 py-2 hover:bg-gray-100 border-b">menu list 1</li>
-          <li class="px-6 py-2 hover:bg-gray-100 border-b">menu list 1 dfdfdf</li>
-        </UIDropDownMenu2>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 
-import { useContacts } from "@/composables/useContacts";
-
-const { loadContact, contact, pending } = useContacts();
+const { loadContact, contact, activeTab } = useContacts();
 
 const route = useRoute();
 
-onMounted(async () => {
-
+onBeforeMount(async () => {
   await loadContact(Number(route.params.id));
+});
 
+onUpdated(() => {
   useHead({
-    title: `${contact.value.firstName} ${contact.value.lastName}`
+    title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
   });
-
 });
 </script>
-<style scoped>
-.sd{
-  margin: auto;
-}
-</style>
+
+<template>
+  <div class="max-w-7xl mx-auto px-10" v-if="contact.firstName">
+    <!--  Header  -->
+    <ContactsInfoRightSideHeader />
+
+    <!--  Contenido central  -->
+    <div class="flex mt-6 pb-10">
+
+      <!--  Panel izquierdo  -->
+      <div class="w-[400px] h-full space-y-2">
+        <ContactsInfoLeftSideContactInfo />
+        <ContactsInfoLeftSideCompanyInfo />
+        <ContactsInfoLeftSideDealsInfo />
+        <ContactsInfoLeftSideFollowersInfo />
+      </div>
+
+      <!--  Panel derecho  -->
+      <div class="w-full h-full ml-4">
+        <ContactsInfoRightSideActivitiesMenu />
+        <ContactsInfoRightSideActivitiesItems v-if="activeTab === 'activity'"/>
+        <ContactsInfoRightSideActivitiesNotes v-if="activeTab === 'notes'"/>
+        <ContactsInfoRightSideActivitiesTasks v-if="activeTab === 'tasks'"/>
+      </div>
+    </div>
+    <ContactsInfoRightSideActivitiesNoteModal />
+  </div>
+</template>
+

@@ -1,5 +1,83 @@
+<script setup lang="ts">
+
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
+
+import { ContactInterface } from "@/interfaces/IContacts";
+
+let rowsLeft            = ref();
+let showNextPageArrow   = ref(true);
+let perPage             = ref(5);
+let showDropdownPerPage = ref(false);
+let currentPage         = ref(1);
+let searchInput         = ref("");
+
+const dropdownPerPageValues = ref([5, 10, 20, 50, 100]);
+
+const { pending, loadContacts, filteredContacts, editContact } = useContacts();
+
+await loadContacts();
+
+rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value);
+
+showNextPageArrow.value = (rowsLeft.value > 0) ? showNextPageArrow.value = true : showNextPageArrow.value = false;
+
+
+const setTablePerPage = (perPageSelected: number) => {
+  perPage.value             = perPageSelected;
+  showDropdownPerPage.value = false;
+};
+
+const indexStart = computed((): number => {
+  return (currentPage.value - 1) * perPage.value;
+});
+
+const indexEnd = computed((): number => {
+  return indexStart.value + perPage.value;
+});
+
+const paginated = computed((): ContactInterface[] => {
+
+  if (filteredContacts.value.length > 0) {
+    if (searchInput.value.length >= 1) {
+      return filteredContacts.value.filter(
+        field =>
+          field.firstName.toLowerCase().includes(searchInput.value.toLowerCase())
+          || field.lastName.toLowerCase().includes(searchInput.value.toLowerCase())
+          || field.email.toLowerCase().includes(searchInput.value.toLowerCase())
+      ).slice(indexStart.value, indexEnd.value);
+    } else {
+      return filteredContacts.value.slice(indexStart.value, indexEnd.value);
+    }
+  }
+});
+
+const nextPage = () => {
+  if (showNextPageArrow.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const toggleTablePerPage = () => {
+  showDropdownPerPage.value = !showDropdownPerPage.value;
+};
+
+watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPageNewV, perPageNewV], [_, perPageOldV]) => {
+
+  rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value);
+
+  if (perPageNewV != perPageOldV) currentPage.value = 1;
+
+  return (rowsLeft.value > 0 && paginated.value.length >= perPage.value) ? showNextPageArrow.value = true : showNextPageArrow.value = false;
+});
+</script>
 <template>
-  <div>
+  <div class="bg-white">
     <div v-if="filteredContacts.length > 0">
 
       <!-- Buscador -->
@@ -213,7 +291,7 @@
       </div>
 
       <!-- Table Footer -->
-      <div class="grid grid-cols-3 gap-4 h-full mt-6 mb-40">
+      <div class="grid grid-cols-4 h-full mt-6 mb-40">
 
         <div class="text-center text-sm text-slate-400">
           Mostrando {{ indexStart + 1 }} a {{ indexEnd }}
@@ -268,21 +346,23 @@
           </div>
 
         </div>
+        <div></div>
       </div>
     </div>
     <!-- Sin registros para mostrar -->
     <div v-else>
       <div class="ml-[2%] w-[96%] h-72 border  flex items-center justify-center">
-       <UILoading :pending="pending" v-if="pending"/>
+        <UILoading :pending="pending" v-if="pending" />
 
         <div class="ml-[2%]  h-72   flex items-center justify-center" v-else>
           <div>
             <div class="text-slate-700 text-xl"> Es momento de organizarse.</div>
             <div class="text-sm text-slate-400 w-96 mt-4"> Comienza por suministrarle a PipeCrm datos con los
-              cuales
-              trabajar, como empresas. Después, puedes ordenar, buscar y filtrar para encontrar lo que necesitas y
-              ocultar
-              lo que no necesitas.
+                                                           cuales
+                                                           trabajar, como empresas. Después, puedes ordenar, buscar y
+                                                           filtrar para encontrar lo que necesitas y
+                                                           ocultar
+                                                           lo que no necesitas.
             </div>
           </div>
 
@@ -743,83 +823,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
-
-import { ContactInterface } from "@/interfaces/IContacts";
-
-let rowsLeft            = ref();
-let showNextPageArrow   = ref(true);
-let perPage             = ref(5);
-let showDropdownPerPage = ref(false);
-let currentPage         = ref(1);
-let searchInput         = ref("");
-
-const dropdownPerPageValues = ref([5, 10, 20, 50, 100]);
-
-const { pending, loadContacts, filteredContacts, editContact } = useContacts();
-
-await loadContacts();
-
-rowsLeft.value          = (filteredContacts.value.length) - (perPage.value * currentPage.value);
-showNextPageArrow.value = (rowsLeft.value > 0) ? showNextPageArrow.value = true : showNextPageArrow.value = false;
-
-
-const setTablePerPage = (perPageSelected: number) => {
-  perPage.value             = perPageSelected;
-  showDropdownPerPage.value = false;
-};
-
-const indexStart = computed((): number => {
-  return (currentPage.value - 1) * perPage.value;
-});
-
-const indexEnd = computed((): number => {
-  return indexStart.value + perPage.value;
-});
-
-const paginated = computed((): ContactInterface[] => {
-
-  if (filteredContacts.value.length > 0) {
-    if (searchInput.value.length >= 1) {
-      return filteredContacts.value.filter(
-        field =>
-          field.firstName.toLowerCase().includes(searchInput.value.toLowerCase())
-          || field.lastName.toLowerCase().includes(searchInput.value.toLowerCase())
-          || field.email.toLowerCase().includes(searchInput.value.toLowerCase())
-      ).slice(indexStart.value, indexEnd.value);
-    } else {
-      return filteredContacts.value.slice(indexStart.value, indexEnd.value);
-    }
-  }
-});
-
-const nextPage = () => {
-  if (showNextPageArrow.value) {
-    currentPage.value++;
-  }
-};
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
-
-const toggleTablePerPage = () => {
-  showDropdownPerPage.value = !showDropdownPerPage.value;
-};
-
-watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPageNewV, perPageNewV], [_, perPageOldV]) => {
-
-  rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value);
-
-  if (perPageNewV != perPageOldV) currentPage.value = 1;
-
-  return (rowsLeft.value > 0 && paginated.value.length >= perPage.value) ? showNextPageArrow.value = true : showNextPageArrow.value = false;
-});
-</script>
 
 <style lang="postcss" scoped>
 .header-info {

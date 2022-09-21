@@ -1,8 +1,46 @@
+<script setup lang="ts">
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+
+let isOpen = ref(false);
+
+interface Link {
+  name:string
+  url: string
+}
+const links: Link[] = [
+  {
+    name: "Cuenta y facturación",
+    url: "/contacts",
+  },
+  {
+    name: "PipeCrm Academy",
+    url: "/login",
+  },
+  {
+    name: "Precios y características",
+    url: "/",
+  },
+  {
+    name: "Formación y servicios",
+    url: "/",
+  },
+];
+
+onMounted(() => {
+  const handleEscape = (e) => {
+    if (e.key === "Esc" || e.key === "Escape") {
+      isOpen.value = false;
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+});
+</script>
+
 <template>
 
   <div class="relative">
 
-    <div class="flex items-center hover:text-slate-300 mx-1 hover:opacity-80 transition-all cursor-pointer"
+    <div class="flex items-center hover:text-slate-300 mx-1 hover:opacity-80  cursor-pointer"
       @click="isOpen = !isOpen">
       <img src="/img/avatar.jpg" class="h-8 w-8 rounded-full  mr-1 object-cover">
       <div class="text-xs ml-1">Patricio Andreu</div>
@@ -56,37 +94,3 @@
     </Transition>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ChevronDownIcon } from "@heroicons/vue/outline";
-
-let isOpen = ref(false);
-
-const links = [
-  {
-    name: "Cuenta y facturación",
-    url: "/contacts",
-  },
-  {
-    name: "PipeCrm Academy",
-    url: "/login",
-  },
-  {
-    name: "Precios y características",
-    url: "/",
-  },
-  {
-    name: "Formación y servicios",
-    url: "/",
-  },
-];
-
-onMounted(() => {
-  const handleEscape = (e) => {
-    if (e.key === "Esc" || e.key === "Escape") {
-      isOpen.value = false;
-    }
-  };
-  document.addEventListener("keydown", handleEscape);
-});
-</script>

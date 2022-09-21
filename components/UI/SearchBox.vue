@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { SearchIcon, XIcon } from "@heroicons/vue/outline";
+import { useUIStore } from "@/stores/ui";
+
+const uiStore = useUIStore();
+
+onMounted(() => {
+  const handleEscape = (e) => {
+    if (e.key === "Esc" || e.key === "Escape") {
+      uiStore.showSearchBox = false;
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+});
+
+</script>
 <template>
   <Transition duration="550" name="nested" appear>
     <div v-show="uiStore.showSearchBox" class="inner z-10 w-full h-full bg-slate-50 absolute top-15">
@@ -35,20 +51,3 @@
     </div>
   </Transition>
 </template>
-
-<script setup lang="ts">
-import { SearchIcon, XIcon } from "@heroicons/vue/outline";
-import { useUIStore } from "@/stores/ui";
-
-const uiStore = useUIStore();
-
-onMounted(() => {
-  const handleEscape = (e) => {
-    if (e.key === "Esc" || e.key === "Escape") {
-      uiStore.showSearchBox = false;
-    }
-  };
-  document.addEventListener("keydown", handleEscape);
-});
-
-</script>

@@ -1,5 +1,28 @@
+<script setup lang="ts">
+import { useUIStore } from "@/stores/ui";
+import { SearchIcon } from "@heroicons/vue/outline";
+import { Link } from "@/interfaces/IUi";
+
+const uiStore = useUIStore();
+
+const menu: Link[] = [
+  {
+    name: "Contactos",
+    url: "/contacts"
+  },
+  {
+    name: "Login",
+    url: "/login"
+  },
+  {
+    name: "Contact",
+    url: "/"
+  }
+];
+</script>
+
 <template>
-  <header>
+  <header class="sticky top-0 z-50">
     <nav>
       <div class="flex p-3 text-white text-sm items-center font-light" style="background-color: #33475b">
         <div class="flex-1 w-full">
@@ -20,26 +43,3 @@
   </header>
   <UISearchBox />
 </template>
-
-<script setup lang="ts">
-
-import { useUIStore } from "@/stores/ui";
-import { SearchIcon } from "@heroicons/vue/outline";
-
-const uiStore = useUIStore();
-
-const menu = [
-  {
-    name: "Contactos",
-    url: "/contacts",
-  },
-  {
-    name: "Login",
-    url: "/login",
-  },
-  {
-    name: "Contact",
-    url: "/",
-  },
-];
-</script>

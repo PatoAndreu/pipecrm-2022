@@ -1,28 +1,28 @@
 import { IDeal } from "@/interfaces/IDeals";
 
 interface ContactLifecycleStage {
-  id: number,
+  readonly id: number,
   name: string,
 }
 
 interface Owner {
-  id: number,
+  readonly id: number,
   firstName: string,
   lastName: string,
 }
 
 interface Company {
-  id: number,
+  readonly id: number,
   name: string,
 }
 
 interface ContactStatus {
-  id: number | undefined,
+  readonly id: number | undefined,
   name: string | undefined,
 }
 
 export interface ContactInterface {
-  id: number,
+  readonly id: number,
   city: number | undefined,
   company: Company,
   contactStatus: ContactStatus | undefined
@@ -55,8 +55,9 @@ export interface ContactState {
   filterUser: Owner,
   filterDate:
     {
-      id: number,
+      readonly id: number,
       name: string
     },
+  activeTab: string
 }
 

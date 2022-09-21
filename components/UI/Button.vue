@@ -1,14 +1,15 @@
-<template>
-  <button :class="classes" :disabled="disabled">
-    <slot />
-  </button>
-</template>
+<script setup lang="ts">
 
-<script setup>
+interface Props {
+  active: boolean
+  disabled?: boolean
+  pending?: boolean
+}
 
-const props = defineProps({
-  active: { type: Boolean, required: false, default: false },
-  disabled: { type: Boolean, required: false, default: false },
+const props = withDefaults(defineProps<Props>(), {
+  active: false,
+  disabled: false,
+  pending: false
 });
 
 const classes = computed(() => {
@@ -21,15 +22,21 @@ const classes = computed(() => {
     "rounded",
     "text-sm",
     {
-      "bg-slate-200 text-slate-400 border-slate-100": props.disabled,
+      "bg-slate-200 text-slate-400 border-slate-100": props.disabled
     },
     {
-      "hover:bg-orange-600 border-0 bg-orange-500 text-white": props.active,
+      "hover:bg-orange-600 border-0 bg-orange-500 text-white": props.active
     },
     {
-      "border-orange-500 text-orange-500 bg-white": !props.active && !props.disabled,
-    },
-  ]; 4
+      "border-orange-500 text-orange-500 bg-white": !props.active && !props.disabled
+    }
+  ];
 });
 
 </script>
+
+<template>
+  <button :class="classes" :disabled="disabled">
+    <slot />
+  </button>
+</template>
