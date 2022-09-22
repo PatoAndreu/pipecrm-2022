@@ -39,7 +39,7 @@ export const useContactsStore = defineStore("contacts", {
     tabSelected: "all",
     filterUser: null,
     filterDate: null,
-    activeTab: 'activity'
+
   }),
   actions: {
     addContact(): void {

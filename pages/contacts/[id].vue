@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 
-const { loadContact, contact, activeTab } = useContacts();
+const { loadContact, contact } = useContacts();
+
+const { activeTab, activities } = useActivities();
 
 const route = useRoute();
 
@@ -13,10 +15,16 @@ onUpdated(() => {
     title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
   });
 });
+
+onUnmounted(() => {
+  activeTab.value = "activity";
+});
+
 </script>
 
 <template>
   <div class="max-w-7xl mx-auto px-10" v-if="contact.firstName">
+
     <!--  Header  -->
     <ContactsInfoRightSideHeader />
 
@@ -34,12 +42,26 @@ onUpdated(() => {
       <!--  Panel derecho  -->
       <div class="w-full h-full ml-4">
         <ContactsInfoRightSideActivitiesMenu />
-        <ContactsInfoRightSideActivitiesItems v-if="activeTab === 'activity'"/>
-        <ContactsInfoRightSideActivitiesNotes v-if="activeTab === 'notes'"/>
-        <ContactsInfoRightSideActivitiesTasks v-if="activeTab === 'tasks'"/>
+
+        <Suspense>
+          <ContactsInfoRightSideActivitiesAll v-if="activeTab === 'activities'" />
+          <template #fallback>
+            Loading...
+          </template>
+        </Suspense>
+
+        <Suspense>
+          <ContactsInfoRightSideActivitiesNotes v-if="activeTab === 'notes'" />
+          <template #fallback>
+            Loading...
+          </template>
+        </Suspense>
+        <ContactsInfoRightSideActivitiesTasks v-if="activeTab === 'tasks'" />
       </div>
+
     </div>
-    <ContactsInfoRightSideActivitiesNoteModal />
+
   </div>
+    <ContactsInfoRightSideActivitiesNotesNoteModal />
 </template>
 

@@ -1,52 +1,3 @@
-<template>
-  <div class="w-full relative">
-    <slot name="label"></slot>
-    <div class="h-10 border rounded text-left p-2"
-         :class="disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'"
-         @click="showSelectBox = !showSelectBox"
-         :disabled="disabled">
-      {{ selectedOption.name }}
-      <template v-if="type === 'user'">
-        {{ selectedOption.firstName }} {{ selectedOption.lastName }}
-      </template>
-      <ChevronDownIcon class="h-5 absolute right-4 bottom-2" v-if="!showSelectBox" />
-      <ChevronUpIcon class="h-5 absolute right-4 bottom-2" v-else />
-    </div>
-    <Transition name="fade">
-      <div v-if="showSelectBox" class="w-full bg-white border absolute z-10" :class="top ? 'bottom-12':'mt-1'">
-        <div class="h-16 p-3 relative bg-sky-100">
-          <SearchIcon class="h-6 text-cyan-400 absolute pointer-events-none right-6 mt-2" v-if="!searchInput" />
-          <XIcon class="h-6 text-cyan-400 absolute  right-6 mt-2 cursor-pointer" v-else @click="searchInput = ''" />
-          <input type="text" class="w-full h-10 rounded p-4 " placeholder="Buscar" v-model="searchInput">
-        </div>
-        <div class="mt-2 overflow-y-scroll max-h-60">
-          <div class="h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer"
-               v-if="!searchInput" @click="setOption(null)">
-          </div>
-
-          <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
-            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer" @click="setOption(option)" :class="selectedOption.id === option.id ? 'bg-cyan-50': ''">
-              <span v-if="type === 'user'">
-                {{ option.firstName }} {{ option.lastName }}
-              </span>
-              <span else>
-                {{ option.name }}
-              </span>
-            </div>
-          </template>
-
-          <div v-else>
-            <div class="w-full h-10 p-2 pl-4 text-slate-400">
-              No se encontraron resultados
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </Transition>
-  </div>
-</template>
-
 <script setup lang="ts">
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
@@ -111,3 +62,51 @@ const searchCriteria = computed(() => {
 
 
 </script>
+<template>
+  <div class="w-full relative">
+    <slot name="label"></slot>
+    <div class="h-10 border rounded text-left p-2"
+         :class="disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'"
+         @click="showSelectBox = !showSelectBox"
+         :disabled="disabled">
+      {{ selectedOption.name }}
+      <template v-if="type === 'user'">
+        {{ selectedOption.firstName }} {{ selectedOption.lastName }}
+      </template>
+      <ChevronDownIcon class="h-5 absolute right-4 bottom-2" v-if="!showSelectBox" />
+      <ChevronUpIcon class="h-5 absolute right-4 bottom-2" v-else />
+    </div>
+    <Transition name="fade">
+      <div v-if="showSelectBox" class="w-full bg-white border absolute z-10" :class="top ? 'bottom-12':'mt-1'">
+        <div class="h-16 p-3 relative bg-sky-100">
+          <SearchIcon class="h-6 text-cyan-400 absolute pointer-events-none right-6 mt-2" v-if="!searchInput" />
+          <XIcon class="h-6 text-cyan-400 absolute  right-6 mt-2 cursor-pointer" v-else @click="searchInput = ''" />
+          <input type="text" class="w-full h-10 rounded p-4 " placeholder="Buscar" v-model="searchInput">
+        </div>
+        <div class="mt-2 overflow-y-scroll max-h-60">
+          <div class="h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer"
+               v-if="!searchInput" @click="setOption(null)">
+          </div>
+
+          <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
+            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer" @click="setOption(option)" :class="selectedOption.id === option.id ? 'bg-cyan-50': ''">
+              <span v-if="type === 'user'">
+                {{ option.firstName }} {{ option.lastName }}
+              </span>
+              <span else>
+                {{ option.name }}
+              </span>
+            </div>
+          </template>
+
+          <div v-else>
+            <div class="w-full h-10 p-2 pl-4 text-slate-400">
+              No se encontraron resultados
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </Transition>
+  </div>
+</template>
