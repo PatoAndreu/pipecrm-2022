@@ -5,7 +5,7 @@ import { Link } from "@/interfaces/IUi";
 interface Props {
   name: string;
   links: [Link] | undefined;
-  right: boolean;
+  right?: boolean;
   avatar?: boolean | undefined;
   avatarImage?: string | undefined;
 }

@@ -1,4 +1,4 @@
-import { IDeal } from "@/interfaces/IDeals";
+import { Deal } from "@/interfaces/IDeals";
 
 interface ContactLifecycleStage {
   readonly id: number,
@@ -28,7 +28,7 @@ export interface ContactInterface {
   contactStatus: ContactStatus | undefined
   createdAt: string,
   updatedAt: string,
-  deals: Array<IDeal> | undefined,
+  deals: Array<Deal> | undefined,
   email: string,
   firstName: string,
   jobTitle: string | undefined,
@@ -58,6 +58,5 @@ export interface ContactState {
       readonly id: number,
       name: string
     },
-  activeTab: string
 }
 
