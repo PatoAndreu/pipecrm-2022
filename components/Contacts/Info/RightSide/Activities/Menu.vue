@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-const { activeTab } = useContacts();
+const { activeTab } = useActivities();
 
 </script>
 
 <template>
   <ul class="flex space-x-10 p-4 text-slate-500">
-    <li :class="activeTab === 'activity' ? 'active':''">
-      <button @click="activeTab = 'activity'">Actividad</button>
+    <li :class="activeTab === 'activities' ? 'active':''">
+      <button @click="activeTab = 'activities'">Actividad</button>
       <div></div>
     </li>
     <li :class="activeTab === 'notes' ? 'active':''">

@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ChevronDownIcon,ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
 
 const { activity, activityModalOpen, isEditing, saveActivity, closeNoteModal, minimize } = useActivities();
 
 const disabledForm = computed(() => {
   return activity.value.text?.length > 0;
 });
+
 </script>
 
 
 <template>
-  <form class="w-[650px] bg-white absolute bottom-2 right-10 h-auto shadow-2xl" @submit.prevent="saveActivity" v-show="activityModalOpen">
+  <form class="w-[650px] bg-white sticky bottom-2 left-1/2 mr-10 h-auto shadow-2xl" @submit.prevent="saveActivity" v-if="activityModalOpen">
     <!--  Header  -->
     <div class="w-full bg-indigo-800 text-white py-2 px-4 flex items-center justify-between">
       <div class="flex items-center justify-center">
@@ -33,7 +34,7 @@ const disabledForm = computed(() => {
       <hr>
       <div class="p-4">
         <UIButton type="submit" :active="disabledForm" :disabled="!disabledForm">
-          {{ !isEditing ? "Guardar nota" : "Actualizar nota" }}
+          {{ !isEditing ? "Guardar Nota" : "Actualizar Nota" }}
         </UIButton>
       </div>
     </div>
