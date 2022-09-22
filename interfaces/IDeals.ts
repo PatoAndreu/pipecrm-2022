@@ -1,4 +1,4 @@
-export interface IDeal {
+export interface Deal {
   readonly id: number,
   amount: number,
   close_date: string,
