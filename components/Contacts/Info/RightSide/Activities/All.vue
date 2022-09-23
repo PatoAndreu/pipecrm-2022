@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Task from "~/components/Contacts/Info/RightSide/Activities/Tasks/Task.vue";
+import Task from "@/components/Contacts/Info/RightSide/Activities/Tasks/Task.vue";
 
 const { contact } = useContacts();
 

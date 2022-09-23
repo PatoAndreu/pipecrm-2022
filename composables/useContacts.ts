@@ -1,7 +1,7 @@
 import { useContactsStore } from "@/stores/contactsStore";
 import { storeToRefs } from "pinia";
 
-import { ContactInterface } from "~/interfaces/IContacts";
+import { IContact } from "~/interfaces/IContacts";
 
 export default function useContacts() {
 
@@ -18,7 +18,6 @@ export default function useContacts() {
           tabSelected,
           filterUser,
           filterDate,
-          activeTab,
           filteredContacts,
           disabledFormContact
         }             = storeToRefs(contactsStore);
@@ -28,7 +27,7 @@ export default function useContacts() {
   const addContact       = () => contactsStore.addContact();
   const saveContact      = (): Promise<void> => contactsStore.saveContact();
   const updateContact    = (contact) => contactsStore.updateContact(contact);
-  const editContact      = (contact: ContactInterface): Promise<void> => contactsStore.editContact(contact);
+  const editContact      = (contact: IContact): Promise<void> => contactsStore.editContact(contact);
   const setTabSelected   = (tab: string) => contactsStore.setTabSelected(tab);
   const getContactStatus = () => contactsStore.getContactStatus();
   const getContactStages = () => contactsStore.getContactStages();
@@ -47,7 +46,6 @@ export default function useContacts() {
     tabSelected,
     filterUser,
     filterDate,
-    activeTab,
     disabledFormContact,
     filteredContacts,
     loadContacts,

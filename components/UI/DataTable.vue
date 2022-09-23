@@ -656,6 +656,9 @@
 </template>
 
 <script setup>
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
+
+import { useUIStore } from "@/stores/ui";
 
 const props = defineProps({
   columns: {
@@ -674,9 +677,7 @@ const props = defineProps({
   },
 })
 
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
 
-import { useUIStore } from "@/stores/ui";
 const uiStore = useUIStore();
 
 let rowsLeft = ref()

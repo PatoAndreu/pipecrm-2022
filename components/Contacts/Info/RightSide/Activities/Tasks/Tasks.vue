@@ -3,7 +3,14 @@ import Task from "~/components/Contacts/Info/RightSide/Activities/Tasks/Task.vue
 
 const { contact } = useContacts();
 
-const { getActivities, pinnedActivities, pendingTasks, completedActivities, delayedActivities } = useActivities();
+const {
+        getActivities,
+        pinnedActivities,
+        pendingTasks,
+        completedActivities,
+        delayedActivities,
+        addActivity
+      } = useActivities();
 
 await getActivities(contact);
 
@@ -11,6 +18,12 @@ await getActivities(contact);
 
 <template>
   <div class="p-2 text-slate-500">
+
+    <div class="flex justify-center py-4">
+      <UIButton type="submit" :active="true" @click="addActivity('note')">
+        Crear Tarea
+      </UIButton>
+    </div>
 
     <div v-if="pinnedActivities.length > 0">
       <p class="font-normal py-4">Ancladas</p>
@@ -28,7 +41,7 @@ await getActivities(contact);
             :activity="activity" />
     </div>
 
-    <div >
+    <div>
       <p class="font-normal py-4">Pendientes</p>
       <hr>
       <Task v-for="activity in pendingTasks"

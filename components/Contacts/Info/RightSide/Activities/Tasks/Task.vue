@@ -11,19 +11,15 @@ import {
 
 import { CheckCircleIcon as CheckCircleIconOk } from "@heroicons/vue/solid";
 
-import { Activity } from "~/interfaces/IActivities";
+import { IActivity } from "~/interfaces/IActivities";
 import dayjs from "dayjs";
 
 interface Props {
-  activity: Activity;
-  pinned: boolean;
-  note: boolean;
+  activity: IActivity;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   activity: null,
-  pinned: false,
-  note: false
 });
 
 const { editActivity, changeStatus, deleteActivity } = useActivities();

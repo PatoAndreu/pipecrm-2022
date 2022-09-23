@@ -9,14 +9,10 @@ import {
 
 interface Props {
   activity: object;
-  pinned: boolean;
-  note: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   activity: null,
-  pinned: false,
-  note: false
 });
 
 const { editActivity, changeStatus, deleteActivity } = useActivities();

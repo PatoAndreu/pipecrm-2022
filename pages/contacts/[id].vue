@@ -6,9 +6,7 @@ const { activeTab, activities } = useActivities();
 
 const route = useRoute();
 
-onBeforeMount(async () => {
-  await loadContact(Number(route.params.id));
-});
+await loadContact(Number(route.params.id));
 
 onUpdated(() => {
   useHead({
@@ -17,13 +15,13 @@ onUpdated(() => {
 });
 
 onUnmounted(() => {
-  activeTab.value = "activity";
+  activeTab.value = "activities";
 });
 
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-10" v-if="contact.firstName">
+  <div class="max-w-7xl mx-auto px-10">
 
     <!--  Header  -->
     <ContactsInfoRightSideHeader />
@@ -60,8 +58,9 @@ onUnmounted(() => {
       </div>
 
     </div>
-
+    <Teleport to="#teleport">
+      <ContactsInfoRightSideActivitiesNotesNoteModal />
+    </Teleport>
   </div>
-    <ContactsInfoRightSideActivitiesNotesNoteModal />
 </template>
 

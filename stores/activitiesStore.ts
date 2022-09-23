@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { ActivitiesState, Activity } from "@/interfaces/IActivities";
-
+import { ActivitiesState, IActivity } from "@/interfaces/IActivities";
+import { IContact } from "~/interfaces/IContacts";
 
 const initialActivity = {
   id: null,
@@ -32,7 +32,7 @@ export const useActivitiesStore = defineStore("activities", {
     // Requests
     async getActivities(contact): Promise<void> {
       try {
-        let data: Activity[];
+        let data: IActivity[];
         ({ data } = await $fetch(`http://pipecrm-api.test/api/activities/contact/${contact.value.id}`));
         this.activities = data;
       } catch (error) {
@@ -67,7 +67,7 @@ export const useActivitiesStore = defineStore("activities", {
             method: "PATCH",
             body: {
               ...activity,
-              [Object.keys(status)[0]]: Object.values(status)[0] ,
+              [Object.keys(status)[0]]: Object.values(status)[0],
               delayed: false
             }
           });
@@ -82,10 +82,10 @@ export const useActivitiesStore = defineStore("activities", {
       try {
         const response = await $fetch(`http://pipecrm-api.test/api/activities/${activity.id}`,
           {
-            method: "DELETE",
+            method: "DELETE"
           });
         await this.getActivities(contact);
-        if (activity.id === this.activity.id){
+        if (activity.id === this.activity.id) {
           this.isEditing         = false;
           this.activityModalOpen = false;
           this.minimize          = false;
@@ -110,12 +110,13 @@ export const useActivitiesStore = defineStore("activities", {
     addActivity(type: string) {
       const { contact } = useContacts();
 
-      this.activity          = {
+      this.activity = {
         ...initialActivity,
         type: type,
         owner: { id: 1 },
         contact: contact
       };
+
       this.activityModalOpen = true;
       this.minimize          = false;
       this.isEditing         = false;
