@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import Task from "@/components/Contacts/Info/RightSide/Activities/Tasks/Task.vue";
+import Task from "@/components/Contacts/Info/RightSide/Activities/Tasks/Task";
+import Note from "@/components/Contacts/Info/RightSide/Activities/Notes/Note";
 
 const { contact } = useContacts();
 
@@ -15,33 +16,46 @@ await getActivities(contact);
     <div v-if="pinnedActivities.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
-      <Task v-for="activity in pinnedActivities"
-            :key="activity.id"
-            :activity="activity" />
+      <template v-for="activity in pinnedActivities"
+                :key="activity.id"
+                :activity="activity">
+        <Note :activity="activity" v-if="activity.type === 'note'" />
+        <Task :activity="activity" v-else />
+      </template>
     </div>
 
     <div v-if="delayedActivities.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
-      <Task v-for="activity in delayedActivities"
-            :key="activity.id"
-            :activity="activity" />
+      <template v-for="activity in delayedActivities"
+                :key="activity.id"
+                :activity="activity">
+        <Note :activity="activity" v-if="activity.type === 'note'" />
+        <Task :activity="activity" v-else />
+      </template>
     </div>
 
     <div v-if="pendingActivities.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
-      <Task v-for="activity in pendingActivities"
-            :key="activity.id"
-            :activity="activity" />
+      <template v-for="activity in pendingActivities"
+                :key="activity.id"
+                :activity="activity">
+        <Note :activity="activity" v-if="activity.type === 'note'" />
+        <Task :activity="activity" v-else />
+      </template>
     </div>
 
     <div v-if="completedActivities.length > 0">
       <p class="font-normal py-4">Completadas</p>
       <hr>
-      <Task v-for="activity in completedActivities"
-            :key="activity.id"
-            :activity="activity" />
+      <template v-for="activity in completedActivities"
+                :key="activity.id"
+                :activity="activity">
+        <Note :activity="activity" v-if="activity.type === 'note'" />
+        <Task :activity="activity" v-else />
+      </template>
     </div>
+
   </div>
 </template>
