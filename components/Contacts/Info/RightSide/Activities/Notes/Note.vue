@@ -97,8 +97,6 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
         </div>
       </button>
 
-
-
     </div>
   </div>
 </template>

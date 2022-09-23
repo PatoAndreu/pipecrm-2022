@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -37,9 +38,9 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
 </script>
 
 <template>
-  <ContactsInfoRightSideActivitiesNotesNote v-if="activity.type === 'note'" :activity="activity" />
 
-  <div class="w-full h-auto text-slate-600 shadow rounded my-4 p-2 relative" v-if="activity.type !== 'note'" :class="activity.delayed ? 'bg-red-50':'bg-white'">
+
+  <div class="w-full h-auto text-slate-600 shadow rounded my-4 p-2 relative" :class="activity.delayed ? 'bg-red-50':'bg-white'">
     <!--  Header    -->
 
     <div class="w-10 h-10 rounded-full bg-orange-600 absolute flex items-center justify-center -right-5 -top-5 shadow-2xl opacity-90 cursor-pointer hover:opacity-90 shadow-2xl"
@@ -53,16 +54,16 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
 
     <div class="w-full flex items-center py-2">
 
-      <div v-if="activity.type !== 'note'">
+      <div>
         <CheckCircleIcon class="h-8 w-8 text-slate-400 cursor-pointer hover:text-green-600" @click="changeStatus(activity, {completed: true})" v-if="!activity.completed" />
         <CheckCircleIconOk class="h-8 w-8 text-green-400 cursor-pointer hover:text-green-600" @click="changeStatus(activity, {completed: false})" v-else />
       </div>
 
       <button class="flex text-sm w-full justify-between px-2 hover:text-cyan-600" @click="editActivity(activity)">
         <div>
-          <span class="font-bold">{{ activity.type !== "note" ? "Tarea" : "Nota" }}</span>
-          <span v-if="activity.type !== 'note'">
-            Asignada a : {{ activity.owner.firstName + " " + activity.owner.lastName }}
+          <span class="font-bold">Tarea</span>
+          <span>
+            asignada a {{ activity.owner.firstName + " " + activity.owner.lastName }}
           </span>
         </div>
       </button>
@@ -79,7 +80,7 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
               Anclar
             </li>
 
-            <li class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2" v-if="!note">
+            <li class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2">
               Marcar como completada
             </li>
             <li class="w-full hover:bg-cyan-500 hover:text-white py-1 pl-2" @CLICK="deleteActivity(activity)">Eliminar</li>
@@ -95,7 +96,7 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
       <p>{{ activity?.text }}</p>
     </div>
     <!--  Footer    -->
-    <div class="flex px-4 text-xs space-x-4 items-center h-10" v-if="!note">
+    <div class="flex px-4 text-xs space-x-4 items-center h-10">
 
       <div class="flex" :class="activity.delayed ? 'text-red-500':''">
         <CalendarIcon class="h-4 w-4" />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Note from "@/components/Contacts/Info/RightSide/Activities/Notes/Note";
 
-const { notes, pinnedNotes, addActivity, getActivities } = useActivities();
+const { notes, pinnedNotes, addNote, getActivities } = useActivities();
 
 const { contact } = useContacts();
 
@@ -11,7 +11,7 @@ await getActivities(contact);
 
 <template>
   <div class="flex justify-center py-4">
-    <UIButton type="submit" :active="true" @click="addActivity('note')">
+    <UIButton type="submit" :active="true" @click="addNote()">
       Crear Nota
     </UIButton>
   </div>

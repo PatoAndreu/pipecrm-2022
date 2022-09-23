@@ -15,9 +15,10 @@ export default function useActivities() {
   const closeNoteModal = (): void => activitiesStore.closeNoteModal();
   const editActivity   = (activity: IActivity): void => activitiesStore.editActivity(activity);
   const changeStatus   = async (activity: IActivity, status: boolean) => await activitiesStore.changeStatus(activity, status);
-  const addActivity    = (type: string): void => activitiesStore.addActivity(type);
   const deleteActivity = async (activity: IActivity) => await activitiesStore.deleteActivity(activity);
 
+  //Notes
+  const addNote    = (): void => activitiesStore.addNote();
 
   const formatDate: string = "YYYY-MM-DD hh:mm:ss";
   const hoy: string        = dayjs().format(formatDate);
@@ -91,7 +92,7 @@ export default function useActivities() {
     closeNoteModal,
     editActivity,
     changeStatus,
-    addActivity,
+    addNote,
     deleteActivity
   };
 }

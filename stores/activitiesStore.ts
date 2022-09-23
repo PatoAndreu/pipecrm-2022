@@ -107,12 +107,12 @@ export const useActivitiesStore = defineStore("activities", {
       this.activityModalOpen = true;
       this.minimize          = false;
     },
-    addActivity(type: string) {
+    addNote() {
       const { contact } = useContacts();
 
       this.activity = {
         ...initialActivity,
-        type: type,
+        type: 'note',
         owner: { id: 1 },
         contact: contact
       };
