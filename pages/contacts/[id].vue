@@ -3,17 +3,18 @@ import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } fr
 import useContacts, { useContactsComponents } from "@/composables/useContacts";
 import useActivities from "@/composables/useActivities";
 
-const { loadContact, contact } = useContacts();
+const { loadContact, loadContacts, contact } = useContacts();
 
 const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
 
-const { getActivities, activeTab, activities } = useActivities();
+const { getActivityByContact, activeTab, activities } = useActivities();
 
 const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesComponents();
 
 const route = useRoute();
 
 await loadContact(Number(route.params.id));
+await loadContacts();
 
 onUpdated(() => {
   useHead({
@@ -23,7 +24,7 @@ onUpdated(() => {
 
 onUnmounted(async () => {
   activeTab.value = "activities";
-  await getActivities(contact);
+  await getActivityByContact(contact);
 
 });
 // const { pending, data } = useLazyAsyncData('contacts', () => $fetch('http://pipecrm-api.test/api/contacts'))
@@ -70,11 +71,11 @@ onUnmounted(async () => {
       </div>
 
     </div>
-    <Teleport to="#teleport">
+    <Teleport to="#NoteModal">
       <NoteModal />
     </Teleport>
 
-    <Teleport to="#teleport">
+    <Teleport to="#TaskModal">
       <TaskModal />
     </Teleport>
   </div>

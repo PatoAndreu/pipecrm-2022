@@ -7,16 +7,16 @@ const { contact } = useContacts();
 const { Task } = useActivitiesComponents();
 
 const {
-  getActivities,
-  pinnedActivities,
+  getActivityByContact,
+  pinnedTasks,
   pendingTasks,
-  completedActivities,
-  delayedActivities,
-  addActivity
+  completedTasks,
+  delayedTasks,
+  addTask
 } = useActivities();
 
 onBeforeMount(async () => {
-  await getActivities(contact);
+  await getActivityByContact(contact);
 });
 </script>
 
@@ -24,33 +24,33 @@ onBeforeMount(async () => {
   <div class="p-2 text-slate-500">
 
     <div class="flex justify-center py-4">
-      <UIButton type="submit" :active="true" @click="addActivity('task')">
+      <UIButton type="submit" :active="true" @click="addTask('call')">
         Crear Tarea
       </UIButton>
     </div>
 
-    <div v-if="pinnedActivities?.length > 0">
+    <div v-if="pinnedTasks?.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
-      <Task v-for="activity in pinnedActivities" :key="activity.id" :activity="activity" />
+      <Task v-for="task in pinnedTasks" :key="task.id" :task="task" />
     </div>
 
-    <div v-if="delayedActivities?.length > 0">
+    <div v-if="delayedTasks?.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
-      <Task v-for="activity in delayedActivities" :key="activity.id" :activity="activity" />
+      <Task v-for="task in delayedTasks" :key="task.id" :task="task" />
     </div>
 
     <div v-if="pendingTasks?.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
-      <Task v-for="activity in pendingTasks" :key="activity.id" :activity="activity" />
+      <Task v-for="task in pendingTasks" :key="task.id" :task="task" />
     </div>
 
-    <div v-if="completedActivities?.length > 0">
-      <p class="font-normal py-4">Completadas</p>
+    <div v-if="completedTasks?.length > 0">
+      <p class="font-normal py-4">Pasadas</p>
       <hr>
-      <Task v-for="activity in completedActivities" :key="activity.id" :activity="activity" />
+      <Task v-for="task in completedTasks" :key="task.id" :task="task" />
     </div>
   </div>
 

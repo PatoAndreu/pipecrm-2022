@@ -21,10 +21,11 @@ export interface IActivity {
 }
 
 export interface ActivitiesState {
-  activity: IActivity;
   activities: IActivity[];
-  activityModalOpen: boolean;
+  task: IActivity;
+  showModal: boolean;
   isEditing: boolean;
+  showAssociations: boolean;
   minimize: boolean;
   activeTab: string;
 }

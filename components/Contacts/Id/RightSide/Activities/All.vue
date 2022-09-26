@@ -3,13 +3,19 @@ import useContacts from "@/composables/useContacts";
 import useActivities, { useActivitiesComponents } from "@/composables/useActivities";
 import { onMounted } from "#imports";
 
-const { contact }    = useContacts();
+const { contact } = useContacts();
 const { Note, Task } = useActivitiesComponents();
 
-const { getActivities, pinnedActivities, pendingActivities, completedActivities, delayedActivities } = useActivities();
+const {
+        getActivityByContact,
+        pinnedActivities,
+        pendingActivities,
+        completedActivities,
+        delayedTasks
+      } = useActivities();
 
 onMounted(async () => {
-  await getActivities(contact);
+  await getActivityByContact(contact);
 });
 
 </script>
@@ -20,44 +26,40 @@ onMounted(async () => {
     <div v-if="pinnedActivities?.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
-      <template v-for="activity in pinnedActivities"
-                :key="activity.id"
-                :activity="activity">
-        <Note :activity="activity" v-if="activity.type === 'note'" />
-        <Task :activity="activity" v-else />
+      <template v-for="task in pinnedActivities"
+                :key="task.id">
+        <Note :note="task" v-if="task.type === 'note'" />
+        <Task :task="task" v-else />
       </template>
     </div>
 
-    <div v-if="delayedActivities?.length > 0">
+    <div v-if="delayedTasks?.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
-      <template v-for="activity in delayedActivities"
-                :key="activity.id"
-                :activity="activity">
-        <Note :activity="activity" v-if="activity.type === 'note'" />
-        <Task :activity="activity" v-else />
+      <template v-for="task in delayedTasks"
+                :key="task.id">
+        <Note :note="task" v-if="task.type === 'note'" />
+        <Task :task="task" v-else />
       </template>
     </div>
 
     <div v-if="pendingActivities?.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
-      <template v-for="activity in pendingActivities"
-                :key="activity.id"
-                :activity="activity">
-        <Note :activity="activity" v-if="activity.type === 'note'" />
-        <Task :activity="activity" v-else />
+      <template v-for="task in pendingActivities"
+                :key="task.id">
+        <Note :note="task" v-if="task.type === 'note'" />
+        <Task :task="task" v-else />
       </template>
     </div>
 
     <div v-if="completedActivities?.length > 0">
-      <p class="font-normal py-4">Completadas</p>
+      <p class="font-normal py-4">Pasadas</p>
       <hr>
-      <template v-for="activity in completedActivities"
-                :key="activity.id"
-                :activity="activity">
-        <Note :activity="activity" v-if="activity.type === 'note'" />
-        <Task :activity="activity" v-else />
+      <template v-for="task in completedActivities"
+                :key="task.id">
+        <Note :note="task" v-if="task.type === 'note'" />
+        <Task :task="task" v-else />
       </template>
     </div>
 

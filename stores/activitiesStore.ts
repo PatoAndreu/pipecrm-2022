@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { ActivitiesState, IActivity } from "@/interfaces/IActivities";
-import { IContact } from "~/interfaces/IContacts";
+import { IContact } from "@/interfaces/IContacts";
+import useContacts from "@/composables/useContacts";
 import { Ref } from "@vue/reactivity";
 
 const initialActivity = {
   id: null,
-  text: null,
+  text: "",
   pinned: false,
   completed: false,
   delayed: false,
@@ -22,16 +23,17 @@ const initialActivity = {
 
 export const useActivitiesStore = defineStore("activities", {
   state: (): ActivitiesState => ({
-    activity: { ...initialActivity },
+    task: { ...initialActivity },
     activities: null,
-    activityModalOpen: false,
+    showModal: false,
     isEditing: false,
     minimize: false,
-    activeTab: "activities"
+    showAssociations: false,
+    activeTab: "tasks"
   }),
   actions: {
     // Requests
-    async getActivities(contact:Ref<IContact>): Promise<void> {
+    async getActivityByContact(contact: Ref<IContact>): Promise<void> {
       try {
         let data: IActivity[];
         ({ data } = await $fetch(`http://pipecrm-api.test/api/activities/contact/${contact.value.id}`));
@@ -40,56 +42,56 @@ export const useActivitiesStore = defineStore("activities", {
         console.error(error);
       }
     },
-    async saveActivity() {
+    async saveTask() {
       const { contact } = useContacts();
 
       const url = this.isEditing ?
-        `http://pipecrm-api.test/api/activities/${this.activity.id}` :
+        `http://pipecrm-api.test/api/activities/${this.task.id}` :
         "http://pipecrm-api.test/api/activities";
 
       try {
         const response = await $fetch(url,
           {
             method: this.isEditing ? "PATCH" : "POST",
-            body: { ...this.activity }
+            body: { ...this.task }
           });
-        await this.getActivities(contact);
-        this.activityModalOpen = false;
+        await this.getActivityByContact(contact);
+        this.showModal = false;
         return response;
       } catch (error) {
         console.error(error);
       }
     },
-    async changeStatus(activity, status) {
+    async changeTaskStatus(task, status) {
       const { contact } = useContacts();
       try {
-        const response = await $fetch(`http://pipecrm-api.test/api/activities/${activity.id}`,
+        const response = await $fetch(`http://pipecrm-api.test/api/activities/${task.id}`,
           {
             method: "PATCH",
             body: {
-              ...activity,
+              ...task,
               [Object.keys(status)[0]]: Object.values(status)[0],
               delayed: false
             }
           });
-        await this.getActivities(contact);
+        await this.getActivityByContact(contact);
         return response;
       } catch (error) {
         console.error(error);
       }
     },
-    async deleteActivity(activity) {
+    async deleteTask(task) {
       const { contact } = useContacts();
       try {
-        const response = await $fetch(`http://pipecrm-api.test/api/activities/${activity.id}`,
+        const response = await $fetch(`http://pipecrm-api.test/api/activities/${task.id}`,
           {
             method: "DELETE"
           });
-        await this.getActivities(contact);
-        if (activity.id === this.activity.id) {
-          this.isEditing         = false;
-          this.activityModalOpen = false;
-          this.minimize          = false;
+        await this.getActivityByContact(contact);
+        if (task.id === this.task.id) {
+          this.isEditing = false;
+          this.showModal = false;
+          this.minimize  = false;
         }
         return response;
       } catch (error) {
@@ -97,30 +99,33 @@ export const useActivitiesStore = defineStore("activities", {
       }
     },
     // Setters
-    closeNoteModal() {
-      this.activity          = { id: null, text: null };
-      this.activityModalOpen = false;
-      this.minimize          = false;
+    closeTaskModal() {
+      this.task             = { ...initialActivity };
+      this.showModal        = false;
+      this.minimize         = false;
+      this.showAssociations = false;
     },
-    editActivity(activity) {
-      this.activity          = { ...activity };
-      this.isEditing         = true;
-      this.activityModalOpen = true;
-      this.minimize          = false;
-    },
-    addActivity(type) {
-      const { contact } = useContacts();
-
-      this.activity = {
+    addTask(type: string, contact?: IContact) {
+      this.task             = {
         ...initialActivity,
         type: type,
         owner: { id: 1 },
         contact: contact
       };
+      this.showModal        = false;
+      this.minimize         = false;
+      this.isEditing        = false;
+      this.showAssociations = false;
 
-      this.activityModalOpen = true;
-      this.minimize          = false;
-      this.isEditing         = false;
+      this.showModal = true;
+    },
+    editTask(task: IActivity) {
+      this.task      = { ...task };
+      this.showModal = false;
+      this.showModal = false;
+      this.minimize  = false;
+      this.isEditing = true;
+      (task.type === "note") ? this.showModal = true : this.showModal = true;
     }
   }
 });

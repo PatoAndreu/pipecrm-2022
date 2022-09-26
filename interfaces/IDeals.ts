@@ -12,3 +12,8 @@ export interface IDeal {
   priority: string,
   updated_at: string
 }
+
+export interface IDealStore {
+  deal: IDeal,
+  deals: IDeal[]
+}
