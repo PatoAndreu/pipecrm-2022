@@ -1,8 +1,15 @@
 <script lang="ts" setup>
+import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } from "#imports";
+import useContacts, { useContactsComponents } from "@/composables/useContacts";
+import useActivities from "@/composables/useActivities";
 
 const { loadContact, contact } = useContacts();
 
-const { activeTab, activities } = useActivities();
+const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
+
+const { getActivities, activeTab, activities } = useActivities();
+
+const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesComponents();
 
 const route = useRoute();
 
@@ -14,9 +21,14 @@ onUpdated(() => {
   });
 });
 
-onUnmounted(() => {
+onUnmounted(async () => {
   activeTab.value = "activities";
+  await getActivities(contact);
+
 });
+// const { pending, data } = useLazyAsyncData('contacts', () => $fetch('http://pipecrm-api.test/api/contacts'))
+//
+// console.log(pending.value);
 
 </script>
 
@@ -24,42 +36,46 @@ onUnmounted(() => {
   <div class="max-w-7xl mx-auto px-10">
 
     <!--  Header  -->
-    <ContactsInfoRightSideHeader />
+    <Header />
 
     <!--  Contenido central  -->
     <div class="flex mt-6 pb-10">
 
       <!--  Panel izquierdo  -->
       <div class="w-[400px] h-full space-y-2">
-        <ContactsInfoLeftSideContactInfo />
-        <ContactsInfoLeftSideCompanyInfo />
-        <ContactsInfoLeftSideDealsInfo />
-        <ContactsInfoLeftSideFollowersInfo />
+        <ContactInfo />
+        <CompanyInfo />
+        <DealsInfo />
+        <FollowersInfo />
       </div>
 
       <!--  Panel derecho  -->
       <div class="w-full h-full ml-4">
-        <ContactsInfoRightSideActivitiesMenu />
+        <ActivityMenu />
 
         <Suspense>
-          <ContactsInfoRightSideActivitiesAll v-if="activeTab === 'activities'" />
+          <All v-if="activeTab === 'activities'" />
           <template #fallback>
             Loading...
           </template>
         </Suspense>
 
         <Suspense>
-          <ContactsInfoRightSideActivitiesNotes v-if="activeTab === 'notes'" />
+          <Notes v-if="activeTab === 'notes'" />
           <template #fallback>
             Loading...
           </template>
         </Suspense>
-        <ContactsInfoRightSideActivitiesTasks v-if="activeTab === 'tasks'" />
+        <Tasks v-if="activeTab === 'tasks'" />
       </div>
 
     </div>
     <Teleport to="#teleport">
-      <ContactsInfoRightSideActivitiesNotesNoteModal />
+      <NoteModal />
+    </Teleport>
+
+    <Teleport to="#teleport">
+      <TaskModal />
     </Teleport>
   </div>
 </template>

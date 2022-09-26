@@ -10,20 +10,20 @@ const initialContact: IContact = {
   city: null,
   company: null,
   contactStatus: null,
-  createdAt: "",
-  updatedAt: "",
+  createdAt: null,
+  updatedAt: null,
   deals: [],
-  email: "",
-  firstName: "",
-  jobTitle: "",
-  lastName: "",
+  email: null,
+  firstName: null,
+  jobTitle: null,
+  lastName: null,
   contactLifeCycleStage: null,
   mobilePhoneNumber: null,
   owner: null,
   phoneNumber: null,
   region: null,
-  address: "",
-  websiteUrl: ""
+  address: null,
+  websiteUrl: null
 };
 
 export const useContactsStore = defineStore("contacts", {
@@ -81,7 +81,7 @@ export const useContactsStore = defineStore("contacts", {
         const { data }     = await $fetch("http://pipecrm-api.test/api/contact/status");
         this.contactStatus = data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
 
     },
@@ -91,7 +91,7 @@ export const useContactsStore = defineStore("contacts", {
         const { data }             = await $fetch("http://pipecrm-api.test/api/contact/stages");
         this.contactLifeCycleStage = data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
 
     },

@@ -1,7 +1,14 @@
 import { useContactsStore } from "@/stores/contactsStore";
 import { storeToRefs } from "pinia";
 
-import { IContact } from "~/interfaces/IContacts";
+import { IContact } from "@/interfaces/IContacts";
+
+import Header from '@/components/Contacts/Id/Header.vue'
+import ContactInfo from '@/components/Contacts/Id/LeftSide/ContactInfo.vue'
+import CompanyInfo from '@/components/Contacts/Id/LeftSide/CompanyInfo.vue'
+import DealsInfo from '@/components/Contacts/Id/LeftSide/DealsInfo.vue'
+import FollowersInfo from '@/components/Contacts/Id/LeftSide/FollowersInfo.vue'
+
 
 export default function useContacts() {
 
@@ -58,6 +65,16 @@ export default function useContacts() {
     getContactStatus,
     getContactStages,
     resetContact,
-    deleteContact
+    deleteContact,
   };
 };
+
+export function useContactsComponents(){
+  return{
+    Header,
+    ContactInfo,
+    CompanyInfo,
+    DealsInfo,
+    FollowersInfo,
+  }
+}

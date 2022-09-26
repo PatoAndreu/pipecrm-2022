@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import useActivities from "@/composables/useActivities";
+
 const { activeTab } = useActivities();
 
 </script>

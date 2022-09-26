@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ActivitiesState, IActivity } from "@/interfaces/IActivities";
 import { IContact } from "~/interfaces/IContacts";
+import { Ref } from "@vue/reactivity";
 
 const initialActivity = {
   id: null,
@@ -26,11 +27,11 @@ export const useActivitiesStore = defineStore("activities", {
     activityModalOpen: false,
     isEditing: false,
     minimize: false,
-    activeTab: "tasks"
+    activeTab: "activities"
   }),
   actions: {
     // Requests
-    async getActivities(contact): Promise<void> {
+    async getActivities(contact:Ref<IContact>): Promise<void> {
       try {
         let data: IActivity[];
         ({ data } = await $fetch(`http://pipecrm-api.test/api/activities/contact/${contact.value.id}`));
@@ -107,12 +108,12 @@ export const useActivitiesStore = defineStore("activities", {
       this.activityModalOpen = true;
       this.minimize          = false;
     },
-    addNote() {
+    addActivity(type) {
       const { contact } = useContacts();
 
       this.activity = {
         ...initialActivity,
-        type: 'note',
+        type: type,
         owner: { id: 1 },
         contact: contact
       };

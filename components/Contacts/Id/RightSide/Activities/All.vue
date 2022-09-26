@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import Task from "@/components/Contacts/Info/RightSide/Activities/Tasks/Task";
-import Note from "@/components/Contacts/Info/RightSide/Activities/Notes/Note";
+import useContacts from "@/composables/useContacts";
+import useActivities, { useActivitiesComponents } from "@/composables/useActivities";
+import { onMounted } from "#imports";
 
-const { contact } = useContacts();
+const { contact }    = useContacts();
+const { Note, Task } = useActivitiesComponents();
 
 const { getActivities, pinnedActivities, pendingActivities, completedActivities, delayedActivities } = useActivities();
 
-await getActivities(contact);
+onMounted(async () => {
+  await getActivities(contact);
+});
 
 </script>
 
 <template>
   <div class="p-2 text-slate-500">
 
-    <div v-if="pinnedActivities.length > 0">
+    <div v-if="pinnedActivities?.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
       <template v-for="activity in pinnedActivities"
@@ -24,7 +28,7 @@ await getActivities(contact);
       </template>
     </div>
 
-    <div v-if="delayedActivities.length > 0">
+    <div v-if="delayedActivities?.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
       <template v-for="activity in delayedActivities"
@@ -35,7 +39,7 @@ await getActivities(contact);
       </template>
     </div>
 
-    <div v-if="pendingActivities.length > 0">
+    <div v-if="pendingActivities?.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
       <template v-for="activity in pendingActivities"
@@ -46,7 +50,7 @@ await getActivities(contact);
       </template>
     </div>
 
-    <div v-if="completedActivities.length > 0">
+    <div v-if="completedActivities?.length > 0">
       <p class="font-normal py-4">Completadas</p>
       <hr>
       <template v-for="activity in completedActivities"

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-
 import { XIcon } from "@heroicons/vue/outline";
 import { useContactsStore } from "@/stores/contactsStore";
+import useContacts from "@/composables/useContacts";
+import { useUsers } from "@/composables/useUsers";
+import { ref } from "@vue/reactivity";
 
 const contactStore = useContactsStore();
 
@@ -20,7 +22,7 @@ const {
 
 const { users, loadUsers } = useUsers();
 
-let errorsMessages = ref([]);
+let errorsMessages = ref<string[]>([]);
 
 await loadUsers();
 

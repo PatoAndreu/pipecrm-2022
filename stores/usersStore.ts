@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import { IUser, IUserState } from "~~/interfaces/IUsers";
+import { IUser, IUserState } from "@/interfaces/IUsers";
 
 const initialUser: IUser = {
   id: null,

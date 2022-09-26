@@ -12,8 +12,9 @@ import {
 
 import { CheckCircleIcon as CheckCircleIconOk } from "@heroicons/vue/solid";
 
-import { IActivity } from "~/interfaces/IActivities";
+import { IActivity } from "@/interfaces/IActivities";
 import dayjs from "dayjs";
+import useActivities from "@/composables/useActivities";
 
 interface Props {
   activity: IActivity;
@@ -61,9 +62,9 @@ const { editActivity, changeStatus, deleteActivity } = useActivities();
 
       <button class="flex text-sm w-full justify-between px-2 hover:text-cyan-600" @click="editActivity(activity)">
         <div>
-          <span class="font-bold">Tarea</span>
+          <span class="font-bold">Tarea </span>
           <span>
-            asignada a {{ activity.owner.firstName + " " + activity.owner.lastName }}
+             {{ activity.type}}
           </span>
         </div>
       </button>
