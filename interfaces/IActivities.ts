@@ -11,6 +11,8 @@ export interface IActivity {
   date: string
   time: string
   type: string
+  priority: string | undefined
+  note: string | undefined
   delayed: boolean
   owner: IUser
   deal: IDeal

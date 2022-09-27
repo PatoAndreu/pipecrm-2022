@@ -4,16 +4,16 @@ import useActivities, { useActivitiesComponents } from "@/composables/useActivit
 import { onBeforeMount } from "#imports";
 
 const { contact } = useContacts();
-const { Task } = useActivitiesComponents();
+const { Task }    = useActivitiesComponents();
 
 const {
-  getActivityByContact,
-  pinnedTasks,
-  pendingTasks,
-  completedTasks,
-  delayedTasks,
-  addTask
-} = useActivities();
+        getActivityByContact,
+        pinnedTasks,
+        pendingTasks,
+        completedTasks,
+        delayedTasks,
+        addTask
+      } = useActivities();
 
 onBeforeMount(async () => {
   await getActivityByContact(contact);
@@ -29,25 +29,27 @@ onBeforeMount(async () => {
       </UIButton>
     </div>
 
-    <div v-if="pinnedTasks?.length > 0">
+    <div class="activities" v-if="pinnedTasks?.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
       <Task v-for="task in pinnedTasks" :key="task.id" :task="task" />
     </div>
 
-    <div v-if="delayedTasks?.length > 0">
+    <div class="activities" v-if="delayedTasks?.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
       <Task v-for="task in delayedTasks" :key="task.id" :task="task" />
     </div>
 
-    <div v-if="pendingTasks?.length > 0">
+    <div class="activities" v-if="pendingTasks?.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
-      <Task v-for="task in pendingTasks" :key="task.id" :task="task" />
+      <div class="activities">
+        <Task v-for="task in pendingTasks" :key="task.id" :task="task" />
+      </div>
     </div>
 
-    <div v-if="completedTasks?.length > 0">
+    <div class="activities" v-if="completedTasks?.length > 0">
       <p class="font-normal py-4">Pasadas</p>
       <hr>
       <Task v-for="task in completedTasks" :key="task.id" :task="task" />

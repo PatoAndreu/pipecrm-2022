@@ -29,12 +29,12 @@ export default function useActivities() {
         } = storeToRefs(activitiesStore);
 
   const getActivityByContact = (contact: Ref<IContact>) => activitiesStore.getActivityByContact(contact as Ref<IContact>);
+  const addTask              = (type: string, contact?: IContact): void => activitiesStore.addTask(type, contact);
   const saveTask             = async () => await activitiesStore.saveTask();
-  const closeTaskModal       = (): void => activitiesStore.closeTaskModal();
   const editTask             = (task: IActivity): void => activitiesStore.editTask(task);
+  const closeTaskModal       = (): void => activitiesStore.closeTaskModal();
   const changeTaskStatus     = async (task: IActivity, status: object) => await activitiesStore.changeTaskStatus(task, status);
   const deleteTask           = async (task: IActivity) => await activitiesStore.deleteTask(task);
-  const addTask              = (type: string, contact?: IContact): void => activitiesStore.addTask(type, contact);
 
   const formatDate: string = "YYYY- MM-DD hh:mm:ss";
 
@@ -78,7 +78,7 @@ export default function useActivities() {
   });
 
   const pinnedTasks = computed<IActivity[]>(() => {
-    return activities?.value?.filter(a => a.type !== "note" && !a.completed && a.pinned);
+    return activities?.value?.filter(a => a.type !== "note" && a.pinned);
   });
 
   const delayedTasks = computed<IActivity[]>(() => {

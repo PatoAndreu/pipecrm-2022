@@ -14,7 +14,6 @@ const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesC
 const route = useRoute();
 
 await loadContact(Number(route.params.id));
-await loadContacts();
 
 onUpdated(() => {
   useHead({
@@ -27,9 +26,6 @@ onUnmounted(async () => {
   await getActivityByContact(contact);
 
 });
-// const { pending, data } = useLazyAsyncData('contacts', () => $fetch('http://pipecrm-api.test/api/contacts'))
-//
-// console.log(pending.value);
 
 </script>
 
@@ -81,3 +77,11 @@ onUnmounted(async () => {
   </div>
 </template>
 
+<style>
+.activities > .activity-container .activity-icon .line {
+  height: 100%;
+}
+.activities > .activity-container:last-child > .activity-icon .line {
+  height: 0;
+}
+</style>

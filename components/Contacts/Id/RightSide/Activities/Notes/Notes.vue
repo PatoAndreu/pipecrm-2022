@@ -21,7 +21,7 @@ onBeforeMount(async () => {
     </UIButton>
   </div>
 
-  <div v-if="pinnedNotes?.length > 0">
+  <div class="activities" v-if="pinnedNotes?.length > 0">
     <p class="text-slate-500 font-normal py-4">Ancladas</p>
     <hr>
     <Note v-for="task in pinnedNotes"
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
           :note="task" />
   </div>
 
-  <div v-if="notes?.length > 0">
+  <div class="activities" v-if="notes?.length > 0">
     <p class="text-slate-500 font-normal py-4">Pasadas</p>
     <hr>
     <Note v-for="task in notes"

@@ -3,7 +3,7 @@ import useContacts from "@/composables/useContacts";
 import useActivities, { useActivitiesComponents } from "@/composables/useActivities";
 import { onMounted } from "#imports";
 
-const { contact } = useContacts();
+const { contact }    = useContacts();
 const { Note, Task } = useActivitiesComponents();
 
 const {
@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
   <div class="p-2 text-slate-500">
 
-    <div v-if="pinnedActivities?.length > 0">
+    <div class="activities" v-if="pinnedActivities?.length > 0">
       <p class="font-normal py-4">Ancladas</p>
       <hr>
       <template v-for="task in pinnedActivities"
@@ -33,7 +33,7 @@ onMounted(async () => {
       </template>
     </div>
 
-    <div v-if="delayedTasks?.length > 0">
+    <div class="activities" v-if="delayedTasks?.length > 0">
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
       <template v-for="task in delayedTasks"
@@ -43,7 +43,7 @@ onMounted(async () => {
       </template>
     </div>
 
-    <div v-if="pendingActivities?.length > 0">
+    <div class="activities" v-if="pendingActivities?.length > 0">
       <p class="font-normal py-4">Pendientes</p>
       <hr>
       <template v-for="task in pendingActivities"
@@ -53,7 +53,7 @@ onMounted(async () => {
       </template>
     </div>
 
-    <div v-if="completedActivities?.length > 0">
+    <div class="activities" v-if="completedActivities?.length > 0">
       <p class="font-normal py-4">Pasadas</p>
       <hr>
       <template v-for="task in completedActivities"
@@ -65,3 +65,5 @@ onMounted(async () => {
 
   </div>
 </template>
+
+

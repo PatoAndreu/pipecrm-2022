@@ -10,6 +10,8 @@ const initialActivity = {
   pinned: false,
   completed: false,
   delayed: false,
+  priority: null,
+  note: "",
   date: null,
   time: null,
   type: null,
@@ -29,7 +31,7 @@ export const useActivitiesStore = defineStore("activities", {
     isEditing: false,
     minimize: false,
     showAssociations: false,
-    activeTab: "tasks"
+    activeTab: "activities"
   }),
   actions: {
     // Requests
@@ -44,8 +46,7 @@ export const useActivitiesStore = defineStore("activities", {
     },
     async saveTask() {
       const { contact } = useContacts();
-
-      const url = this.isEditing ?
+      const url         = this.isEditing ?
         `http://pipecrm-api.test/api/activities/${this.task.id}` :
         "http://pipecrm-api.test/api/activities";
 
@@ -53,7 +54,7 @@ export const useActivitiesStore = defineStore("activities", {
         const response = await $fetch(url,
           {
             method: this.isEditing ? "PATCH" : "POST",
-            body: { ...this.task }
+            body: { ...this.task, contact: { id: contact.value.id } }
           });
         await this.getActivityByContact(contact);
         this.showModal = false;
@@ -81,22 +82,25 @@ export const useActivitiesStore = defineStore("activities", {
       }
     },
     async deleteTask(task) {
-      const { contact } = useContacts();
-      try {
-        const response = await $fetch(`http://pipecrm-api.test/api/activities/${task.id}`,
-          {
-            method: "DELETE"
-          });
-        await this.getActivityByContact(contact);
-        if (task.id === this.task.id) {
-          this.isEditing = false;
-          this.showModal = false;
-          this.minimize  = false;
+      if (confirm(`¿Esta seguro que desea eliminar la tarea: ${task.text}?`) === true) {
+        const { contact } = useContacts();
+        try {
+          const response = await $fetch(`http://pipecrm-api.test/api/activities/${task.id}`,
+            {
+              method: "DELETE"
+            });
+          await this.getActivityByContact(contact);
+          if (task.id === this.task.id) {
+            this.isEditing = false;
+            this.showModal = false;
+            this.minimize  = false;
+          }
+          return response;
+        } catch (error) {
+          console.error(error);
         }
-        return response;
-      } catch (error) {
-        console.error(error);
       }
+
     },
     // Setters
     closeTaskModal() {
