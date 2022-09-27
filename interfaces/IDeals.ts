@@ -1,4 +1,4 @@
-export interface Deal {
+export interface IDeal {
   readonly id: number,
   amount: number,
   close_date: string,
@@ -11,4 +11,9 @@ export interface Deal {
   pipeline_stage_id: number,
   priority: string,
   updated_at: string
+}
+
+export interface IDealStore {
+  deal: IDeal,
+  deals: IDeal[]
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ChevronDownIcon } from "@heroicons/vue/outline";
-import { Link } from "@/interfaces/IUi";
+import { ILink } from "@/interfaces/IUi";
 
 interface Props {
   name: string;
-  links: [Link] | undefined;
+  links: [ILink] | undefined;
   right?: boolean;
   avatar?: boolean | undefined;
   avatarImage?: string | undefined;

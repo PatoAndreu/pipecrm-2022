@@ -1,16 +1,17 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-import { User, UserState } from '~~/interfaces/IUsers'
+import { IUser, IUserState } from "@/interfaces/IUsers";
 
-const initialUser: User = {
+const initialUser: IUser = {
   id: null,
-  email: "",
-  firstName: "",
-  lastName: "",
-}
+  email: null,
+  firstName: null,
+  lastName: null,
+  createdAt: null
+};
 
-export const useUsersStore = defineStore('users', {
-  state: (): UserState => ({
+export const useUsersStore = defineStore("users", {
+  state: (): IUserState => ({
     user: { ...initialUser },
     users: []
   }),
@@ -18,17 +19,17 @@ export const useUsersStore = defineStore('users', {
     async getUsers() {
       try {
         // @ts-ignore
-        const { data } = await $fetch('http://pipecrm-api.test/api/users')
-        this.users = data
+        const { data } = await $fetch("http://pipecrm-api.test/api/users");
+        this.users     = data;
       } catch (error) {
         console.log(error);
       }
     },
-    setUser(user: User) {
-      this.user = { ...user }
+    setUser(user: IUser) {
+      this.user = { ...user };
     },
     resetUser() {
-      this.user = { ...initialUser }
+      this.user = { ...initialUser };
     }
   }
-})
+});

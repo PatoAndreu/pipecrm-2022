@@ -1,96 +1,144 @@
 import { useActivitiesStore } from "@/stores/activitiesStore";
 import { storeToRefs } from "pinia";
 import dayjs from "dayjs";
+import { IActivity } from "@/interfaces/IActivities";
+import { IContact } from "@/interfaces/IContacts";
+
+import All from "@/components/Contacts/Id/RightSide/Activities/All.vue";
+import ActivityMenu from "@/components/Contacts/Id/RightSide/Activities/Menu.vue";
+import Task from "@/components/Contacts/Id/RightSide/Activities/Tasks/Task.vue";
+import Tasks from "@/components/Contacts/Id/RightSide/Activities/Tasks/Tasks.vue";
+import TaskModal from "@/components/Contacts/Id/RightSide/Activities/Tasks/TaskModal.vue";
+import Note from "@/components/Contacts/Id/RightSide/Activities/Notes/Note.vue";
+import Notes from "@/components/Contacts/Id/RightSide/Activities/Notes/Notes.vue";
+import NoteModal from "@/components/Contacts/Id/RightSide/Activities/Notes/NoteModal.vue";
+import { computed, Ref } from "@vue/reactivity";
 
 export default function useActivities() {
 
   const activitiesStore = useActivitiesStore();
 
-  const { activities, activity, activityModalOpen, isEditing, minimize, activeTab } = storeToRefs(activitiesStore);
+  const {
+          activities,
+          task,
+          showModal,
+          isEditing,
+          minimize,
+          showAssociations,
+          activeTab
+        } = storeToRefs(activitiesStore);
 
-  const getActivities  = (contact) => activitiesStore.getActivities(contact);
-  const saveActivity   = async () => await activitiesStore.saveActivity();
-  const closeNoteModal = (): void => activitiesStore.closeNoteModal();
-  const editActivity   = (activity): void => activitiesStore.editActivity(activity);
-  const changeStatus   = async (activity, status) => await activitiesStore.changeStatus(activity, status);
-  const addActivity    = (type: string): void => activitiesStore.addActivity(type);
-  const deleteActivity = async (activity) => await activitiesStore.deleteActivity(activity);
+  const getActivityByContact = (contact: Ref<IContact>) => activitiesStore.getActivityByContact(contact as Ref<IContact>);
+  const addTask              = (type: string, contact?: IContact): void => activitiesStore.addTask(type, contact);
+  const saveTask             = async () => await activitiesStore.saveTask();
+  const editTask             = (task: IActivity): void => activitiesStore.editTask(task);
+  const closeTaskModal       = (): void => activitiesStore.closeTaskModal();
+  const changeTaskStatus     = async (task: IActivity, status: object) => await activitiesStore.changeTaskStatus(task, status);
+  const deleteTask           = async (task: IActivity) => await activitiesStore.deleteTask(task);
 
+  const formatDate: string = "YYYY- MM-DD hh:mm:ss";
 
-
-  const formatDate: string = "YYYY-MM-DD hh:mm:ss";
   const hoy: string = dayjs().format(formatDate);
 
   //Activities
-  const pinnedActivities = computed(() => {
-    return activities.value.filter(a => a.pinned);
+  const pinnedActivities = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.pinned);
   });
 
-  const pendingActivities = computed(() => {
-    return activities.value.filter(a => {
+  const pendingActivities = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => !a.completed && !a.pinned && a.type !== "note" && !a.delayed);
+  });
 
-      const dateTime = new Date(a.date + " " + a.time);
-
-      return !a.completed && !a.pinned && dayjs(dateTime).format(formatDate) >= hoy;
-
+  const completedActivities = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => {
+      if (a.type !== "note")
+        return a.completed && !a.pinned && !a.delayed;
+      return !a.pinned;
     });
   });
 
-  const delayedActivities = computed(() => {
-    return activities.value.filter(a => {
-
-      return a.type !== "note" && !a.completed && !a.pinned && a.delayed;
-
-      // const dateTime = new Date(a.date + " " + a.time);
-      // return a.type !== "note" && !a.completed && !a.pinned && dayjs(dateTime).format(formatDate) <= hoy;
-
-    });
-  });
-
-  const completedActivities = computed(() => {
-    return activities.value.filter(a => a.completed && !a.pinned);
+  const disabledNoteForm = computed(() => {
+    return task.value.text.length < 1;
   });
 
   //Notes
-  const notes = computed(() => {
-    return activities.value.filter(a => a.type === "note" && !a.pinned);
+
+  const notes = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.type === "note" && !a.pinned);
   });
 
-  const pinnedNotes = computed(() => {
-    return activities.value.filter(a => a.type === "note" && a.pinned);
+  const pinnedNotes = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.type === "note" && a.pinned);
   });
+
 
   //Tasks
-  const tasks = computed(() => {
-    return activities.value.filter(a => a.type !== "note");
+  const tasks = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.type !== "note");
   });
 
-  const pendingTasks = computed(() => {
-    return pendingActivities.value.filter(a => a.type !== "note");
+  const pinnedTasks = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.type !== "note" && a.pinned);
+  });
+
+  const delayedTasks = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => a.type !== "note" && !a.completed && !a.pinned && a.delayed
+    );
+  });
+
+  const pendingTasks = computed<IActivity[]>(() => {
+    return pendingActivities?.value?.filter(a => a.type !== "note" && !a.completed);
+  });
+
+  const completedTasks = computed<IActivity[]>(() => {
+    return activities?.value?.filter(a => {
+      if (a.type !== "note")
+        return a.completed && !a.pinned && !a.delayed;
+    });
   });
 
 
   return {
-    activities,
-    activity,
-    activityModalOpen,
+    showModal,
     isEditing,
+    disabledNoteForm,
     minimize,
     activeTab,
-    notes,
-    pinnedNotes,
-    tasks,
-    delayedActivities,
+    showAssociations,
+    //Activities
+    activities,
     pinnedActivities,
     pendingActivities,
     completedActivities,
+    getActivityByContact,
+    //Notes
+    notes,
+    pinnedNotes,
+    //Tasks
+    tasks,
+    task,
+    pinnedTasks,
+    delayedTasks,
     pendingTasks,
-    getActivities,
-    saveActivity,
-    closeNoteModal,
-    editActivity,
-    changeStatus,
-    addActivity,
-    deleteActivity
+    completedTasks,
+    addTask,
+    saveTask,
+    editTask,
+    changeTaskStatus,
+    deleteTask,
+    closeTaskModal
+  };
+}
+
+export function useActivitiesComponents() {
+  return {
+    All,
+    ActivityMenu,
+    Notes,
+    Tasks,
+    Task,
+    TaskModal,
+    Note,
+    NoteModal
   };
 }

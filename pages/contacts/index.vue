@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import { useUsersStore } from "@/stores/usersStore";
+import { ref } from "@vue/reactivity";
+
+useHead({
+  title: " Contactos"
+});
+
+const { addContact, setTabSelected, tabSelected, filterUser, filterDate } = useContacts();
+
+const usersStore = useUsersStore();
+
+
+const createdAtFilters = ref([
+  { id: 1, name: "Hoy" },
+  { id: 2, name: "Ayer" },
+  { id: 3, name: "Esta semana" },
+  { id: 4, name: "Semana pasada" },
+  { id: 5, name: "Este mes" },
+  { id: 6, name: "Mes pasado" }
+]);
+
+</script>
 <template>
   <div class="bg-white">
     <!-- Header -->
@@ -74,33 +97,11 @@
 
       </div>
       <ContactsIndexTable />
+
     </div>
 
     <ContactsCreateDrawer />
   </div>
 </template>
 
-<script setup lang="ts">
 
-import { useUsersStore } from "@/stores/usersStore";
-
-useHead({
-  title: " Contactos"
-});
-
-const { addContact, setTabSelected, tabSelected, filterUser, filterDate } = useContacts();
-
-const usersStore = useUsersStore();
-
-
-const createdAtFilters = ref([
-  { id: 1, name: "Hoy" },
-  { id: 2, name: "Ayer" },
-  { id: 3, name: "Esta semana" },
-  { id: 4, name: "Semana pasada" },
-  { id: 5, name: "Este mes" },
-  { id: 6, name: "Mes pasado" }
-]);
-
-
-</script>

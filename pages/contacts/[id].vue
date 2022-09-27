@@ -1,14 +1,19 @@
 <script lang="ts" setup>
+import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } from "#imports";
+import useContacts, { useContactsComponents } from "@/composables/useContacts";
+import useActivities from "@/composables/useActivities";
 
-const { loadContact, contact } = useContacts();
+const { loadContact, loadContacts, contact } = useContacts();
 
-const { activeTab, activities } = useActivities();
+const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
+
+const { getActivityByContact, activeTab, activities } = useActivities();
+
+const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesComponents();
 
 const route = useRoute();
 
-onBeforeMount(async () => {
-  await loadContact(Number(route.params.id));
-});
+await loadContact(Number(route.params.id));
 
 onUpdated(() => {
   useHead({
@@ -16,52 +21,67 @@ onUpdated(() => {
   });
 });
 
-onUnmounted(() => {
-  activeTab.value = "activity";
+onUnmounted(async () => {
+  activeTab.value = "activities";
+  await getActivityByContact(contact);
+
 });
 
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-10" v-if="contact.firstName">
+  <div class="max-w-7xl mx-auto px-10">
 
     <!--  Header  -->
-    <ContactsInfoRightSideHeader />
+    <Header />
 
     <!--  Contenido central  -->
     <div class="flex mt-6 pb-10">
 
       <!--  Panel izquierdo  -->
       <div class="w-[400px] h-full space-y-2">
-        <ContactsInfoLeftSideContactInfo />
-        <ContactsInfoLeftSideCompanyInfo />
-        <ContactsInfoLeftSideDealsInfo />
-        <ContactsInfoLeftSideFollowersInfo />
+        <ContactInfo />
+        <CompanyInfo />
+        <DealsInfo />
+        <FollowersInfo />
       </div>
 
       <!--  Panel derecho  -->
       <div class="w-full h-full ml-4">
-        <ContactsInfoRightSideActivitiesMenu />
+        <ActivityMenu />
 
         <Suspense>
-          <ContactsInfoRightSideActivitiesAll v-if="activeTab === 'activities'" />
+          <All v-if="activeTab === 'activities'" />
           <template #fallback>
             Loading...
           </template>
         </Suspense>
 
         <Suspense>
-          <ContactsInfoRightSideActivitiesNotes v-if="activeTab === 'notes'" />
+          <Notes v-if="activeTab === 'notes'" />
           <template #fallback>
             Loading...
           </template>
         </Suspense>
-        <ContactsInfoRightSideActivitiesTasks v-if="activeTab === 'tasks'" />
+        <Tasks v-if="activeTab === 'tasks'" />
       </div>
 
     </div>
+    <Teleport to="#NoteModal">
+      <NoteModal />
+    </Teleport>
 
+    <Teleport to="#TaskModal">
+      <TaskModal />
+    </Teleport>
   </div>
-    <ContactsInfoRightSideActivitiesNotesNoteModal />
 </template>
 
+<style>
+.activities > .activity-container .activity-icon .line {
+  height: 100%;
+}
+.activities > .activity-container:last-child > .activity-icon .line {
+  height: 0;
+}
+</style>

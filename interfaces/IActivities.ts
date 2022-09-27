@@ -1,9 +1,9 @@
-import { UserInterface } from "@/interfaces/IUsers";
-import { Deal } from "@/interfaces/IDeals";
-import { ContactInterface } from "@/interfaces/IContacts";
-import { Company } from "@/interfaces/ICompany";
+import { IUser } from "@/interfaces/IUsers";
+import { IDeal } from "@/interfaces/IDeals";
+import { IContact } from "@/interfaces/IContacts";
+import { ICompany } from "@/interfaces/ICompany";
 
-export interface Activity {
+export interface IActivity {
   readonly id: number | undefined,
   text: string | undefined
   pinned?: boolean
@@ -11,20 +11,23 @@ export interface Activity {
   date: string
   time: string
   type: string
+  priority: string | undefined
+  note: string | undefined
   delayed: boolean
-  owner: UserInterface
-  deal: Deal
-  contact: ContactInterface
-  company: Company
+  owner: IUser
+  deal: IDeal
+  contact: IContact
+  company: ICompany
   createdAt: string
   updatedAt?: string
 }
 
 export interface ActivitiesState {
-  activity: Activity;
-  activities: Activity[];
-  activityModalOpen: boolean;
+  activities: IActivity[];
+  task: IActivity;
+  showModal: boolean;
   isEditing: boolean;
+  showAssociations: boolean;
   minimize: boolean;
   activeTab: string;
 }

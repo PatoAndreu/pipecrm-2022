@@ -1,29 +1,29 @@
 import { defineStore } from "pinia";
-import { ContactInterface, ContactState } from "@/interfaces/IContacts";
+import { IContact, ContactState } from "@/interfaces/IContacts";
 import dayjs from "dayjs";
 import quarterOfYear from "dayjs/plugin/quarterOfYear.js";
 
 dayjs.extend(quarterOfYear);
 
-const initialContact: ContactInterface = {
+const initialContact: IContact = {
   id: null,
   city: null,
   company: null,
   contactStatus: null,
-  createdAt: "",
-  updatedAt: "",
+  createdAt: null,
+  updatedAt: null,
   deals: [],
-  email: "",
-  firstName: "",
-  jobTitle: "",
-  lastName: "",
+  email: null,
+  firstName: null,
+  jobTitle: null,
+  lastName: null,
   contactLifeCycleStage: null,
   mobilePhoneNumber: null,
   owner: null,
   phoneNumber: null,
   region: null,
-  address: "",
-  websiteUrl: ""
+  address: null,
+  websiteUrl: null
 };
 
 export const useContactsStore = defineStore("contacts", {
@@ -39,7 +39,6 @@ export const useContactsStore = defineStore("contacts", {
     tabSelected: "all",
     filterUser: null,
     filterDate: null,
-
   }),
   actions: {
     addContact(): void {
@@ -50,7 +49,7 @@ export const useContactsStore = defineStore("contacts", {
     async getContacts(): Promise<void> {
       try {
         this.pending = true;
-        let data: ContactInterface[];
+        let data: IContact[];
         ({ data } = await $fetch("http://pipecrm-api.test/api/contacts"));
         await this.getContactStatus();
         await this.getContactStages();
@@ -63,7 +62,7 @@ export const useContactsStore = defineStore("contacts", {
     async getContact(id: number): Promise<void> {
       this.pending = true;
       try {
-        let data: ContactInterface;
+        let data: IContact;
         ({ data } = await $fetch(`http://pipecrm-api.test/api/contacts/${id}`));
         this.contact = { ...data };
         this.pending = false;
@@ -82,7 +81,7 @@ export const useContactsStore = defineStore("contacts", {
         const { data }     = await $fetch("http://pipecrm-api.test/api/contact/status");
         this.contactStatus = data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
 
     },
@@ -92,7 +91,7 @@ export const useContactsStore = defineStore("contacts", {
         const { data }             = await $fetch("http://pipecrm-api.test/api/contact/stages");
         this.contactLifeCycleStage = data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
 
     },

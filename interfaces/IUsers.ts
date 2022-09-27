@@ -1,4 +1,4 @@
-export interface UserInterface {
+export interface IUser {
  readonly id: number,
   firstName: string,
   lastName: string,
@@ -7,7 +7,7 @@ export interface UserInterface {
   createdAt: Date,
 }
 
-export interface UserState {
-  user: UserInterface,
-  users: UserInterface[]
+export interface IUserState {
+  user: IUser,
+  users: IUser[]
 }

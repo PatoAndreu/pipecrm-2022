@@ -1,41 +1,41 @@
-import { Deal } from "@/interfaces/IDeals";
+import { IDeal } from "@/interfaces/IDeals";
 
-interface ContactLifecycleStage {
+interface IContactLifecycleStage {
   readonly id: number,
   name: string,
 }
 
-interface Owner {
+interface IOwner {
   readonly id: number,
   firstName: string,
   lastName: string,
 }
 
-interface Company {
+interface ICompany {
   readonly id: number,
   name: string,
 }
 
-interface ContactStatus {
+interface IContactStatus {
   readonly id: number | undefined,
   name: string | undefined,
 }
 
-export interface ContactInterface {
+export interface IContact {
   readonly id: number,
   city: number | undefined,
-  company: Company,
-  contactStatus: ContactStatus | undefined
+  company: ICompany,
+  contactStatus: IContactStatus | undefined
   createdAt: string,
   updatedAt: string,
-  deals: Array<Deal> | undefined,
+  deals: Array<IDeal> | undefined,
   email: string,
   firstName: string,
   jobTitle: string | undefined,
   lastName: string,
-  contactLifeCycleStage?: ContactLifecycleStage | undefined,
+  contactLifeCycleStage?: IContactLifecycleStage | undefined,
   mobilePhoneNumber: number | undefined,
-  owner: Owner | undefined,
+  owner: IOwner | undefined,
   phoneNumber: string | undefined,
   region: number | undefined,
   address: string | undefined,
@@ -44,15 +44,15 @@ export interface ContactInterface {
 
 export interface ContactState {
   pending: boolean,
-  contact: ContactInterface,
-  contacts: ContactInterface[],
-  contactStatus: ContactStatus[],
-  contactLifeCycleStage: ContactLifecycleStage[]
+  contact: IContact,
+  contacts: IContact[],
+  contactStatus: IContactStatus[],
+  contactLifeCycleStage: IContactLifecycleStage[]
   errorMessages: [],
   showDrawer: boolean,
   isEditing: boolean,
   tabSelected: string,
-  filterUser: Owner,
+  filterUser: IOwner,
   filterDate:
     {
       readonly id: number,

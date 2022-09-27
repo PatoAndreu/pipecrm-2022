@@ -3,11 +3,11 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 
 let isOpen = ref(false);
 
-interface Link {
+interface ILink {
   name:string
   url: string
 }
-const links: Link[] = [
+const links: ILink[] = [
   {
     name: "Cuenta y facturación",
     url: "/contacts",

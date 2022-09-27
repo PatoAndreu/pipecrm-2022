@@ -1,7 +1,14 @@
 import { useContactsStore } from "@/stores/contactsStore";
 import { storeToRefs } from "pinia";
 
-import { ContactInterface } from "~/interfaces/IContacts";
+import { IContact } from "@/interfaces/IContacts";
+
+import Header from '@/components/Contacts/Id/Header.vue'
+import ContactInfo from '@/components/Contacts/Id/LeftSide/ContactInfo.vue'
+import CompanyInfo from '@/components/Contacts/Id/LeftSide/CompanyInfo.vue'
+import DealsInfo from '@/components/Contacts/Id/LeftSide/DealsInfo.vue'
+import FollowersInfo from '@/components/Contacts/Id/LeftSide/FollowersInfo.vue'
+
 
 export default function useContacts() {
 
@@ -18,7 +25,6 @@ export default function useContacts() {
           tabSelected,
           filterUser,
           filterDate,
-          activeTab,
           filteredContacts,
           disabledFormContact
         }             = storeToRefs(contactsStore);
@@ -28,7 +34,7 @@ export default function useContacts() {
   const addContact       = () => contactsStore.addContact();
   const saveContact      = (): Promise<void> => contactsStore.saveContact();
   const updateContact    = (contact) => contactsStore.updateContact(contact);
-  const editContact      = (contact: ContactInterface): Promise<void> => contactsStore.editContact(contact);
+  const editContact      = (contact: IContact): Promise<void> => contactsStore.editContact(contact);
   const setTabSelected   = (tab: string) => contactsStore.setTabSelected(tab);
   const getContactStatus = () => contactsStore.getContactStatus();
   const getContactStages = () => contactsStore.getContactStages();
@@ -47,7 +53,6 @@ export default function useContacts() {
     tabSelected,
     filterUser,
     filterDate,
-    activeTab,
     disabledFormContact,
     filteredContacts,
     loadContacts,
@@ -60,6 +65,16 @@ export default function useContacts() {
     getContactStatus,
     getContactStages,
     resetContact,
-    deleteContact
+    deleteContact,
   };
 };
+
+export function useContactsComponents(){
+  return{
+    Header,
+    ContactInfo,
+    CompanyInfo,
+    DealsInfo,
+    FollowersInfo,
+  }
+}

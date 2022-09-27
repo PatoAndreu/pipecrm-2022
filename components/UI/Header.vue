@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useUIStore } from "@/stores/ui";
 import { SearchIcon } from "@heroicons/vue/outline";
-import { Link } from "@/interfaces/IUi";
+import { ILink } from "@/interfaces/IUi";
 
 const uiStore = useUIStore();
 
-const menu: Link[] = [
+const menu: ILink[] = [
   {
     name: "Contactos",
     url: "/contacts"

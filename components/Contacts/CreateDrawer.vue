@@ -1,7 +1,9 @@
 <script setup lang="ts">
-
 import { XIcon } from "@heroicons/vue/outline";
 import { useContactsStore } from "@/stores/contactsStore";
+import useContacts from "@/composables/useContacts";
+import { useUsers } from "@/composables/useUsers";
+import { ref } from "@vue/reactivity";
 
 const contactStore = useContactsStore();
 
@@ -20,7 +22,7 @@ const {
 
 const { users, loadUsers } = useUsers();
 
-let errorsMessages = ref([]);
+let errorsMessages = ref<string[]>([]);
 
 await loadUsers();
 
@@ -53,7 +55,7 @@ const afterPost = (res) => {
 <template>
   <Transition duration="550" name="drawer" appear>
     <div v-if="showDrawer"
-         class="w-[500px] fixed h-auto z-10 min-h-screen  shadow-xl  right-0 top-0 bg-white inner">
+         class="w-[500px] fixed h-auto z-10 min-h-screen  shadow-xl right-0 top-12 bg-white inner">
 
       <!-- Header -->
       <div class="flex justify-between bg-cyan-500 h-16 items-center">

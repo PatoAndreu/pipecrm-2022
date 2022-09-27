@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
 
-import { ContactInterface } from "@/interfaces/IContacts";
+import { IContact } from "@/interfaces/IContacts";
 
 let rowsLeft            = ref();
 let showNextPageArrow   = ref(true);
@@ -35,7 +35,7 @@ const indexEnd = computed((): number => {
   return indexStart.value + perPage.value;
 });
 
-const paginated = computed((): ContactInterface[] => {
+const paginated = computed((): IContact[] => {
 
   if (filteredContacts.value.length > 0) {
     if (searchInput.value.length >= 1) {
@@ -76,6 +76,7 @@ watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPage
   return (rowsLeft.value > 0 && paginated.value.length >= perPage.value) ? showNextPageArrow.value = true : showNextPageArrow.value = false;
 });
 </script>
+
 <template>
   <div class="bg-white">
     <div v-if="filteredContacts.length > 0">
@@ -819,10 +820,8 @@ watch(() => [currentPage.value, perPage.value, searchInput.value], ([currentPage
         </div>
       </div>
     </div>
-
   </div>
 </template>
-
 
 <style lang="postcss" scoped>
 .header-info {
