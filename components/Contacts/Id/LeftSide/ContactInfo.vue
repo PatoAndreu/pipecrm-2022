@@ -1,6 +1,9 @@
 <script setup lang="ts">
 
 import { PencilAltIcon } from "@heroicons/vue/outline";
+import useContacts from "@/composables/useContacts";
+import { ref } from "@vue/reactivity";
+import { onBeforeMount } from "@vue/runtime-core";
 
 const {
         contact,

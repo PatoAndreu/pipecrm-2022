@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IContact, ContactState } from "@/interfaces/IContacts";
+import { IContact, IContactState } from "@/interfaces/IContacts";
 import dayjs from "dayjs";
 import quarterOfYear from "dayjs/plugin/quarterOfYear.js";
 
@@ -27,7 +27,7 @@ const initialContact: IContact = {
 };
 
 export const useContactsStore = defineStore("contacts", {
-  state: (): ContactState => ({
+  state: (): IContactState => ({
     pending: true,
     contact: { ...initialContact },
     contacts: [],

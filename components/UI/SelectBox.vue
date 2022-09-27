@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
+import { computed, ref } from "@vue/reactivity";
+import { onMounted, onUpdated } from "@vue/runtime-core";
 
 let selectedOption = ref({});
 let searchInput    = ref("");
@@ -8,13 +10,22 @@ let showSelectBox  = ref(false);
 
 const emit = defineEmits(["update:modelValue"]);
 
-const props = defineProps({
-  field: { type: String, required: false, default: "name" },
-  type: { type: String, required: false, default: "other" },
-  options: { type: Array, required: true, default: [] },
-  disabled: { type: Boolean, required: true, default: false },
-  modelValue: { type: Object, required: false, default: null },
-  top: { type: Boolean, required: false, default: true }
+interface Props {
+  field?: string;
+  type?: string;
+  options: [];
+  disabled: boolean;
+  modelValue?: object;
+  top?: boolean;
+}
+
+const props =  withDefaults(defineProps<Props>(), {
+  field: "name",
+  type: "other",
+  options: null,
+  disabled: false,
+  modelValue: null,
+  top: true
 });
 
 onMounted(async () => {
@@ -54,30 +65,44 @@ const searchCriteria = computed(() => {
   if (props.type === "user") {
     return props.options.filter(option => option.firstName.toLowerCase().includes(searchInput.value.toLowerCase())
       || option.lastName.toLowerCase().includes(searchInput.value.toLowerCase()));
-  } else {
-    return props.options.filter(option => option[props.field].toLowerCase().includes(searchInput.value.toLowerCase()));
   }
+  if (props.type === "array") {
+    return props.options.filter(option => option.toLowerCase().includes(searchInput.value.toLowerCase()));
+  }
+  return props.options.filter(option => option[props.field].toLowerCase().includes(searchInput.value.toLowerCase()));
 
 });
+
+const getClass = (option) => {
+  if (props.type === "array") {
+    return selectedOption.value.toLowerCase() === option.toLowerCase() ? "bg-cyan-50" : "";
+  }
+  return selectedOption.id === option.id ? "bg-cyan-50" : "";
+};
 
 
 </script>
 <template>
   <div class="w-full relative">
     <slot name="label"></slot>
-    <div class="h-10 border rounded text-left p-2"
+    <div class="h-10 border rounded text-left p-2 capitalize"
          :class="disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'"
          @click="showSelectBox = !showSelectBox"
          :disabled="disabled">
-      {{ selectedOption.name }}
       <template v-if="type === 'user'">
         {{ selectedOption.firstName }} {{ selectedOption.lastName }}
+      </template>
+      <template v-else-if="type === 'array'">
+        {{ selectedOption }}
+      </template>
+      <template v-else>
+        {{ selectedOption.name }}
       </template>
       <ChevronDownIcon class="h-5 absolute right-4 bottom-2" v-if="!showSelectBox" />
       <ChevronUpIcon class="h-5 absolute right-4 bottom-2" v-else />
     </div>
     <Transition name="fade">
-      <div v-if="showSelectBox" class="w-full bg-white border absolute z-10" :class="top ? 'bottom-12':'mt-1'">
+      <div v-if="showSelectBox" class="w-full bg-white border absolute z-10 capitalize" :class="top ? 'bottom-12':'mt-1'">
         <div class="h-16 p-3 relative bg-sky-100">
           <SearchIcon class="h-6 text-cyan-400 absolute pointer-events-none right-6 mt-2" v-if="!searchInput" />
           <XIcon class="h-6 text-cyan-400 absolute  right-6 mt-2 cursor-pointer" v-else @click="searchInput = ''" />
@@ -89,9 +114,15 @@ const searchCriteria = computed(() => {
           </div>
 
           <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
-            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer" @click="setOption(option)" :class="selectedOption.id === option.id ? 'bg-cyan-50': ''">
+            <div class="w-full h-10 hover:bg-cyan-50 p-2 pl-4 cursor-pointer"
+                 :class="getClass(option)"
+                 @click="setOption(option)"
+            >
               <span v-if="type === 'user'">
                 {{ option.firstName }} {{ option.lastName }}
+              </span>
+              <span v-else-if="type === 'array'">
+                {{ option }}
               </span>
               <span else>
                 {{ option.name }}

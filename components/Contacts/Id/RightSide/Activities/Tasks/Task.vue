@@ -9,7 +9,7 @@ import {
   PaperClipIcon,
   PhoneOutgoingIcon,
   UserIcon,
-  UserGroupIcon
+  UserGroupIcon,
 } from "@heroicons/vue/outline";
 
 import { CheckCircleIcon as CheckCircleIconOk } from "@heroicons/vue/solid";
@@ -52,6 +52,7 @@ const arrowColor = computed(() => {
         <PhoneOutgoingIcon class="h-5 text-slate-400" v-if="task.type === 'call'" />
         <MailIcon class="h-5 text-slate-400" v-if="task.type === 'email'" />
         <UserGroupIcon class="h-5 text-slate-400" v-if="task.type === 'meeting'" />
+        <PaperClipIcon class="h-5 text-slate-400" v-if="task.type === 'other'" />
       </div>
       <div class="mt-7 h-auto line w-0.5 bg-slate-200 text-center ml-5"></div>
     </div>

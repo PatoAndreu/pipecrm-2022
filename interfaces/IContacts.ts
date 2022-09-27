@@ -42,7 +42,7 @@ export interface IContact {
   websiteUrl: string | undefined,
 }
 
-export interface ContactState {
+export interface IContactState {
   pending: boolean,
   contact: IContact,
   contacts: IContact[],
