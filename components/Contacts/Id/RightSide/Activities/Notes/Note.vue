@@ -101,7 +101,7 @@ const { editTask, changeTaskStatus, deleteTask } = useActivities();
             <p>Fecha de creación</p>
           </div>
           <CalendarIcon class="h-4 w-4" />
-          <p class="ml-1">{{ $dayjs(note.createdAt).format("DD MMMM YYYY h:mm A") }}</p>
+          <p class="ml-1">{{ $dayjs(note.createdAt).format("ddd DD MMMM YYYY H:mm") }}</p>
         </button>
 
         <button class="flex relative justify-center group hover:text-indigo-600" v-if="note.owner">
