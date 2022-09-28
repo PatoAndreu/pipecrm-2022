@@ -38,21 +38,21 @@ const updateCompanyInfo = async () => {
     </div>
     <hr>
     <div class="mt-3" v-if="companyLocal">
-      <form class="text-sm py-4" @submit.prevent="">
+      <form class="text-sm py-4" @submit.prevent="" v-auto-animate>
 
-        <div class="h-12 items-center mb-4">
+        <div class="h-12 items-center mb-4" v-auto-animate>
           <div class="text-slate-500 text-xs text-cyan-700">Nombre</div>
           <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ companyLocal.name }}</div>
           <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="companyLocal.name" v-else />
         </div>
 
-        <div class="h-12 items-center mb-4">
+        <div class="h-12 items-center mb-4" v-auto-animate>
           <div class="text-slate-500 text-xs text-cyan-700">Dominio</div>
           <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ companyLocal.domain }}</div>
           <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="companyLocal.domain" v-else />
         </div>
 
-        <div class="h-12 items-center mb-4">
+        <div class="h-12 items-center mb-4" v-auto-animate>
           <div class="text-slate-500 text-xs text-cyan-700">Tipo</div>
           <div class="pt-2 text-slate-600 capitalize" v-if="!isEditing">{{ companyLocal.type }}</div>
           <UISelectBox class="mt-2"
@@ -63,19 +63,19 @@ const updateCompanyInfo = async () => {
           </UISelectBox>
         </div>
 
-        <div class="h-12 items-center mb-4">
+        <div class="h-12 items-center mb-4" v-auto-animate>
           <div class="text-slate-500 text-xs text-cyan-700">Ciudad</div>
           <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ companyLocal.city }}</div>
           <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="companyLocal.city" v-else />
         </div>
 
-        <div class="h-12 items-center mb-4">
+        <div class="h-12 items-center mb-4" v-auto-animate>
           <div class="text-slate-500 text-xs text-cyan-700">Dirección</div>
           <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ companyLocal.address }}</div>
           <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="companyLocal.address" v-else />
         </div>
 
-        <div class="flex w-auto h-auto justify-end mt-16" v-if="isEditing">
+        <div class="flex w-auto h-auto justify-end mt-16" v-if="isEditing" v-auto-animate>
 
           <button type="button"
                   class="inline-flex items-center px-4 py-2 mr-4 font-semibold leading-6 text-sm shadow rounded text-indigo-500 bg-white border hover:shadow-md border-indigo-500 transition ease-in-out duration-150"

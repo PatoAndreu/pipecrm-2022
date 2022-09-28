@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
-import { computed, ref } from "@vue/reactivity";
-import { onMounted, onUpdated } from "@vue/runtime-core";
+import { onMounted, onUpdated, computed, ref } from "#imports";
 
-let selectedOption = ref({});
+let selectedOption = ref(null);
 let searchInput    = ref("");
 let showSelectBox  = ref(false);
 
@@ -22,7 +21,6 @@ interface Props {
 const props =  withDefaults(defineProps<Props>(), {
   field: "name",
   type: "other",
-  options: null,
   disabled: false,
   modelValue: null,
   top: true
@@ -77,9 +75,8 @@ const getClass = (option) => {
   if (props.type === "array") {
     return selectedOption.value.toLowerCase() === option.toLowerCase() ? "bg-cyan-50" : "";
   }
-  return selectedOption.id === option.id ? "bg-cyan-50" : "";
+  return selectedOption.value.id === option.id ? "bg-cyan-50" : "";
 };
-
 
 </script>
 <template>
@@ -90,13 +87,13 @@ const getClass = (option) => {
          @click="showSelectBox = !showSelectBox"
          :disabled="disabled">
       <template v-if="type === 'user'">
-        {{ selectedOption.firstName }} {{ selectedOption.lastName }}
+        {{ selectedOption?.firstName }} {{ selectedOption?.lastName }}
       </template>
-      <template v-else-if="type === 'array'">
+      <template v-if="type === 'array'">
         {{ selectedOption }}
       </template>
-      <template v-else>
-        {{ selectedOption.name }}
+      <template v-if="type === 'other'">
+        {{ selectedOption?.name }}
       </template>
       <ChevronDownIcon class="h-5 absolute right-4 bottom-2" v-if="!showSelectBox" />
       <ChevronUpIcon class="h-5 absolute right-4 bottom-2" v-else />

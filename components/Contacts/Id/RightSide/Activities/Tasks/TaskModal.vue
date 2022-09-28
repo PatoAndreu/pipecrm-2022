@@ -21,7 +21,8 @@ const disabledNoteForm = computed(() => {
 <template>
   <form class="w-[650px] bg-white fixed bottom-[20px] right-[20px] h-auto shadow-2xl"
         @submit.prevent="saveTask"
-        v-if="showModal && task.type !== 'note'">
+        v-if="showModal && task.type !== 'note'"
+        v-auto-animate>
     <!--  Header  -->
     <div class="min-w-fit bg-indigo-800 text-white py-2 px-4 flex items-center justify-between">
       <div class="flex items-center justify-center">

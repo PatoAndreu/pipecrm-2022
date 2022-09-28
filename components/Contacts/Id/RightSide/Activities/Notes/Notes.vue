@@ -4,6 +4,7 @@ import { onBeforeMount } from "#imports";
 import useContacts from "@/composables/useContacts";
 
 const { notes, pinnedNotes, addTask, getActivityByContact } = useActivities();
+
 const { Note } = useActivitiesComponents();
 
 const { contact } = useContacts();
@@ -15,27 +16,31 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="flex justify-center py-4">
-    <UIButton type="submit" :active="true" @click="addTask('note', contact)">
-      Crear Nota
-    </UIButton>
+  <div class="p-2 text-slate-500">
+    <div class="flex justify-center py-4">
+      <UIButton type="submit" :active="true" @click="addTask('note', contact)">
+        Crear Nota
+      </UIButton>
+    </div>
+
+    <div v-auto-animate>
+
+      <div class="activities" v-if="pinnedNotes?.length > 0" v-auto-animate>
+        <p class="text-slate-500 font-normal py-4">Ancladas</p>
+        <hr>
+        <Note v-for="task in pinnedNotes"
+              :key="task.id"
+              :note="task" />
+      </div>
+
+      <div class="activities" v-if="notes?.length > 0" v-auto-animate>
+        <p class="text-slate-500 font-normal py-4">Pasadas</p>
+        <hr>
+        <Note v-for="task in notes"
+              :key="task.id"
+              :note="task" />
+      </div>
+
+    </div>
   </div>
-
-  <div class="activities" v-if="pinnedNotes?.length > 0">
-    <p class="text-slate-500 font-normal py-4">Ancladas</p>
-    <hr>
-    <Note v-for="task in pinnedNotes"
-          :key="task.id"
-          :note="task" />
-  </div>
-
-  <div class="activities" v-if="notes?.length > 0">
-    <p class="text-slate-500 font-normal py-4">Pasadas</p>
-    <hr>
-    <Note v-for="task in notes"
-          :key="task.id"
-          :note="task" />
-  </div>
-
-
 </template>
