@@ -28,31 +28,30 @@ onBeforeMount(async () => {
         Crear Tarea
       </UIButton>
     </div>
+    <div v-auto-animate>
+      <div class="activities" v-if="pinnedTasks?.length > 0" v-auto-animate>
+        <p class="font-normal py-4">Ancladas</p>
+        <hr>
+        <Task v-for="task in pinnedTasks" :key="task.id" :task="task" />
+      </div>
 
-    <div class="activities" v-if="pinnedTasks?.length > 0">
-      <p class="font-normal py-4">Ancladas</p>
-      <hr>
-      <Task v-for="task in pinnedTasks" :key="task.id" :task="task" />
-    </div>
+      <div class="activities" v-if="delayedTasks?.length > 0" v-auto-animate>
+        <p class="font-normal py-4">Atrasadas</p>
+        <hr>
+        <Task v-for="task in delayedTasks" :key="task.id" :task="task" />
+      </div>
 
-    <div class="activities" v-if="delayedTasks?.length > 0">
-      <p class="font-normal py-4">Atrasadas</p>
-      <hr>
-      <Task v-for="task in delayedTasks" :key="task.id" :task="task" />
-    </div>
-
-    <div class="activities" v-if="pendingTasks?.length > 0">
-      <p class="font-normal py-4">Pendientes</p>
-      <hr>
-      <div class="activities">
+      <div class="activities" v-if="pendingTasks?.length > 0" v-auto-animate>
+        <p class="font-normal py-4">Pendientes</p>
+        <hr>
         <Task v-for="task in pendingTasks" :key="task.id" :task="task" />
       </div>
-    </div>
 
-    <div class="activities" v-if="completedTasks?.length > 0">
-      <p class="font-normal py-4">Pasadas</p>
-      <hr>
-      <Task v-for="task in completedTasks" :key="task.id" :task="task" />
+      <div class="activities" v-if="completedTasks?.length > 0" v-auto-animate>
+        <p class="font-normal py-4">Pasadas</p>
+        <hr>
+        <Task v-for="task in completedTasks" :key="task.id" :task="task" />
+      </div>
     </div>
   </div>
 

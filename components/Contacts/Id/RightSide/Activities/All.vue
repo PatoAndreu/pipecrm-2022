@@ -21,19 +21,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-2 text-slate-500">
+  <div class="p-2 text-slate-500" v-auto-animate>
 
-    <div class="activities" v-if="pinnedActivities?.length > 0">
+    <div class="activities" v-if="pinnedActivities?.length > 0" v-auto-animate>
       <p class="font-normal py-4">Ancladas</p>
       <hr>
       <template v-for="task in pinnedActivities"
                 :key="task.id">
-        <Note :note="task" v-if="task.type === 'note'" />
-        <Task :task="task" v-else />
+        <Note :note="task" v-if="task.type === 'note'"/>
+        <Task :task="task" v-else/>
       </template>
     </div>
 
-    <div class="activities" v-if="delayedTasks?.length > 0">
+    <div class="activities" v-if="delayedTasks?.length > 0" v-auto-animate>
       <p class="font-normal py-4">Atrasadas</p>
       <hr>
       <template v-for="task in delayedTasks"
@@ -43,7 +43,7 @@ onMounted(async () => {
       </template>
     </div>
 
-    <div class="activities" v-if="pendingActivities?.length > 0">
+    <div class="activities" v-if="pendingActivities?.length > 0" v-auto-animate>
       <p class="font-normal py-4">Pendientes</p>
       <hr>
       <template v-for="task in pendingActivities"
@@ -53,7 +53,7 @@ onMounted(async () => {
       </template>
     </div>
 
-    <div class="activities" v-if="completedActivities?.length > 0">
+    <div class="activities" v-if="completedActivities?.length > 0" v-auto-animate>
       <p class="font-normal py-4">Pasadas</p>
       <hr>
       <template v-for="task in completedActivities"
@@ -62,7 +62,6 @@ onMounted(async () => {
         <Task :task="task" v-else />
       </template>
     </div>
-
   </div>
 </template>
 

@@ -3,7 +3,7 @@ import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } fr
 import useContacts, { useContactsComponents } from "@/composables/useContacts";
 import useActivities from "@/composables/useActivities";
 
-const { loadContact, loadContacts, contact } = useContacts();
+const { loadContact, contact } = useContacts();
 
 const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
 
@@ -15,16 +15,17 @@ const route = useRoute();
 
 await loadContact(Number(route.params.id));
 
+await getActivityByContact(contact);
+
 onUpdated(() => {
   useHead({
     title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
   });
 });
 
+
 onUnmounted(async () => {
   activeTab.value = "activities";
-  await getActivityByContact(contact);
-
 });
 
 </script>
@@ -49,24 +50,15 @@ onUnmounted(async () => {
       <!--  Panel derecho  -->
       <div class="w-full h-full ml-4">
         <ActivityMenu />
-
-        <Suspense>
-          <All v-if="activeTab === 'activities'" />
-          <template #fallback>
-            Loading...
-          </template>
-        </Suspense>
-
-        <Suspense>
+        <All v-if="activeTab === 'activities'" />
+        <div v-auto-animate>
           <Notes v-if="activeTab === 'notes'" />
-          <template #fallback>
-            Loading...
-          </template>
-        </Suspense>
-        <Tasks v-if="activeTab === 'tasks'" />
+          <Tasks v-if="activeTab === 'tasks'" />
+        </div>
       </div>
 
     </div>
+
     <Teleport to="#NoteModal">
       <NoteModal />
     </Teleport>
@@ -81,6 +73,7 @@ onUnmounted(async () => {
 .activities > .activity-container .activity-icon .line {
   height: 100%;
 }
+
 .activities > .activity-container:last-child > .activity-icon .line {
   height: 0;
 }

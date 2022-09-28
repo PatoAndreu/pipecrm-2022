@@ -18,6 +18,7 @@ export interface IActivity {
   deal: IDeal
   contact: IContact
   company: ICompany
+  dateTime?: string
   createdAt: string
   updatedAt?: string
 }

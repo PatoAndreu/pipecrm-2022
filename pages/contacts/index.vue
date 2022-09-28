@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUsersStore } from "@/stores/usersStore";
-import { ref } from "@vue/reactivity";
+import { ref, useContacts, useHead } from "#imports";
 
 useHead({
   title: " Contactos"

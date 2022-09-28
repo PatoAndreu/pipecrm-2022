@@ -7,33 +7,35 @@ const { activeTab } = useActivities();
 </script>
 
 <template>
-  <ul class="flex space-x-10 p-4 text-slate-500">
-    <li :class="activeTab === 'activities' ? 'active':''">
-      <button @click="activeTab = 'activities'">Actividad</button>
-      <div></div>
-    </li>
-    <li :class="activeTab === 'notes' ? 'active':''">
-      <button @click="activeTab = 'notes'">Notas</button>
-      <div></div>
-    </li>
-    <li :class="activeTab === 'tasks' ? 'active':''">
-      <button @click="activeTab = 'tasks'">Tareas</button>
-      <div></div>
-    </li>
-    <li :class="activeTab === 'meetings' ? 'active':''">
-      <button @click="activeTab = 'meetings'">Reuniones</button>
-      <div class=""></div>
-    </li>
-    <li :class="activeTab === 'calls' ? 'active':''">
-      <button @click="activeTab = 'calls'">Llamadas</button>
-      <div></div>
-    </li>
-    <li :class="activeTab === 'emails' ? 'active':''">
-      <button @click="activeTab = 'emails'">Correos electrónicos</button>
-      <div></div>
-    </li>
-  </ul>
-  <hr>
+  <div>
+    <ul class="flex space-x-10 p-4 text-slate-500">
+      <li :class="activeTab === 'activities' ? 'active':''">
+        <button @click="activeTab = 'activities'">Actividad</button>
+        <div></div>
+      </li>
+      <li :class="activeTab === 'notes' ? 'active':''">
+        <button @click="activeTab = 'notes'">Notas</button>
+        <div></div>
+      </li>
+      <li :class="activeTab === 'tasks' ? 'active':''">
+        <button @click="activeTab = 'tasks'">Tareas</button>
+        <div></div>
+      </li>
+      <li :class="activeTab === 'meetings' ? 'active':''">
+        <button @click="activeTab = 'meetings'">Reuniones</button>
+        <div class=""></div>
+      </li>
+      <li :class="activeTab === 'calls' ? 'active':''">
+        <button @click="activeTab = 'calls'">Llamadas</button>
+        <div></div>
+      </li>
+      <li :class="activeTab === 'emails' ? 'active':''">
+        <button @click="activeTab = 'emails'">Correos electrónicos</button>
+        <div></div>
+      </li>
+    </ul>
+    <hr>
+  </div>
 </template>
 
 <style scoped>
