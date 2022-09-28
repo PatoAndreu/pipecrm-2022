@@ -29,8 +29,8 @@ export default function useContacts() {
           disabledFormContact
         }             = storeToRefs(contactsStore);
 
-  const loadContacts     = (): Promise<void> => contactsStore.getContacts();
-  const loadContact      = (id: number): Promise<void> => contactsStore.getContact(id);
+  const getContacts     = (): Promise<void> => contactsStore.getContacts();
+  const getContact      = (id: number): Promise<void> => contactsStore.getContact(id);
   const addContact       = () => contactsStore.addContact();
   const saveContact      = (): Promise<void> => contactsStore.saveContact();
   const updateContact    = (contact) => contactsStore.updateContact(contact);
@@ -55,8 +55,8 @@ export default function useContacts() {
     filterDate,
     disabledFormContact,
     filteredContacts,
-    loadContacts,
-    loadContact,
+    getContacts,
+    getContact,
     addContact,
     saveContact,
     updateContact,

@@ -28,7 +28,7 @@ export const useCompanyStore = defineStore("companies", {
       }
     },
     async updateCompany(company): Promise<any> {
-      const { contact, loadContact } = useContacts();
+      const { contact, getContact } = useContacts();
       console.log(contact.value.id);
 
       try {
@@ -38,7 +38,7 @@ export const useCompanyStore = defineStore("companies", {
             body: { ...company }
           });
 
-        await loadContact(contact.value.id)
+        await getContact(contact.value.id)
         return response;
       } catch (error) {
         return error;

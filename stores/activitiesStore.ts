@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ActivitiesState, IActivity } from "@/interfaces/IActivities";
 import { IContact } from "@/interfaces/IContacts";
 import useContacts from "@/composables/useContacts";
-import { Ref } from "@vue/reactivity";
 
 const initialActivity = {
   id: null,
@@ -35,10 +34,11 @@ export const useActivitiesStore = defineStore("activities", {
   }),
   actions: {
     // Requests
-    async getActivityByContact(contact: Ref<IContact>): Promise<void> {
+    async getActivityByContact(id:number): Promise<void> {
       try {
         let data: IActivity[];
-        ({ data } = await $fetch(`http://pipecrm-api.test/api/activities/contact/${contact.value.id}`));
+        ({ data } = await $fetch(`http://pipecrm-api.test/api/activities/contact/${id}`));
+        this.activities = [];
         this.activities = data;
       } catch (error) {
         console.error(error);
@@ -54,9 +54,9 @@ export const useActivitiesStore = defineStore("activities", {
         const response = await $fetch(url,
           {
             method: this.isEditing ? "PATCH" : "POST",
-            body: { ...this.task, contact: { id: contact.value.id } }
+            body: { ...this.task }
           });
-        await this.getActivityByContact(contact);
+        await this.getActivityByContact(contact.value.id);
         this.showModal = false;
         return response;
       } catch (error) {
@@ -75,7 +75,7 @@ export const useActivitiesStore = defineStore("activities", {
               delayed: false
             }
           });
-        await this.getActivityByContact(contact);
+        await this.getActivityByContact(contact.value.id);
         return response;
       } catch (error) {
         console.error(error);

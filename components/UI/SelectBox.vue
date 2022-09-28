@@ -21,6 +21,7 @@ interface Props {
 const props =  withDefaults(defineProps<Props>(), {
   field: "name",
   type: "other",
+  options: null,
   disabled: false,
   modelValue: null,
   top: true
@@ -56,7 +57,6 @@ const setOption = (option) => {
 };
 
 const searchCriteria = computed(() => {
-
   if (!searchInput) {
     return props.options;
   }
@@ -75,7 +75,7 @@ const getClass = (option) => {
   if (props.type === "array") {
     return selectedOption.value.toLowerCase() === option.toLowerCase() ? "bg-cyan-50" : "";
   }
-  return selectedOption.value.id === option.id ? "bg-cyan-50" : "";
+  return selectedOption.value?.id === option.id ? "bg-cyan-50" : "";
 };
 
 </script>

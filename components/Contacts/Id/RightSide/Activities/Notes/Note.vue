@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { IActivity } from "@/interfaces/IActivities";
 import {
   AnnotationIcon,
@@ -33,13 +33,13 @@ const { editTask, changeTaskStatus, deleteTask } = useActivities();
       <div class="mt-7 h-auto line w-0.5 bg-slate-200 text-center ml-5"></div>
     </div>
 
-    <div class="activity-item w-full text-slate-600 shadow rounded my-4 p-2 relative bg-amber-50"
-         :class="note.pinned ? 'my-7': 'my-4'">
+    <div :class="note.pinned ? 'my-7': 'my-4'"
+         class="activity-item w-full text-slate-600 shadow rounded my-4 p-2 relative bg-amber-50">
 
       <!--  Header    -->
 
-      <div class="w-10 h-10 rounded-full bg-orange-600 absolute flex items-center justify-center -right-5 -top-5 shadow-2xl opacity-90 cursor-pointer hover:opacity-90 shadow-2xl"
-           v-if="note.pinned">
+      <div v-if="note.pinned"
+           class="w-10 h-10 rounded-full bg-orange-600 absolute flex items-center justify-center -right-5 -top-5 shadow-2xl opacity-90 cursor-pointer hover:opacity-90 shadow-2xl">
 
         <PaperClipIcon
           class="h-6 text-white"
@@ -69,12 +69,12 @@ const { editTask, changeTaskStatus, deleteTask } = useActivities();
               <li class="w-full hover:bg-cyan-500 hover:text-white py-1 pl-2" @click="editTask(note)">
                 Editar
               </li>
-              <li class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2"
-                  @click="changeTaskStatus(note, {pinned: true})" v-if="!note.pinned">
+              <li v-if="!note.pinned"
+                  class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2" @click="changeTaskStatus(note, {pinned: true})">
                 Anclar
               </li>
-              <li class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2"
-                  @click="changeTaskStatus(note, {pinned: false})" v-else>
+              <li v-else
+                  class="w-full hover:bg-cyan-500 hover:text-white py-1 mt-4 pl-2" @click="changeTaskStatus(note, {pinned: false})">
                 Desanclar
               </li>
               <li class="w-full hover:bg-cyan-500 hover:text-white py-1 pl-2" @click="deleteTask(note)">
@@ -104,7 +104,7 @@ const { editTask, changeTaskStatus, deleteTask } = useActivities();
           <p class="ml-1">{{ $dayjs(note.createdAt).format("ddd DD MMMM YYYY H:mm") }}</p>
         </button>
 
-        <button class="flex relative justify-center group hover:text-indigo-600" v-if="note.owner">
+        <button v-if="note.owner" class="flex relative justify-center group hover:text-indigo-600">
           <div
             class="bottom-6 w-max h-auto px-2 py-1 rounded bg-indigo-600 text-white absolute z-50 shadow group-hover:block hidden inner">
             <p>Asociada al Contacto </p>
@@ -115,7 +115,7 @@ const { editTask, changeTaskStatus, deleteTask } = useActivities();
           </div>
         </button>
 
-        <button class="flex relative justify-center group hover:text-indigo-600" v-if="note.deal">
+        <button v-if="note.deal" class="flex relative justify-center group hover:text-indigo-600">
           <div class="bottom-6 w-max h-auto p-2 rounded bg-indigo-600 text-white absolute z-50 shadow group-hover:block hidden inner text-left space-y-2">
             <p>Asociada al Negocio</p>
           </div>

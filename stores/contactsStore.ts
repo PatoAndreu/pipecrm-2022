@@ -51,8 +51,6 @@ export const useContactsStore = defineStore("contacts", {
         this.pending = true;
         let data: IContact[];
         ({ data } = await $fetch("http://pipecrm-api.test/api/contacts"));
-        await this.getContactStatus();
-        await this.getContactStages();
         this.contacts = data;
         this.pending  = false;
       } catch (error) {

@@ -12,7 +12,7 @@ import TaskModal from "@/components/Contacts/Id/RightSide/Activities/Tasks/TaskM
 import Note from "@/components/Contacts/Id/RightSide/Activities/Notes/Note.vue";
 import Notes from "@/components/Contacts/Id/RightSide/Activities/Notes/Notes.vue";
 import NoteModal from "@/components/Contacts/Id/RightSide/Activities/Notes/NoteModal.vue";
-import { computed, Ref } from "@vue/reactivity";
+import { computed } from "@vue/reactivity";
 
 export default function useActivities() {
 
@@ -28,7 +28,7 @@ export default function useActivities() {
           activeTab
         } = storeToRefs(activitiesStore);
 
-  const getActivityByContact = (contact: Ref<IContact>) => activitiesStore.getActivityByContact(contact as Ref<IContact>);
+  const getActivityByContact = (id: number) => activitiesStore.getActivityByContact(id);
   const addTask              = (type: string, contact?: IContact): void => activitiesStore.addTask(type, contact);
   const saveTask             = async () => await activitiesStore.saveTask();
   const editTask             = (task: IActivity): void => activitiesStore.editTask(task);
