@@ -69,7 +69,7 @@ const getClass = (probabilityOfClose) => {
     <button class="flex items-center text-cyan-700 hover:text-cyan-500 py-2" @click="showDealsInfo = !showDealsInfo">
       <ChevronRightIcon v-if="!showDealsInfo" class="h-5 mr-1" />
       <ChevronDownIcon v-else class="h-5 mr-1" />
-      <div class="text-xs font-medium">NEGOCIOS ({{ contact.deals.length }})</div>
+      <div class="text-xs font-semibold">NEGOCIOS ({{ contact.deals.length }})</div>
     </button>
 
     <div v-if="showDealsInfo " v-auto-animate>
