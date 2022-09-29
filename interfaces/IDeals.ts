@@ -1,16 +1,21 @@
+import { IContact } from "~/interfaces/IContacts";
+import { ICompany } from "~/interfaces/ICompany";
+import { IUser } from "~/interfaces/IUsers";
+
 export interface IDeal {
   readonly id: number,
-  amount: number,
-  close_date: string,
-  company_id: number,
-  contact_id: number,
-  created_at: string,
   name: string,
-  owner_id: number,
-  pipeline_id: number,
-  pipeline_stage_id: number,
+  amount: number,
   priority: string,
-  updated_at: string
+  closeDate: string,
+  probabilityOfClose: string,
+  contact: IContact,
+  company: ICompany,
+  owner: IUser,
+  pipeline: object,
+  pipelineStage: object,
+  createdAt: string,
+  updatedAt: string,
 }
 
 export interface IDealStore {

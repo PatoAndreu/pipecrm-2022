@@ -38,7 +38,7 @@ const updateCompanyInfo = async () => {
     </div>
     <hr>
     <div v-if="companyLocal" class="mt-3">
-      <form v-auto-animate class="text-sm py-4" @submit.prevent="">
+      <form v-auto-animate class="text-sm py-4" @submit.prevent="updateCompanyInfo">
 
         <div v-auto-animate class="h-12 items-center mb-4">
           <div class="text-slate-500 text-xs text-cyan-700">Nombre</div>
