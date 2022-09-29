@@ -21,12 +21,36 @@ export const useDealsStore = defineStore("deals", {
     async getDeals(): Promise<void> {
       try {
         let data: IDeal[];
-        ({ data } = await $fetch('http://pipecrm-api.test/api/deals'));
+        ({ data } = await $fetch("http://pipecrm-api.test/api/deals"));
         this.deals = data;
       } catch (error) {
         console.error(error);
       }
-    }
+    },
+    async addDeal(deal: IDeal): Promise<void> {
+      try {
+        return await $fetch(`http://pipecrm-api.test/api/deals`,
+          {
+            method: "POST",
+            body: { ...deal }
+          });
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    },
+    async updateDeal(deal: IDeal): Promise<void> {
+      try {
+        return await $fetch(`http://pipecrm-api.test/api/deals/${deal.id}`,
+          {
+            method: "PATCH",
+            body: { ...deal }
+          });
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    },
   }
 
 });

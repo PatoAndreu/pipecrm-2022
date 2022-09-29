@@ -21,5 +21,6 @@
     "@pinia/nuxt": "^0.4.1",
     "@vueuse/core": "^9.2.0",
     "dayjs": "^1.11.5"
-  }
+  },
+  "web-types": "./web-types.json"
 }

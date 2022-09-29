@@ -123,7 +123,7 @@ const deleteContactLocal = async () => {
   border-right: 0 solid red;
   border-bottom: 0 solid red;
   border-left: 1px solid #dedede;
-  top: 15px;
+  top: 14px;
   right: 5%;
   content: '';
   transform: rotate(45deg);

@@ -71,8 +71,8 @@ const linkOrUnlinkCompanyToContact = async (type) => {
 };
 
 const linkCompany = async () => {
-  isLinkingCompany.value = true;
   await getCompanies();
+  isLinkingCompany.value = true;
 };
 
 const cancelLinkCompany = () => {
