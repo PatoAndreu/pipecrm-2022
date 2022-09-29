@@ -1,39 +1,65 @@
-<script setup lang="ts">
-import useActivities from "@/composables/useActivities";
+<script lang="ts" setup>
+import { computed, onMounted, watch } from "#imports";
 import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
-import { computed } from "@vue/reactivity";
+import useActivities from "@/composables/useActivities";
 import useContacts from "@/composables/useContacts";
-import { useUsers } from "~/composables/useUsers";
+import useDeals from "@/composables/useDeals";
+import useUsers from "@/composables/useUsers";
 
-const { task, showModal, isEditing, minimize, saveTask, closeTaskModal } = useActivities();
+const { task, showModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } = useActivities();
 
-const { loadUsers, users } = useUsers()
+let { contact, contacts, getContacts } = useContacts();
 
-await loadUsers();
+const { getDeals, deals } = useDeals();
+const { getUsers, users } = useUsers();
+
+onMounted(async () => {
+  await getContacts();
+  await getDeals();
+  await getUsers();
+});
 
 const disabledNoteForm = computed(() => {
-  return task.value.text?.length > 0;
+  return task.value.text?.length < 1;
 });
+
+
+contacts.value = contacts.value.sort(function(a, b) {
+  if (a.firstName < b.firstName) {
+    return -1;
+  }
+  if (a.firstName > b.firstName) {
+    return 1;
+  }
+  return 0;
+});
+
+watch(() => [disabledNoteForm.value], () => {
+  if (disabledNoteForm.value) {
+    showAssociations.value = !disabledNoteForm.value;
+  }
+});
+
 
 </script>
 
 
 <template>
-  <form class="w-[650px] bg-white fixed bottom-[20px] right-[20px] h-auto shadow-2xl"
+  <form v-if="showModal && task.type !== 'note'"
+        class="w-[650px] bg-white fixed bottom-[20px] right-[20px] h-auto shadow-2xl"
         @submit.prevent="saveTask"
-        v-if="showModal && task.type !== 'note'"
-        v-auto-animate>
+  >
     <!--  Header  -->
     <div class="min-w-fit bg-indigo-800 text-white py-2 px-4 flex items-center justify-between">
       <div class="flex items-center justify-center">
-        <button class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
-                @click="minimize = true"
-                v-if="!minimize">
+        <button v-if="!minimize"
+                class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
+                @click="minimize = true">
           <ChevronDownIcon class="w-6" />
         </button>
-        <button class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
-                @click="minimize = false"
-                v-else>
+        <button v-else
+                class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
+                @click="minimize = false">
           <ChevronRightIcon class="w-6" />
         </button>
         <p class="font-semibold tracking-wider">Tarea</p>
@@ -46,15 +72,15 @@ const disabledNoteForm = computed(() => {
     <!--  Content  -->
     <div v-show="!minimize">
 
-      <input type="text" class="w-full p-4 outline-none" placeholder="Ingresa tu tarea" v-model="task.text">
+      <input v-model="task.text" class="w-full p-4 outline-none" placeholder="Ingresa tu tarea" type="text">
       <div class="flex space-x-10 p-4 items-start">
         <div class="w-40">
           <div class="text-xs text-slate-600">Fecha de vencimiento</div>
-          <input type="date" class="py-2 text-cyan-600 w-full" v-model="task.date">
+          <input v-model="task.date" class="py-2 text-cyan-600 w-full" type="date">
         </div>
         <div class="w-max">
           <div class="text-xs text-slate-600">Hora</div>
-          <input type="time" class="py-2 text-cyan-600 w-full" v-model="task.time">
+          <input v-model="task.time" class="py-2 text-cyan-600 w-full" type="time">
         </div>
       </div>
 
@@ -63,7 +89,7 @@ const disabledNoteForm = computed(() => {
       <div class="flex p-4 space-x-8 items-center">
         <div class="w-32">
           <div class="text-xs text-slate-600">Tipo</div>
-          <select class="py-2 text-cyan-600 min-w-fit" v-model="task.type">
+          <select v-model="task.type" class="py-2 text-cyan-600 min-w-fit">
             <option value="other">Otro</option>
             <option value="call">Llamada</option>
             <option value="email">Correo</option>
@@ -73,7 +99,7 @@ const disabledNoteForm = computed(() => {
 
         <div class="w-32">
           <div class="text-xs text-slate-600">Prioridad</div>
-          <select class="py-2 text-cyan-600 min-w-fit" v-model="task.priority">
+          <select v-model="task.priority" class="py-2 text-cyan-600 min-w-fit">
             <option value="">Ninguno</option>
             <option value="low">Baja</option>
             <option value="medium">Media</option>
@@ -83,10 +109,10 @@ const disabledNoteForm = computed(() => {
 
         <div class="w-60">
           <div class="text-xs text-slate-600">Asignado a</div>
-          <UISelectBox class="w-full mt-2"
+          <UISelectBox v-model:modelValue="task.owner"
                        :options="users"
+                       class="w-full mt-2"
                        type="user"
-                       v-model:modelValue="task.owner"
           />
         </div>
 
@@ -94,17 +120,44 @@ const disabledNoteForm = computed(() => {
 
       <hr class="mx-4">
 
-      <textarea rows="3" placeholder="Empieza a escribir una nota...."
-                class="w-full p-4 focus:outline-none"
-                v-model="task.note"></textarea>
+      <textarea v-model="task.note" class="w-full p-4 focus:outline-none"
+                placeholder="Empieza a escribir una nota...."
+                rows="3" />
+
+      <!-- showAssociations -->
+      <div v-if="showAssociations" class="w-full h-auto bg-white p-4 absolute z-50 fixed bottom-20 flex space-x-4">
+        <div class="w-full">
+          <div class="text-slate-500 text-xs text-cyan-700">Contacto</div>
+          <UISelectBox v-model:modelValue="task.contact"
+                       :options="contacts"
+                       class="mt-2"
+                       type="user"
+          />
+        </div>
+        <div class="w-full">
+          <div class="text-slate-500 text-xs text-cyan-700">Negocio</div>
+          <UISelectBox v-model:modelValue="task.deal"
+                       :options="deals"
+                       class="mt-2"
+          />
+        </div>
+      </div>
       <!--  Footer  -->
       <hr>
-      <div class="p-4">
-        <UIButton type="submit"
-                  :active="disabledNoteForm"
-                  :disabled="!disabledNoteForm">
+      <div class="p-4 flex justify-between">
+        <UIButton :active="!disabledNoteForm"
+                  :disabled="disabledNoteForm"
+                  type="submit">
           {{ !isEditing ? "Guardar Tarea" : "Actualizar Tarea" }}
         </UIButton>
+
+        <button :class="disabledNoteForm ? 'cursor-not-allowed opacity-50' : 'border-orange-500 text-orange-500 bg-white'" :disabled="disabledNoteForm"
+                class="h-10 w-h-auto py-2 px-6 border rounded text-sm"
+                type="button"
+                @click="showAssociations = !showAssociations">
+          Asociaciones
+        </button>
+
       </div>
     </div>
   </form>

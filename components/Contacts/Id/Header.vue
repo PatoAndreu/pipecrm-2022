@@ -4,14 +4,14 @@ import { ChevronDownIcon, DotsHorizontalIcon, UserIcon } from "@heroicons/vue/ou
 
 const { contact, updateContact, pending, deleteContact } = useContacts();
 
-const { users, loadUsers, resetUser } = useUsers();
+const { users, getUsers, resetUser } = useUsers();
 
 const router = useRouter();
 
 const show = ref(false);
 
 onBeforeMount(async () => {
-  await loadUsers();
+  await getUsers();
 });
 
 const owner = ref({ ...contact.value.owner });

@@ -2,7 +2,7 @@
 import { XIcon } from "@heroicons/vue/outline";
 import { useContactsStore } from "@/stores/contactsStore";
 import useContacts from "@/composables/useContacts";
-import { useUsers } from "@/composables/useUsers";
+import useUsers from "@/composables/useUsers";
 import { ref } from "@vue/reactivity";
 
 const contactStore = useContactsStore();
@@ -16,15 +16,15 @@ const {
         disabledFormContact,
         saveContact,
         updateContact,
-        loadContacts,
+        getContacts,
         resetContact
       } = useContacts();
 
-const { users, loadUsers } = useUsers();
+const { users, getUsers } = useUsers();
 
 let errorsMessages = ref<string[]>([]);
 
-await loadUsers();
+await getUsers();
 
 contactStore.$subscribe((mutation, state) => {
   if (state.showDrawer)
@@ -44,7 +44,7 @@ const afterPost = (res) => {
   if (status === 200) {
     isEditing.value  = false;
     showDrawer.value = false;
-    loadContacts();
+    getContacts();
     resetContact();
   } else {
     errorsMessages.value = errors;

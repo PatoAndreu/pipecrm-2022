@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import { PencilAltIcon } from "@heroicons/vue/outline";
 import useContacts from "@/composables/useContacts";
-import { onBeforeMount, ref } from "#imports";
+import { onMounted, ref } from "#imports";
 
 const {
         contact,
@@ -17,7 +17,7 @@ const contactLocal = ref({ ...contact.value });
 const isEditing    = ref(false);
 const pending      = ref(false);
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await getContactStatus();
   await getContactStages();
 });
@@ -49,64 +49,64 @@ const updateContactInfo = async () => {
     </div>
     <hr>
     <!-- Formulario-->
-    <form class="text-sm py-4" @submit.prevent="updateContactInfo" v-auto-animate>
+    <form v-auto-animate class="text-sm py-4" @submit.prevent="updateContactInfo">
 
-        <div class="h-12 items-center mb-4" v-auto-animate>
-          <div class="text-slate-500 text-xs text-cyan-700">Nombre</div>
-          <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ contactLocal.firstName }}</div>
-          <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="contactLocal.firstName" v-else />
-        </div>
+      <div v-auto-animate class="h-12 items-center mb-4">
+        <div class="text-slate-500 text-xs text-cyan-700">Nombre</div>
+        <div v-if="!isEditing" class=" pt-2 text-slate-600">{{ contactLocal.firstName }}</div>
+        <input v-else v-model="contactLocal.firstName" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" type="text" />
+      </div>
 
-        <div class="h-12 items-center mb-4" v-auto-animate>
-          <div class="text-slate-500 text-xs text-cyan-700">Apellidos</div>
-          <div class=" pt-2 text-slate-600" v-if="!isEditing">{{ contactLocal.lastName }}</div>
-          <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="contactLocal.lastName" v-else />
-        </div>
+      <div v-auto-animate class="h-12 items-center mb-4">
+        <div class="text-slate-500 text-xs text-cyan-700">Apellidos</div>
+        <div v-if="!isEditing" class=" pt-2 text-slate-600">{{ contactLocal.lastName }}</div>
+        <input v-else v-model="contactLocal.lastName" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" type="text" />
+      </div>
 
-        <div class="h-12 items-center mb-4" v-auto-animate>
-          <div class="text-slate-500 text-xs text-cyan-700">Email</div>
-          <div class="pt-2 text-slate-600" v-if="!isEditing">{{ contactLocal.email }}</div>
-          <input type="text" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" v-model="contactLocal.email" v-else />
-        </div>
+      <div v-auto-animate class="h-12 items-center mb-4">
+        <div class="text-slate-500 text-xs text-cyan-700">Email</div>
+        <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.email }}</div>
+        <input v-else v-model="contactLocal.email" class="w-full h-8 mt-1 pl-2 rounded-sm bg-slate-100 border border-slate-200" type="text" />
+      </div>
 
-        <div class="h-12 items-center mb-4" v-auto-animate>
-          <div class="text-slate-500 text-xs text-cyan-700">Etapa del ciclo de vida</div>
-          <div class="pt-2 text-slate-600" v-if="!isEditing">{{ contactLocal.contactLifeCycleStage?.name }}</div>
-          <UISelectBox class="mt-2"
-                       :options="contactLifeCycleStage"
-                       v-model:modelValue="contactLocal.contactLifeCycleStage"
-                       v-else>
-          </UISelectBox>
-        </div>
+      <div v-auto-animate class="h-12 items-center mb-4">
+        <div class="text-slate-500 text-xs text-cyan-700">Etapa del ciclo de vida</div>
+        <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.contactLifeCycleStage?.name }}</div>
+        <UISelectBox v-else
+                     v-model:modelValue="contactLocal.contactLifeCycleStage"
+                     :options="contactLifeCycleStage"
+                     class="mt-2">
+        </UISelectBox>
+      </div>
 
-        <div class="h-12 items-center" :class="isEditing ? 'pt-2' : ''" v-auto-animate>
-          <div class="text-slate-500 text-xs text-cyan-700">Estado del lead</div>
-          <div class="pt-2 text-slate-600" v-if="!isEditing">{{ contactLocal.contactStatus?.name }}</div>
-          <UISelectBox class="mt-2"
-                       :options="contactStatus"
-                       v-model:modelValue="contactLocal.contactStatus"
-                       v-else>
-          </UISelectBox>
-        </div>
+      <div v-auto-animate :class="isEditing ? 'pt-2' : ''" class="h-12 items-center">
+        <div class="text-slate-500 text-xs text-cyan-700">Estado del lead</div>
+        <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.contactStatus?.name }}</div>
+        <UISelectBox v-else
+                     v-model:modelValue="contactLocal.contactStatus"
+                     :options="contactStatus"
+                     class="mt-2">
+        </UISelectBox>
+      </div>
 
-      <div class="flex w-auto h-auto justify-end mt-16" v-if="isEditing">
+      <div v-if="isEditing" class="flex w-auto h-auto justify-end mt-16">
 
-        <button type="button"
-                class="inline-flex items-center px-4 py-2 mr-4 font-semibold leading-6 text-sm shadow rounded text-indigo-500 bg-white border hover:shadow-md border-indigo-500 transition ease-in-out duration-150"
-                :class="pending ? 'cursor-not-allowed opacity-70' :''"
+        <button :class="pending ? 'cursor-not-allowed opacity-70' :''"
                 :disabled="pending"
+                class="inline-flex items-center px-4 py-2 mr-4 font-semibold leading-6 text-sm shadow rounded text-indigo-500 bg-white border hover:shadow-md border-indigo-500 transition ease-in-out duration-150"
+                type="button"
                 @click="cancelEdit">
           Cancelar
         </button>
 
-        <button type="submit"
-                class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded text-white bg-indigo-600 hover:shadow-lg transition ease-in-out duration-150"
-                :class="pending ? 'cursor-not-allowed opacity-70' :''"
+        <button :class="pending ? 'cursor-not-allowed opacity-70' :''"
                 :disabled="pending"
+                class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded text-white bg-indigo-600 hover:shadow-lg transition ease-in-out duration-150"
+                type="submit"
                 @click="updateContactInfo">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" v-show="pending">
+          <svg v-show="pending" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
           </svg>
           {{ !pending ? "Guardar" : "Guardando..." }}
         </button>

@@ -3,26 +3,25 @@ import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } fr
 import useContacts, { useContactsComponents } from "@/composables/useContacts";
 import useActivities from "@/composables/useActivities";
 
-const { loadContact, contact } = useContacts();
+const { getContact, contact } = useContacts();
 
 const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
 
-const { getActivityByContact, activeTab, activities } = useActivities();
+const { getActivityByContact, activeTab, activities, showModal } = useActivities();
 
 const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesComponents();
 
 const route = useRoute();
 
-await loadContact(Number(route.params.id));
+await getContact(Number(route.params.id));
 
-await getActivityByContact(contact);
+await getActivityByContact(contact.value.id);
 
 onUpdated(() => {
   useHead({
     title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
   });
 });
-
 
 onUnmounted(async () => {
   activeTab.value = "activities";
@@ -60,11 +59,11 @@ onUnmounted(async () => {
     </div>
 
     <Teleport to="#NoteModal">
-      <NoteModal />
+      <NoteModal v-if="showModal" />
     </Teleport>
 
     <Teleport to="#TaskModal">
-      <TaskModal />
+      <TaskModal v-if="showModal" />
     </Teleport>
   </div>
 </template>

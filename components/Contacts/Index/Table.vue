@@ -13,9 +13,9 @@ let searchInput         = ref("");
 
 const dropdownPerPageValues = ref([5, 10, 20, 50, 100]);
 
-const { pending, loadContacts, filteredContacts, editContact } = useContacts();
+const { pending, getContacts, filteredContacts, editContact } = useContacts();
 
-await loadContacts();
+await getContacts();
 
 rowsLeft.value = (filteredContacts.value.length) - (perPage.value * currentPage.value);
 
