@@ -93,10 +93,9 @@ watch(() => [disabledNoteForm.value], () => {
           <div class="w-32">
             <div class="text-xs text-slate-600">Tipo</div>
             <select v-model="task.type" class="py-2 text-cyan-600 min-w-fit">
-              <option value="other">Otro</option>
               <option value="call">Llamada</option>
               <option value="email">Correo</option>
-              <option value="meeting">Reunión</option>
+              <option value="other">Otro</option>
             </select>
           </div>
 
