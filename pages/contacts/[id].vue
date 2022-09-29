@@ -7,9 +7,9 @@ const { getContact, contact } = useContacts();
 
 const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
 
-const { getActivityByContact, activeTab, activities, showModal } = useActivities();
+const { getActivityByContact, activeTab, activities } = useActivities();
 
-const { All, ActivityMenu, Tasks, TaskModal, Notes, NoteModal } = useActivitiesComponents();
+const { All, ActivityMenu, Tasks, Notes } = useActivitiesComponents();
 
 const route = useRoute();
 
@@ -57,14 +57,6 @@ onUnmounted(async () => {
       </div>
 
     </div>
-
-    <Teleport to="#NoteModal">
-      <NoteModal v-if="showModal" />
-    </Teleport>
-
-    <Teleport to="#TaskModal">
-      <TaskModal v-if="showModal" />
-    </Teleport>
   </div>
 </template>
 

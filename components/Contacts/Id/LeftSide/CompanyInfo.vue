@@ -97,7 +97,7 @@ const reLinkCompany = async () => {
       <button class="flex items-center text-cyan-700 hover:text-cyan-500" @click="showCompanyInfo = !showCompanyInfo">
         <ChevronRightIcon v-if="!showCompanyInfo" class="h-5 mr-1" />
         <ChevronDownIcon v-else class="h-5 mr-1" />
-        <div class="text-xs font-medium">EMPRESA</div>
+        <div class="text-xs font-semibold">EMPRESA</div>
       </button>
       <PencilAltIcon v-if="showCompanyInfo && !isEditing && contact.company" class="h-5 text-cyan-600 cursor-pointer hover:text-cyan-500" @click="isEditing = true" />
 
