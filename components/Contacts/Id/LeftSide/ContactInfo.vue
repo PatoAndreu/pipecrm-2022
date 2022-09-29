@@ -29,6 +29,7 @@ const cancelEdit = () => {
 
 const updateContactInfo = async () => {
   pending.value = true;
+
   const res     = await updateContact(contactLocal.value);
 
   const { data: { errors }, response: { status } }: any = res;

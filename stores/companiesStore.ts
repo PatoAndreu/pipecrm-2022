@@ -28,18 +28,13 @@ export const useCompanyStore = defineStore("companies", {
       }
     },
     async updateCompany(company): Promise<any> {
-      const { contact, getContact } = useContacts();
-      console.log(contact.value.id);
-
       try {
-        const response = await $fetch(`http://pipecrm-api.test/api/companies/${company.id}`,
+        return await $fetch(`http://pipecrm-api.test/api/companies/${company.id}`,
           {
             method: "PATCH",
             body: { ...company }
           });
 
-        await getContact(contact.value.id)
-        return response;
       } catch (error) {
         return error;
       }

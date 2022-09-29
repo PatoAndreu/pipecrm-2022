@@ -1,17 +1,8 @@
 import { IDeal } from "@/interfaces/IDeals";
+import { ICompany } from "~/interfaces/ICompany";
+import { IUser } from "~/interfaces/IUsers";
 
 interface IContactLifecycleStage {
-  readonly id: number,
-  name: string,
-}
-
-interface IOwner {
-  readonly id: number,
-  firstName: string,
-  lastName: string,
-}
-
-interface ICompany {
   readonly id: number,
   name: string,
 }
@@ -20,6 +11,7 @@ interface IContactStatus {
   readonly id: number | undefined,
   name: string | undefined,
 }
+
 
 export interface IContact {
   readonly id: number,
@@ -35,7 +27,7 @@ export interface IContact {
   lastName: string,
   contactLifeCycleStage?: IContactLifecycleStage | undefined,
   mobilePhoneNumber: number | undefined,
-  owner: IOwner | undefined,
+  owner: IUser | undefined,
   phoneNumber: string | undefined,
   region: number | undefined,
   address: string | undefined,
@@ -52,7 +44,7 @@ export interface IContactState {
   showDrawer: boolean,
   isEditing: boolean,
   tabSelected: string,
-  filterUser: IOwner,
+  filterUser: IUser,
   filterDate:
     {
       readonly id: number,

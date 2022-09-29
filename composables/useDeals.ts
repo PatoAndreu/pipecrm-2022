@@ -10,12 +10,15 @@ export default function useDeals() {
   const { deal, deals } = storeToRefs(dealsStore);
 
   const getDealsByContact = (contact: Ref<IContact>) => dealsStore.getDealsByContact(contact as Ref<IContact>);
-
-  const getDeals = () => dealsStore.getDeals();
+  const getDeals          = () => dealsStore.getDeals();
+  const addDeal           = (deal) => dealsStore.addDeal(deal);
+  const updateDeal        = (deal) => dealsStore.updateDeal(deal);
 
   return {
     deal, deals,
     getDealsByContact,
-    getDeals
+    getDeals,
+    addDeal,
+    updateDeal
   };
 }

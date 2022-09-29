@@ -7,11 +7,13 @@ export default function useCompanies() {
 
   const { company, companies } = storeToRefs(companiesStore);
 
+  const getCompanies  = () => companiesStore.getCompanies();
   const updateCompany = (company) => companiesStore.updateCompany(company);
 
   return {
     company,
     companies,
+    getCompanies,
     updateCompany
   };
 }
