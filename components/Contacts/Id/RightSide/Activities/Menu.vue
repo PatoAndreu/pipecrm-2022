@@ -1,16 +1,16 @@
 <script setup lang="ts">
 
-import useActivities from "@/composables/useActivities";
+import useTasks from "@/composables/useTasks";
 
-const { activeTab } = useActivities();
+const { activeTab } = useTasks();
 
 </script>
 
 <template>
   <div>
     <ul class="flex space-x-10 p-4 text-slate-500">
-      <li :class="activeTab === 'activities' ? 'active':''">
-        <button @click="activeTab = 'activities'">Actividad</button>
+      <li :class="activeTab === 'activity' ? 'active':''">
+        <button @click="activeTab = 'activity'">Actividad</button>
         <div></div>
       </li>
       <li :class="activeTab === 'notes' ? 'active':''">

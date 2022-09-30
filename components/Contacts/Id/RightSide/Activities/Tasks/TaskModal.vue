@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, watch } from "#imports";
 import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
-import useActivities from "@/composables/useActivities";
+import useTasks from "@/composables/useTasks";
 import useContacts from "@/composables/useContacts";
 import useDeals from "@/composables/useDeals";
 import useUsers from "@/composables/useUsers";
 
-const { task, showModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } = useActivities();
+const { task, showModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } = useTasks();
 
 let { contact, contacts, getContacts } = useContacts();
 

@@ -1,21 +1,23 @@
 <script lang="ts" setup>
-import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } from "#imports";
+import { onUnmounted, onUpdated, useHead, useRoute } from "#imports";
 import useContacts, { useContactsComponents } from "@/composables/useContacts";
-import useActivities from "@/composables/useActivities";
+import useTasks, { useActivitiesComponents, useTasksComponents } from "@/composables/useTasks";
 
 const { getContact, contact } = useContacts();
 
 const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
 
-const { getActivityByContact, activeTab, activities } = useActivities();
+const { getTasksByContact, activeTab, tasks } = useTasks();
 
-const { All, ActivityMenu, Tasks, Notes } = useActivitiesComponents();
+const { Tasks, Notes } = useTasksComponents();
+
+const { All, ActivityMenu } = useActivitiesComponents();
 
 const route = useRoute();
 
 await getContact(Number(route.params.id));
 
-await getActivityByContact(contact.value.id);
+await getTasksByContact(contact.value.id);
 
 onUpdated(() => {
   useHead({
@@ -24,7 +26,7 @@ onUpdated(() => {
 });
 
 onUnmounted(async () => {
-  activeTab.value = "activities";
+  activeTab.value = "tasks";
 });
 
 </script>
@@ -49,9 +51,9 @@ onUnmounted(async () => {
       <!--  Panel derecho  -->
       <div class="w-full h-full ml-4">
         <ActivityMenu />
-        <All v-if="activeTab === 'activities'" />
+        <All v-if="activeTab === 'activity'" />
         <div v-auto-animate>
-          <Notes v-if="activeTab === 'notes'" />
+<!--          <Notes v-if="activeTab === 'notes'" />-->
           <Tasks v-if="activeTab === 'tasks'" />
         </div>
       </div>

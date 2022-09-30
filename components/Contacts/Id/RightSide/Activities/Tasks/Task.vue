@@ -14,7 +14,7 @@ import {
 import { CheckCircleIcon as CheckCircleIconOk } from "@heroicons/vue/solid";
 
 import { IActivity } from "@/interfaces/IActivities";
-import useActivities from "@/composables/useActivities";
+import useTasks from "@/composables/useTasks";
 import { computed } from "@vue/reactivity";
 
 interface Props {
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   task: null
 });
 
-const { editTask, changeTaskStatus, deleteTask } = useActivities();
+const { editTask, changeTaskStatus, deleteTask } = useTasks();
 
 const arrowColor = computed(() => {
   return props.task?.delayed ? '#FEF2F2' : '#FFFFFF'

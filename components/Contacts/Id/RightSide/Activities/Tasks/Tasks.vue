@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import useContacts from "@/composables/useContacts";
-import useActivities, { useActivitiesComponents } from "@/composables/useActivities";
+import useTasks, { useTasksComponents } from "@/composables/useTasks";
 
 const { contact } = useContacts();
-const { Task }    = useActivitiesComponents();
+const { Task }    = useTasksComponents();
 
 const {
         pinnedTasks,
@@ -11,7 +11,7 @@ const {
         completedTasks,
         delayedTasks,
         addTask
-      } = useActivities();
+      } = useTasks();
 
 </script>
 

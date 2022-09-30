@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import useActivities, { useActivitiesComponents } from "../composables/useActivities";
+import useTasks, { useTasksComponents } from "@/composables/useTasks";
 
-const { showModal } = useActivities();
-const { TaskModal, NoteModal } = useActivitiesComponents();
+const { showModal } = useTasks();
+const { TaskModal, NoteModal } = useTasksComponents();
 
 </script>
 
