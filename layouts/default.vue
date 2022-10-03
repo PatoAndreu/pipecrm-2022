@@ -1,16 +1,21 @@
 <script lang="ts" setup>
-import useTasks, { useTasksComponents } from "@/composables/useTasks";
+  import useTasks, { useTasksComponents } from '@/composables/useTasks'
+  import useNotes, { useNotesComponents } from '@/composables/useNotes'
+  import DeleteModal from '@/components/UI/DeleteModal.vue'
 
-const { showModal } = useTasks();
-const { TaskModal, NoteModal } = useTasksComponents();
+  const { showTaskModal } = useTasks()
+  const { showNoteModal } = useNotes()
 
+  const { TaskModal } = useTasksComponents()
+  const { NoteModal } = useNotesComponents()
 </script>
 
 <template>
-  <div class="min-w-[1024px]" style="background-color: #f5f8fa;">
+  <div id="default-layout" class="min-h-screen min-w-[1024px]" style="background-color: #f5f8fa">
     <UIHeader />
     <slot />
-    <NoteModal v-if="showModal" />
-    <TaskModal v-if="showModal" />
+    <NoteModal v-if="showNoteModal" />
+    <TaskModal v-if="showTaskModal" />
+    <DeleteModal />
   </div>
 </template>

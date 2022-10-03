@@ -1,68 +1,78 @@
 <script lang="ts" setup>
-import { computed, onMounted, watch } from "#imports";
-import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline";
-import useTasks from "@/composables/useTasks";
-import useContacts from "@/composables/useContacts";
-import useDeals from "@/composables/useDeals";
-import useUsers from "@/composables/useUsers";
+import { computed, onMounted } from "#imports"
+import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline"
+import useTasks from "@/composables/useTasks"
+import useContacts from "@/composables/useContacts"
+import useDeals from "@/composables/useDeals"
+import useUsers from "@/composables/useUsers"
 
-const { task, showModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } = useTasks();
+const {
+  task,
+  showModal,
+  isEditing,
+  minimize,
+  showAssociations,
+  saveTask,
+  closeTaskModal
+} = useTasks()
 
-let { contact, contacts, getContacts } = useContacts();
+let { contact, contacts, getContacts } = useContacts()
 
-const { getDeals, deals } = useDeals();
-const { getUsers, users } = useUsers();
+const { getDeals, deals } = useDeals()
+const { getUsers, users } = useUsers()
 
 onMounted(async () => {
-  await getContacts();
-  await getDeals();
-  await getUsers();
-});
+  await getContacts()
+  await getDeals()
+  await getUsers()
+})
 
-const disabledNoteForm = computed(() => {
-  return task.value.text?.length < 1;
-});
+const disabledTaskForm = computed(() => {
+  return task.value.text.length < 1 || !task.value.date || !task.value.time
+})
 
-
-contacts.value = contacts.value.sort(function(a, b) {
+contacts.value = contacts.value.sort(function (a, b) {
   if (a.firstName < b.firstName) {
-    return -1;
+    return -1
   }
   if (a.firstName > b.firstName) {
-    return 1;
+    return 1
   }
-  return 0;
-});
+  return 0
+})
 
-watch(() => [disabledNoteForm.value], () => {
-  if (disabledNoteForm.value) {
-    showAssociations.value = !disabledNoteForm.value;
-  }
-});
-
-
+// watch(
+//   () => [disabledTaskForm.value],
+//   () => {
+//     if (disabledTaskForm.value) {
+//       showAssociations.value = !disabledTaskForm.value
+//     }
+//   }
+// )
 </script>
-
 
 <template>
   <div>
-    <form v-if="showModal && task.type !== 'note'"
-          class="w-[650px] bg-white fixed bottom-[20px] right-[20px] h-auto shadow-2xl"
-          @submit.prevent="saveTask"
-    >
+    <form
+      v-if="showModal && task.type !== 'note'"
+      class="fixed bottom-[20px] right-[20px] h-auto w-[650px] bg-white shadow-2xl"
+      @submit.prevent="saveTask">
       <!--  Header  -->
-      <div class="min-w-fit bg-indigo-800 text-white py-2 px-4 flex items-center justify-between">
+      <div
+        class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">
-          <button v-if="!minimize"
-                  class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
-                  type="button"
-                  @click="minimize = true">
+          <button
+            v-if="!minimize"
+            class="flex h-8 w-8 items-center justify-center rounded-full hover:opacity-50"
+            type="button"
+            @click="minimize = true">
             <ChevronDownIcon class="w-6" />
           </button>
-          <button v-else
-                  class="w-8 h-8 flex items-center justify-center hover:opacity-50 rounded-full"
-                  type="button"
-                  @click="minimize = false">
+          <button
+            v-else
+            class="flex h-8 w-8 items-center justify-center rounded-full hover:opacity-50"
+            type="button"
+            @click="minimize = false">
             <ChevronRightIcon class="w-6" />
           </button>
           <p class="font-semibold tracking-wider">Tarea</p>
@@ -74,25 +84,28 @@ watch(() => [disabledNoteForm.value], () => {
 
       <!--  Content  -->
       <div v-show="!minimize">
-
-        <input v-model="task.text" class="w-full p-4 outline-none" placeholder="Ingresa tu tarea" type="text">
-        <div class="flex space-x-10 p-4 items-start">
+        <input
+          v-model="task.text"
+          class="w-full p-4 outline-none"
+          placeholder="Ingresa tu tarea"
+          type="text" />
+        <div class="flex items-start space-x-10 p-4">
           <div class="w-40">
             <div class="text-xs text-slate-600">Fecha de vencimiento</div>
-            <input v-model="task.date" class="py-2 text-cyan-600 w-full" type="date">
+            <input v-model="task.date" class="w-full py-2 text-cyan-600" type="date" />
           </div>
           <div class="w-max">
             <div class="text-xs text-slate-600">Hora</div>
-            <input v-model="task.time" class="py-2 text-cyan-600 w-full" type="time">
+            <input v-model="task.time" class="w-full py-2 text-cyan-600" type="time" />
           </div>
         </div>
 
-        <hr class="mx-4">
+        <hr class="mx-4" />
 
-        <div class="flex p-4 space-x-8 items-center">
+        <div class="flex items-center space-x-8 p-4">
           <div class="w-32">
             <div class="text-xs text-slate-600">Tipo</div>
-            <select v-model="task.type" class="py-2 text-cyan-600 min-w-fit">
+            <select v-model="task.type" class="min-w-fit py-2 text-cyan-600">
               <option value="call">Llamada</option>
               <option value="email">Correo</option>
               <option value="other">Otro</option>
@@ -101,7 +114,7 @@ watch(() => [disabledNoteForm.value], () => {
 
           <div class="w-32">
             <div class="text-xs text-slate-600">Prioridad</div>
-            <select v-model="task.priority" class="py-2 text-cyan-600 min-w-fit">
+            <select v-model="task.priority" class="min-w-fit py-2 text-cyan-600">
               <option value="">Ninguno</option>
               <option value="low">Baja</option>
               <option value="medium">Media</option>
@@ -111,55 +124,61 @@ watch(() => [disabledNoteForm.value], () => {
 
           <div class="w-60">
             <div class="text-xs text-slate-600">Asignado a</div>
-            <UISelectBox v-model:modelValue="task.owner"
-                         :options="users"
-                         class="w-full mt-2"
-                         type="user"
-            />
+            <UISelectBox
+              v-model:modelValue="task.owner"
+              :options="users"
+              class="mt-2 w-full"
+              type="user" />
           </div>
-
         </div>
 
-        <hr class="mx-4">
+        <hr class="mx-4" />
 
-        <textarea v-model="task.note" class="w-full p-4 focus:outline-none"
-                  placeholder="Empieza a escribir una nota...."
-                  rows="3" />
+        <textarea
+          v-model="task.note"
+          class="w-full p-4 focus:outline-none"
+          placeholder="Empieza a escribir una nota...."
+          rows="3" />
 
         <!-- showAssociations -->
-        <div v-if="showAssociations" class="w-full h-auto bg-white p-4 absolute z-50 fixed bottom-20 flex space-x-4">
+        <div
+          v-if="showAssociations"
+          class="absolute bottom-20 z-50 flex h-auto w-full space-x-4 bg-white p-4">
           <div class="w-full">
-            <div class="text-slate-500 text-xs text-cyan-700">Contacto</div>
-            <UISelectBox v-model:modelValue="task.contact"
-                         :options="contacts"
-                         class="mt-2"
-                         type="user"
-            />
+            <div class="text-xs text-cyan-700">Contacto</div>
+            <UISelectBox
+              v-model:modelValue="task.contact"
+              :options="contacts"
+              class="mt-2"
+              type="user" />
           </div>
           <div class="w-full">
-            <div class="text-slate-500 text-xs text-cyan-700">Negocio</div>
-            <UISelectBox v-model:modelValue="task.deal"
-                         :options="deals"
-                         class="mt-2"
-            />
+            <div class="text-xs text-cyan-700">Negocio</div>
+            <UISelectBox v-model:modelValue="task.deal" :options="deals" class="mt-2" />
           </div>
         </div>
         <!--  Footer  -->
-        <hr>
-        <div class="p-4 flex justify-between">
-          <UIButton :active="!disabledNoteForm"
-                    :disabled="disabledNoteForm"
-                    type="submit">
+        <hr />
+        <div class="flex justify-between p-4">
+          <UIButton
+            :active="!disabledTaskForm"
+            :disabled="disabledTaskForm"
+            type="submit">
             {{ !isEditing ? "Guardar Tarea" : "Actualizar Tarea" }}
           </UIButton>
 
-          <button :class="disabledNoteForm ? 'cursor-not-allowed opacity-50' : 'border-orange-500 text-orange-500 bg-white'" :disabled="disabledNoteForm"
-                  class="h-10 w-h-auto py-2 px-6 border rounded text-sm"
-                  type="button"
-                  @click="showAssociations = !showAssociations">
+          <button
+            :class="
+              disabledTaskForm
+                ? 'cursor-not-allowed opacity-50'
+                : 'border-orange-500 bg-white text-orange-500'
+            "
+            :disabled="disabledTaskForm"
+            class="w-h-auto h-10 rounded border py-2 px-6 text-sm"
+            type="button"
+            @click="showAssociations = !showAssociations">
             Asociaciones
           </button>
-
         </div>
       </div>
     </form>

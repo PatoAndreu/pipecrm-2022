@@ -1,12 +1,12 @@
-import { IUser } from "@/interfaces/IUsers";
-import { IDeal } from "@/interfaces/IDeals";
-import { IContact } from "@/interfaces/IContacts";
-import { ICompany } from "@/interfaces/ICompany";
+import { IUser } from "@/interfaces/IUsers"
+import { IDeal } from "@/interfaces/IDeals"
+import { IContact } from "@/interfaces/IContacts"
+import { ICompany } from "@/interfaces/ICompany"
 
 export interface ITask {
-  readonly id: number | undefined,
+  readonly id: number | undefined
   text: string | undefined
-  pinned?: boolean
+  pinned: boolean
   completed: boolean
   date: string
   time: string
@@ -24,11 +24,12 @@ export interface ITask {
 }
 
 export interface TasksState {
-  tasks: ITask[];
-  task: ITask;
-  showModal: boolean;
-  isEditing: boolean;
-  showAssociations: boolean;
-  minimize: boolean;
-  activeTab: string;
+  tasks: ITask[]
+  task: ITask
+  showTaskModal: boolean
+  showDeleteModal: boolean
+  isEditing: boolean
+  showAssociations: boolean
+  minimize: boolean
+  activeTab: string
 }
