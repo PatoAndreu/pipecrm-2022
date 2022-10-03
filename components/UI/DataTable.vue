@@ -658,7 +658,7 @@
 <script setup>
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "@heroicons/vue/outline";
 
-import { useUIStore } from "@/stores/ui";
+import { useUIStore } from "~~/stores/uiStore";
 
 const props = defineProps({
   columns: {

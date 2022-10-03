@@ -3,10 +3,10 @@ import { IDeal } from "@/interfaces/IDeals"
 import { IContact } from "@/interfaces/IContacts"
 import { ICompany } from "@/interfaces/ICompany"
 
-export interface IActivity {
+export interface ITask {
   readonly id: number | undefined
   text: string | undefined
-  pinned?: boolean
+  pinned: boolean
   completed: boolean
   date: string
   time: string
@@ -23,7 +23,13 @@ export interface IActivity {
   updatedAt?: string
 }
 
-export interface ActivitiesState {
-  activities: IActivity[]
+export interface TasksState {
+  tasks: ITask[]
+  task: ITask
+  showTaskModal: boolean
+  showDeleteModal: boolean
+  isEditing: boolean
+  showAssociations: boolean
+  minimize: boolean
   activeTab: string
 }

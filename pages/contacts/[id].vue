@@ -1,61 +1,78 @@
 <script lang="ts" setup>
-import { onUnmounted, onUpdated, useActivitiesComponents, useHead, useRoute } from "#imports";
-import useContacts, { useContactsComponents } from "@/composables/useContacts";
-import useActivities from "@/composables/useActivities";
+import { onUnmounted, onUpdated, useHead, useRoute } from "#imports"
+import useContacts, { useContactsComponents } from "@/composables/useContacts"
+import { useTasksComponents } from "@/composables/useTasks"
 
-const { getContact, contact } = useContacts();
+const { getContact, contact } = useContacts()
 
-const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents();
+const { activeTab, getActivityByContact } = useActivity()
 
-const { getActivityByContact, activeTab, activities } = useActivities();
+const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } =
+  useContactsComponents()
 
-const { All, ActivityMenu, Tasks, Notes } = useActivitiesComponents();
+const { All, ActivityMenu } = useActivitiesComponents()
 
-const route = useRoute();
+const { Tasks } = useTasksComponents()
+const { Notes } = useNotesComponents()
 
-await getContact(Number(route.params.id));
+const route = useRoute()
 
-await getActivityByContact(contact.value.id);
+await getContact(Number(route.params.id))
 
 onUpdated(() => {
   useHead({
     title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
-  });
-});
+  })
+})
 
 onUnmounted(async () => {
-  activeTab.value = "activities";
-});
-
+  activeTab.value = "activity"
+})
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-10">
-
+  <div class="mx-auto max-w-7xl px-10">
     <!--  Header  -->
     <Header />
 
     <!--  Contenido central  -->
-    <div class="flex mt-6 pb-10">
-
+    <div class="mt-6 flex pb-10">
       <!--  Panel izquierdo  -->
-      <div class="w-[400px] h-full space-y-2">
-        <ContactInfo />
-        <CompanyInfo />
+      <div class="h-full w-[400px] space-y-2">
+        <Suspense timeout="0">
+          <ContactInfo />
+          <template #fallback> <UILoading /> </template>
+        </Suspense>
+
+        <Suspense timeout="0">
+          <CompanyInfo />
+          <template #fallback> <UILoading /> </template>
+        </Suspense>
+
         <DealsInfo />
         <FollowersInfo />
       </div>
 
       <!--  Panel derecho  -->
-      <div class="w-full h-full ml-4">
+      <div class="ml-4 h-full w-full">
         <ActivityMenu />
-        <All v-if="activeTab === 'activities'" />
-        <div v-auto-animate>
-          <Notes v-if="activeTab === 'notes'" />
-          <Tasks v-if="activeTab === 'tasks'" />
+        <div>
+          <Suspense timeout="0">
+            <All v-if="activeTab === 'activity'" />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
+
+          <Suspense timeout="0">
+            <Notes v-if="activeTab === 'notes'" />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
+
+          <Suspense timeout="0">
+            <Tasks v-if="activeTab === 'tasks'" />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
         </div>
       </div>
-
     </div>
   </div>
 </template>
