@@ -19,24 +19,7 @@
     note: null
   })
 
-  const { deleteModalOpen, deleteMessage, confirmDelete } = useUi()
-
-  const { pinOrUnpinNote, editNote, deleteNote } = useNotes()
-
-  const deleteModal = async (noteLocal: INote) => {
-    const { note } = useNotes()
-    note.value = { ...noteLocal }
-    deleteMessage.value = '¿Está seguro de que desea eliminar esta actividad?'
-    deleteModalOpen.value = true
-    confirmDelete.value = false
-  }
-
-  watch(confirmDelete, async (newValue, oldValue) => {
-    if (newValue) {
-      const { note } = useNotes()
-      await deleteNote(note.value)
-    }
-  })
+  const { pinOrUnpinNote, editNote, deleteModal } = useNotes()
 </script>
 
 <template>
@@ -101,7 +84,6 @@
                 @click="deleteModal(note)">
                 Eliminar
               </li>
-              <!-- <li class="w-full py-1 pl-2 hover:bg-cyan-500 hover:text-white" @click="deleteNote(note)">Eliminar</li> -->
             </ul>
           </div>
         </button>

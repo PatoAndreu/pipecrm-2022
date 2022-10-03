@@ -1,45 +1,51 @@
 <script lang="ts" setup>
-import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline"
-import useContacts from "@/composables/useContacts"
-import useDeals from "@/composables/useDeals"
-import { onMounted, watch } from "#imports"
+  import { ChevronDownIcon, ChevronRightIcon, XIcon } from '@heroicons/vue/outline'
+  import useContacts from '@/composables/useContacts'
+  import useDeals from '@/composables/useDeals'
+  import { onMounted, watch } from '#imports'
 
-const {
-  note,
-  showNoteModal,
-  isEditing,
-  disabledNoteForm,
-  showAssociations,
-  minimize,
-  saveNote,
-  closeNoteModal,
-} = useNotes()
+  const {
+    note,
+    showNoteModal,
+    isEditing,
+    disabledNoteForm,
+    showAssociations,
+    minimize,
+    saveNote,
+    closeNoteModal
+  } = useNotes()
 
-let { contacts, getContacts } = useContacts()
+  const textInput = ref(null)
 
-const { getDeals, deals } = useDeals()
+  onMounted(() => {
+    textInput.value.focus()
+  })
 
-await getDeals()
-await getContacts()
+  let { contacts, getContacts } = useContacts()
 
-contacts.value = contacts.value.sort(function (a, b) {
-  if (a.firstName < b.firstName) {
-    return -1
-  }
-  if (a.firstName > b.firstName) {
-    return 1
-  }
-  return 0
-})
+  const { getDeals, deals } = useDeals()
 
-watch(
-  () => [disabledNoteForm.value],
-  () => {
-    if (disabledNoteForm.value) {
-      showAssociations.value = !disabledNoteForm.value
+  await getDeals()
+  await getContacts()
+
+  contacts.value = contacts.value.sort(function (a, b) {
+    if (a.firstName < b.firstName) {
+      return -1
     }
-  }
-)
+    if (a.firstName > b.firstName) {
+      return 1
+    }
+    return 0
+  })
+
+  watch(
+    () => [disabledNoteForm.value],
+    () => {
+      if (disabledNoteForm.value) {
+        showAssociations.value = !disabledNoteForm.value
+      }
+    }
+  )
 </script>
 
 <template>
@@ -75,7 +81,8 @@ watch(
           v-model="note.text"
           class="w-full p-4 focus:outline-none"
           placeholder="Empieza a escribir una nota...."
-          rows="6" />
+          rows="6"
+          ref="textInput" />
         <!-- showAssociations -->
         <div
           v-if="showAssociations"
@@ -97,7 +104,7 @@ watch(
         <hr />
         <div class="flex justify-between p-4">
           <UIButton :active="!disabledNoteForm" :disabled="disabledNoteForm" type="submit">
-            {{ !isEditing ? "Guardar Nota" : "Actualizar Nota" }}
+            {{ !isEditing ? 'Guardar Nota' : 'Actualizar Nota' }}
           </UIButton>
 
           <button

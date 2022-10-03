@@ -10,7 +10,7 @@ import NoteModal from "@/components/Contacts/Id/RightSide/Activities/Notes/NoteM
 
 export default function useNotes() {
   const notesStore = useNotesStore()
-  const { deleteModalOpen } = useUi()
+  const { confirmDelete } = useUi()
 
   const { notes, note, showNoteModal, showDeleteModal, isEditing, minimize, showAssociations } = storeToRefs(notesStore)
 
@@ -20,9 +20,8 @@ export default function useNotes() {
   const pinOrUnpinNote = async (note: INote, status: boolean) => await notesStore.pinOrUnpinNote(note, status)
   const editNote = (note: INote): void => notesStore.editNote(note)
   const closeNoteModal = (): void => notesStore.closeNoteModal()
-  const deleteNote = async (note: INote) => {
-    await notesStore.deleteNote(note)
-  }
+  const deleteNote = async (note: INote) => await notesStore.deleteNote(note)
+  const deleteModal = (note: INote) => notesStore.deleteModal(note)
 
   const pinnedNotes = computed<INote[]>(() => {
     return notes?.value?.filter((a) => a.pinned)
@@ -34,6 +33,13 @@ export default function useNotes() {
 
   const disabledNoteForm = computed(() => {
     return note.value.text.length < 1
+  })
+
+  watch(confirmDelete, async (newValue, oldValue) => {
+    if (newValue === true) {
+      await deleteNote(note.value)
+      confirmDelete.value = false
+    }
   })
 
   return {
@@ -53,6 +59,7 @@ export default function useNotes() {
     pinOrUnpinNote,
     editNote,
     deleteNote,
+    deleteModal,
     closeNoteModal
   }
 }
