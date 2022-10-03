@@ -22,7 +22,7 @@ export const useNotesStore = defineStore('notes', {
     note: { ...initialNote },
     notes: [],
     showNoteModal: false,
-    showDeleteModal: false,
+    openDeleteModal: false,
     isEditing: false,
     minimize: false,
     showAssociations: false
@@ -78,21 +78,18 @@ export const useNotesStore = defineStore('notes', {
         console.error(error)
       }
     },
-    async deleteNote(note: INote) {
+    async deleteNote() {
       try {
 
-        const response = await $fetch(`http://pipecrm-api.test/api/notes/${note.id}`, {
+        const response = await $fetch(`http://pipecrm-api.test/api/notes/${this.note.id}`, {
           method: 'DELETE'
         })
 
-        if (note.id === this.note.id) {
-          this.isEditing = false
-          this.minimize = false
-        }
+        this.isEditing = false
+        this.minimize = false
 
         const { activeTab, getActivityByContact } = useActivity()
         const { contact } = useContacts()
-        const { deleteModalOpen, deleteMessage } = useUi()
 
         if (activeTab.value === 'activity') {
           await getActivityByContact(contact.value.id)
@@ -100,12 +97,11 @@ export const useNotesStore = defineStore('notes', {
           await this.getNotesByContact(contact.value.id)
         }
 
-        deleteModalOpen.value = false
-        deleteMessage.value = null
         this.note = null
 
         return response
       } catch (error) {
+        return error
         console.error(error)
       }
     },
@@ -134,14 +130,12 @@ export const useNotesStore = defineStore('notes', {
       this.minimize = false
       this.isEditing = true
     },
-    deleteModal(note: INote) {
+    openNoteDeleteModal(note: INote) {
 
-      const { deleteModalOpen, deleteMessage, confirmDelete } = useUi()
+      const { openDeleteModal } = useUi()
 
       this.note = { ...note }
-      deleteMessage.value = '¿Está seguro de que desea eliminar esta nota?'
-      deleteModalOpen.value = true
-      confirmDelete.value = false
+      openDeleteModal('¿Está seguro de que desea eliminar esta nota?', 'deleteNote')
     }
   }
 })

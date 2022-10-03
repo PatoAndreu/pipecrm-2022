@@ -5,8 +5,10 @@ export const useUIStore = defineStore('ui', {
     showSearchBox: false,
     showCreateContactDrawer: false,
     deleteModalOpen: false,
-    confirmDelete: false,
-    deleteMessage: null
+    deleteMessage: null,
+    errorMessage: false,
+    deleteAction: null,
+    pending: false
   }),
   actions: {
     toggleSearchBox(): void {
@@ -15,16 +17,41 @@ export const useUIStore = defineStore('ui', {
     toggleCreateContactDrawer(): void {
       this.showCreateContactDrawer = !this.showCreateContactDrawer
     },
-    showDeleteModal(message: string): void {
+    openDeleteModal(message: string, action: string): void {
       this.deleteMessage = message
       this.deleteModalOpen = true
+      this.deleteAction = action
     },
-    hideDeleteModal(): void {
+    cancelDeleteModal(): void {
       this.deleteMessage = null
       this.deleteModalOpen = false
+      this.deleteAction = null
     },
-    confirmDeleteModal(): void {
-      this.confirmDelete = true
+    async confirmDeleteModal() {
+
+      this.errorMessage = false
+      this.pending = true
+
+      let response: any
+
+      switch (this.deleteAction) {
+        case 'deleteNote':
+          const { deleteNote } = useNotes()
+          response = await deleteNote()
+          break;
+
+        case 'deleteTask':
+          const { deleteTask } = useTasks()
+          response = await deleteTask()
+          break;
+      }
+
+      if (response.response.status === 200) {
+        this.pending = false
+        this.cancelDeleteModal()
+      } else {
+        this.errorMessage = true
+      }
     }
   }
 })

@@ -25,7 +25,7 @@
     task: null
   })
 
-  const { editTask, changeTaskStatus, deleteTask } = useTasks()
+  const { editTask, changeTaskStatus, openTaskDeleteModal } = useTasks()
 
   const arrowColor = computed(() => {
     return props.task?.delayed ? '#FEF2F2' : '#FFFFFF'
@@ -118,7 +118,7 @@
               </li>
               <li
                 class="w-full py-1 pl-2 hover:bg-cyan-500 hover:text-white"
-                @click="deleteTask(task)">
+                @click="openTaskDeleteModal(task)">
                 Eliminar
               </li>
             </ul>

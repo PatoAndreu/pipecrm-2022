@@ -3,6 +3,7 @@
   import useNotes, { useNotesComponents } from '@/composables/useNotes'
   import DeleteModal from '@/components/UI/DeleteModal.vue'
 
+  const { deleteModalOpen } = useUi()
   const { showTaskModal } = useTasks()
   const { showNoteModal } = useNotes()
 
@@ -16,6 +17,25 @@
     <slot />
     <NoteModal v-if="showNoteModal" />
     <TaskModal v-if="showTaskModal" />
-    <DeleteModal />
+    <Transition name="modal">
+      <DeleteModal v-if="deleteModalOpen" />
+    </Transition>
   </div>
 </template>
+
+<style scoped>
+  .modal-bg {
+    background-color: rgb(93, 106, 120, 0.9);
+  }
+
+  .modal-enter-active,
+  .modal-leave-active {
+    transition: all 0.25s ease;
+  }
+
+  .modal-enter-from,
+  .modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+</style>

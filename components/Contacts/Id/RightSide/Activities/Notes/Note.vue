@@ -19,7 +19,7 @@
     note: null
   })
 
-  const { pinOrUnpinNote, editNote, deleteModal } = useNotes()
+  const { pinOrUnpinNote, editNote, openNoteDeleteModal } = useNotes()
 </script>
 
 <template>
@@ -81,7 +81,7 @@
               </li>
               <li
                 class="w-full py-1 pl-2 hover:bg-cyan-500 hover:text-white"
-                @click="deleteModal(note)">
+                @click="openNoteDeleteModal(note)">
                 Eliminar
               </li>
             </ul>

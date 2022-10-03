@@ -15,7 +15,7 @@ export default function useTasks() {
     tasks,
     task,
     showTaskModal,
-    showDeleteModal,
+    openDeleteModal,
     isEditing,
     minimize,
     showAssociations,
@@ -28,7 +28,8 @@ export default function useTasks() {
   const editTask = (task: ITask): void => tasksStore.editTask(task)
   const closeTaskModal = (): void => tasksStore.closeTaskModal()
   const changeTaskStatus = async (task: ITask, status: object) => await tasksStore.changeTaskStatus(task, status)
-  const deleteTask = async (task: ITask) => await tasksStore.deleteTask(task)
+  const deleteTask = async () => await tasksStore.deleteTask()
+  const openTaskDeleteModal = async (task: ITask) => tasksStore.openTaskDeleteModal(task)
 
   const delayedTasks = computed<ITask[]>(() => {
     return tasks?.value?.filter((a) => !a.completed && !a.pinned && a.delayed)
@@ -48,7 +49,7 @@ export default function useTasks() {
 
   return {
     showTaskModal,
-    showDeleteModal,
+    openDeleteModal,
     isEditing,
     minimize,
     activeTab,
@@ -65,6 +66,7 @@ export default function useTasks() {
     editTask,
     changeTaskStatus,
     deleteTask,
+    openTaskDeleteModal,
     closeTaskModal
   }
 }

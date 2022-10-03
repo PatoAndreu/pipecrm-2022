@@ -4,24 +4,25 @@ import { storeToRefs } from 'pinia'
 export default function useTasks() {
   const uiStore = useUIStore()
 
-  const { showSearchBox, showCreateContactDrawer, deleteModalOpen, confirmDelete, deleteMessage } = storeToRefs(uiStore)
+  const { showSearchBox, showCreateContactDrawer, deleteMessage, pending, deleteModalOpen, errorMessage } = storeToRefs(uiStore)
 
   const toggleSearchBox = () => uiStore.toggleSearchBox()
   const toggleCreateContactDrawer = () => uiStore.toggleCreateContactDrawer()
-  const showDeleteModal = (message: string) => uiStore.showDeleteModal(message)
-  const hideDeleteModal = () => uiStore.hideDeleteModal()
+  const openDeleteModal = (message: string, action: string) => uiStore.openDeleteModal(message, action)
+  const cancelDeleteModal = () => uiStore.cancelDeleteModal()
   const confirmDeleteModal = () => uiStore.confirmDeleteModal()
 
   return {
     showSearchBox,
     showCreateContactDrawer,
     deleteModalOpen,
-    confirmDelete,
     deleteMessage,
+    errorMessage,
+    pending,
     toggleSearchBox,
     toggleCreateContactDrawer,
-    showDeleteModal,
-    hideDeleteModal,
+    openDeleteModal,
+    cancelDeleteModal,
     confirmDeleteModal
   }
 }
