@@ -27,7 +27,7 @@ export interface TasksState {
   tasks: ITask[]
   task: ITask
   showTaskModal: boolean
-  showDeleteModal: boolean
+  openDeleteModal: boolean
   isEditing: boolean
   showAssociations: boolean
   minimize: boolean

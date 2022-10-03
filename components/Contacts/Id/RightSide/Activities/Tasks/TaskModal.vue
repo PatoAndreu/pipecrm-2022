@@ -12,7 +12,7 @@
   const textInput = ref(null)
 
   onMounted(() => {
-    textInput.value.focus()
+    textInput?.value?.focus()
   })
 
   let { contacts, getContacts } = useContacts()
@@ -27,7 +27,9 @@
   })
 
   const disabledTaskForm = computed(() => {
-    return task.value.text.length < 1 || !task.value.date || !task.value.time
+    return (
+      task.value.text.length < 1 || !task.value.date || !task.value.time || !task.value.owner.id
+    )
   })
 
   contacts.value = contacts.value.sort(function (a, b) {
@@ -39,15 +41,6 @@
     }
     return 0
   })
-
-  // watch(
-  //   () => [disabledTaskForm.value],
-  //   () => {
-  //     if (disabledTaskForm.value) {
-  //       showAssociations.value = !disabledTaskForm.value
-  //     }
-  //   }
-  // )
 </script>
 
 <template>
@@ -114,7 +107,7 @@
           <div class="w-32">
             <div class="text-xs text-slate-600">Prioridad</div>
             <select v-model="task.priority" class="min-w-fit py-2 text-cyan-600">
-              <option value="">Ninguno</option>
+              <option value="null">Ninguno</option>
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>

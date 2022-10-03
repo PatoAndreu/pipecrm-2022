@@ -18,7 +18,7 @@
   const textInput = ref(null)
 
   onMounted(() => {
-    textInput.value.focus()
+    textInput?.value?.focus()
   })
 
   let { contacts, getContacts } = useContacts()

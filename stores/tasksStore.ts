@@ -27,7 +27,7 @@ export const useTasksStore = defineStore("tasks", {
     task: { ...initialTask },
     tasks: null,
     showTaskModal: false,
-    showDeleteModal: false,
+    openDeleteModal: false,
     isEditing: false,
     minimize: false,
     showAssociations: false,
@@ -37,7 +37,7 @@ export const useTasksStore = defineStore("tasks", {
     async getTasksByContact(id: number): Promise<void> {
       try {
         let data: ITask[]
-        ;({ data } = await $fetch(`http://pipecrm-api.test/api/tasks/contact/${id}`))
+          ; ({ data } = await $fetch(`http://pipecrm-api.test/api/tasks/contact/${id}`))
         this.tasks = []
         this.tasks = data
       } catch (error) {
@@ -73,29 +73,43 @@ export const useTasksStore = defineStore("tasks", {
             delayed: false
           }
         })
-        await this.getTasksByContact(contact.value.id)
+
+        const { activeTab, getActivityByContact } = useActivity()
+
+        if (activeTab.value === 'activity') {
+          await getActivityByContact(contact.value.id)
+        } else {
+          await this.getTasksByContact(contact.value.id)
+        }
         return response
       } catch (error) {
         console.error(error)
       }
     },
-    async deleteTask(task: ITask) {
-      if (confirm(`¿Esta seguro que desea eliminar la tarea: ${task.text}?`) === true) {
+    async deleteTask() {
+
+      try {
+        const response = await $fetch(`http://pipecrm-api.test/api/tasks/${this.task.id}`, {
+          method: "DELETE"
+        })
+
+        this.isEditing = false
+        this.showTaskModal = false
+        this.minimize = false
+        this.task = null
+
         const { contact } = useContacts()
-        try {
-          const response = await $fetch(`http://pipecrm-api.test/api/tasks/${task.id}`, {
-            method: "DELETE"
-          })
+        const { activeTab, getActivityByContact } = useActivity()
+
+        if (activeTab.value === 'activity') {
+          await getActivityByContact(contact.value.id)
+        } else {
           await this.getTasksByContact(contact.value.id)
-          if (task.id === this.task.id) {
-            this.isEditing = false
-            this.showTaskModal = false
-            this.minimize = false
-          }
-          return response
-        } catch (error) {
-          console.error(error)
         }
+
+        return response
+      } catch (error) {
+        console.error(error)
       }
     },
     closeTaskModal() {
@@ -123,6 +137,13 @@ export const useTasksStore = defineStore("tasks", {
       this.showTaskModal = true
       this.minimize = false
       this.isEditing = true
+    },
+    openTaskDeleteModal(task: ITask) {
+
+      const { openDeleteModal } = useUi()
+
+      this.task = { ...task }
+      openDeleteModal('¿Está seguro de que desea eliminar esta actividad?', 'deleteTask')
     }
   }
 })

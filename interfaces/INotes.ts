@@ -20,7 +20,7 @@ export interface NotesState {
   note: INote
   notes: INote[]
   showNoteModal: boolean
-  showDeleteModal: boolean
+  openDeleteModal: boolean
   isEditing: boolean
   showAssociations: boolean
   minimize: boolean
