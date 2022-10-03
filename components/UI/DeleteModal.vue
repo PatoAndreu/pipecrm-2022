@@ -2,7 +2,7 @@
   import { onClickOutside } from '@vueuse/core'
 
   const modal = ref(null)
-  const { deleteModalOpen, deleteMessage, confirmDelete, hideDeleteModal, confirmDeleteModal } = useUi()
+  const { deleteModalOpen, deleteMessage, hideDeleteModal, confirmDeleteModal } = useUi()
 
   onClickOutside(modal, () => (deleteModalOpen.value = false))
 </script>
@@ -13,11 +13,15 @@
       class="modal-bg bg-[rgb(93, 106, 120, 0.9)] fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center"
       v-if="deleteModalOpen">
       <div class="-mt-[30%] rounded-md bg-[#f2545b] shadow-sm" ref="modal">
-        <div class="flex h-24 items-center justify-center px-10 text-3xl text-white">Confirmación</div>
+        <div class="flex h-24 items-center justify-center px-10 text-3xl text-white">
+          Confirmación
+        </div>
         <div class="bg-white px-10 pb-6">
           <div class="py-10 text-[#4F6E91]">{{ deleteMessage }}</div>
           <div class="flex justify-end space-x-4">
-            <button class="rounded-md bg-[#f2545b] py-2 px-6 text-white hover:bg-[#ff5962]" @click="confirmDeleteModal">
+            <button
+              class="rounded-md bg-[#f2545b] py-2 px-6 text-white hover:bg-[#ff5962]"
+              @click="confirmDeleteModal">
               Eliminar
             </button>
             <button

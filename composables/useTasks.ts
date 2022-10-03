@@ -23,13 +23,11 @@ export default function useTasks() {
   } = storeToRefs(tasksStore)
 
   const getTasksByContact = (id: number) => tasksStore.getTasksByContact(id)
-  const addTask = (type: string, contact?: IContact): void =>
-    tasksStore.addTask(type, contact)
+  const addTask = (type: string, contact?: IContact): void => tasksStore.addTask(type, contact)
   const saveTask = async () => await tasksStore.saveTask()
   const editTask = (task: ITask): void => tasksStore.editTask(task)
   const closeTaskModal = (): void => tasksStore.closeTaskModal()
-  const changeTaskStatus = async (task: ITask, status: object) =>
-    await tasksStore.changeTaskStatus(task, status)
+  const changeTaskStatus = async (task: ITask, status: object) => await tasksStore.changeTaskStatus(task, status)
   const deleteTask = async (task: ITask) => await tasksStore.deleteTask(task)
 
   const delayedTasks = computed<ITask[]>(() => {

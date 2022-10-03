@@ -1,108 +1,108 @@
 <script lang="ts" setup>
-import useCompanies from "@/composables/useCompanies"
-import useContacts from "@/composables/useContacts"
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  DotsHorizontalIcon,
-  PencilAltIcon
-} from "@heroicons/vue/outline"
-import { ref } from "#imports"
+  import useCompanies from '@/composables/useCompanies'
+  import useContacts from '@/composables/useContacts'
+  import {
+    ChevronDownIcon,
+    ChevronRightIcon,
+    DotsHorizontalIcon,
+    PencilAltIcon
+  } from '@heroicons/vue/outline'
+  import { ref } from '#imports'
 
-const { contact, updateContact, getContact } = useContacts()
+  const { contact, updateContact, getContact } = useContacts()
 
-const { getCompanies, updateCompany, companies } = useCompanies()
+  const { getCompanies, updateCompany, companies } = useCompanies()
 
-const isEditing = ref(false)
-const pending = ref(false)
-const showCompanyInfo = ref(false)
+  const isEditing = ref(false)
+  const pending = ref(false)
+  const showCompanyInfo = ref(false)
 
-// Update Company Info ------------
+  // Update Company Info ------------
 
-let companyLocal = ref({ ...contact.value.company })
+  let companyLocal = ref({ ...contact.value.company })
 
-const cancelEdit = () => {
-  companyLocal.value = { ...contact.value.company }
-  isEditing.value = false
-}
-
-const updateCompanyInfo = async () => {
-  pending.value = true
-
-  const res = await updateCompany(companyLocal.value)
-
-  const {
-    data: { errors },
-    response: { status }
-  }: any = res
-
-  if (status === 200) {
-    await getContact(contact.value.id)
-
-    companyLocal.value = { ...contact.value.company }
-    companyToLink.value = { ...contact.value.company }
-    isEditing.value = false
-    pending.value = false
-  }
-}
-
-// Link Company ------------
-
-let companyToLink = ref({ ...contact.value.company })
-const isLinkingCompany = ref(false)
-
-const linkOrUnlinkCompanyToContact = async (type) => {
-  pending.value = true
-
-  if (type === "link") {
-    contact.value.company = { ...companyToLink.value }
-  } else {
-    contact.value.company = null
-  }
-
-  const res = await updateContact(contact.value)
-
-  const {
-    data: { errors },
-    response: { status }
-  }: any = res
-
-  if (status === 200) {
-    await getContact(contact.value.id)
+  const cancelEdit = () => {
     companyLocal.value = { ...contact.value.company }
     isEditing.value = false
-    pending.value = false
+  }
+
+  const updateCompanyInfo = async () => {
+    pending.value = true
+
+    const res = await updateCompany(companyLocal.value)
+
+    const {
+      data: { errors },
+      response: { status }
+    }: any = res
+
+    if (status === 200) {
+      await getContact(contact.value.id)
+
+      companyLocal.value = { ...contact.value.company }
+      companyToLink.value = { ...contact.value.company }
+      isEditing.value = false
+      pending.value = false
+    }
+  }
+
+  // Link Company ------------
+
+  let companyToLink = ref({ ...contact.value.company })
+  const isLinkingCompany = ref(false)
+
+  const linkOrUnlinkCompanyToContact = async (type) => {
+    pending.value = true
+
+    if (type === 'link') {
+      contact.value.company = { ...companyToLink.value }
+    } else {
+      contact.value.company = null
+    }
+
+    const res = await updateContact(contact.value)
+
+    const {
+      data: { errors },
+      response: { status }
+    }: any = res
+
+    if (status === 200) {
+      await getContact(contact.value.id)
+      companyLocal.value = { ...contact.value.company }
+      isEditing.value = false
+      pending.value = false
+      isLinkingCompany.value = false
+    }
+  }
+
+  const linkCompany = async () => {
+    await getCompanies()
+    isLinkingCompany.value = true
+    companies.value = companies.value.sort(function (a, b) {
+      if (a.name < b.name) {
+        return -1
+      }
+      if (a.name > b.name) {
+        return 1
+      }
+      return 0
+    })
+  }
+
+  const cancelLinkCompany = () => {
+    companyLocal.value = { ...contact.value.company }
+    isEditing.value = true
     isLinkingCompany.value = false
   }
-}
 
-const linkCompany = async () => {
-  await getCompanies()
-  isLinkingCompany.value = true
-  companies.value = companies.value.sort(function (a, b) {
-    if (a.name < b.name) {
-      return -1
-    }
-    if (a.name > b.name) {
-      return 1
-    }
-    return 0
-  })
-}
+  const reLinkCompany = async () => {
+    await getContact(contact.value.id)
+    await getCompanies()
 
-const cancelLinkCompany = () => {
-  companyLocal.value = { ...contact.value.company }
-  isEditing.value = true
-  isLinkingCompany.value = false
-}
-
-const reLinkCompany = async () => {
-  await getContact(contact.value.id)
-  await getCompanies()
-
-  isEditing.value = false
-  isLinkingCompany.value = true
-}
+    isEditing.value = false
+    isLinkingCompany.value = true
+  }
 </script>
 
 <template>
@@ -154,7 +154,7 @@ const reLinkCompany = async () => {
           class="py-4 text-sm"
           @submit.prevent="updateCompanyInfo">
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Nombre</div>
+            <div class="text-xs text-cyan-700">Nombre</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">{{ companyLocal.name }}</div>
             <input
               v-else
@@ -164,7 +164,7 @@ const reLinkCompany = async () => {
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Dominio</div>
+            <div class="text-xs text-cyan-700">Dominio</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">{{ companyLocal.domain }}</div>
             <input
               v-else
@@ -174,7 +174,7 @@ const reLinkCompany = async () => {
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Tipo</div>
+            <div class="text-xs text-cyan-700">Tipo</div>
             <div v-if="!isEditing" class="pt-2 capitalize text-slate-600">
               {{ companyLocal.type }}
             </div>
@@ -188,7 +188,7 @@ const reLinkCompany = async () => {
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Ciudad</div>
+            <div class="text-xs text-cyan-700">Ciudad</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">{{ companyLocal.city }}</div>
             <input
               v-else
@@ -198,7 +198,7 @@ const reLinkCompany = async () => {
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Dirección</div>
+            <div class="text-xs text-cyan-700">Dirección</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">{{ companyLocal.address }}</div>
             <input
               v-else
@@ -241,7 +241,7 @@ const reLinkCompany = async () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   fill="currentColor"></path>
               </svg>
-              {{ !pending ? "Guardar" : "Guardando..." }}
+              {{ !pending ? 'Guardar' : 'Guardando...' }}
             </button>
           </div>
         </form>
@@ -259,7 +259,7 @@ const reLinkCompany = async () => {
 
           <!--  Vincular Empresa  -->
           <div v-else v-auto-animate class="mb-4 h-auto items-center">
-            <div class="text-xs text-slate-500 text-cyan-700">Empresa</div>
+            <div class="text-xs text-cyan-700">Empresa</div>
             <UISelectBox v-model:modelValue="companyToLink" :options="companies" class="mt-2">
             </UISelectBox>
 
@@ -297,7 +297,7 @@ const reLinkCompany = async () => {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     fill="currentColor"></path>
                 </svg>
-                {{ !pending ? "Guardar" : "Guardando..." }}
+                {{ !pending ? 'Guardar' : 'Guardando...' }}
               </button>
             </div>
           </div>

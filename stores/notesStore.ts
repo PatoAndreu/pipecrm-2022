@@ -15,6 +15,8 @@ const initialNote: INote = {
   updatedAt: null
 }
 
+
+
 export const useNotesStore = defineStore('notes', {
   state: (): NotesState => ({
     note: { ...initialNote },
@@ -29,7 +31,7 @@ export const useNotesStore = defineStore('notes', {
     async getNotesByContact(id: number): Promise<void> {
       try {
         let data: INote[]
-        ;({ data } = await $fetch(`http://pipecrm-api.test/api/notes/contact/${id}`))
+          ; ({ data } = await $fetch(`http://pipecrm-api.test/api/notes/contact/${id}`))
         this.notes = []
         this.notes = data
       } catch (error) {
@@ -77,11 +79,12 @@ export const useNotesStore = defineStore('notes', {
       }
     },
     async deleteNote(note: INote) {
-      // if (confirm(`¿Esta seguro que desea eliminar la nota: ${note.text}?`) === true) {
       try {
+
         const response = await $fetch(`http://pipecrm-api.test/api/notes/${note.id}`, {
           method: 'DELETE'
         })
+
         if (note.id === this.note.id) {
           this.isEditing = false
           this.minimize = false
@@ -89,22 +92,22 @@ export const useNotesStore = defineStore('notes', {
 
         const { activeTab, getActivityByContact } = useActivity()
         const { contact } = useContacts()
-        const { deleteModalOpen, deleteMessage, confirmDelete } = useUi()
+        const { deleteModalOpen, deleteMessage } = useUi()
 
         if (activeTab.value === 'activity') {
           await getActivityByContact(contact.value.id)
         } else {
           await this.getNotesByContact(contact.value.id)
         }
+
         deleteModalOpen.value = false
-        confirmDelete.value = false
         deleteMessage.value = null
+        this.note = null
 
         return response
       } catch (error) {
         console.error(error)
       }
-      // }
     },
     closeNoteModal() {
       this.note = { ...initialNote }
@@ -130,6 +133,15 @@ export const useNotesStore = defineStore('notes', {
       this.showNoteModal = true
       this.minimize = false
       this.isEditing = true
+    },
+    deleteModal(note: INote) {
+
+      const { deleteModalOpen, deleteMessage, confirmDelete } = useUi()
+
+      this.note = { ...note }
+      deleteMessage.value = '¿Está seguro de que desea eliminar esta nota?'
+      deleteModalOpen.value = true
+      confirmDelete.value = false
     }
   }
 })

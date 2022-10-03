@@ -1,65 +1,63 @@
 <script lang="ts" setup>
-import { computed, onMounted } from "#imports"
-import { ChevronDownIcon, ChevronRightIcon, XIcon } from "@heroicons/vue/outline"
-import useTasks from "@/composables/useTasks"
-import useContacts from "@/composables/useContacts"
-import useDeals from "@/composables/useDeals"
-import useUsers from "@/composables/useUsers"
+  import { computed, onMounted } from '#imports'
+  import { ChevronDownIcon, ChevronRightIcon, XIcon } from '@heroicons/vue/outline'
+  import useTasks from '@/composables/useTasks'
+  import useContacts from '@/composables/useContacts'
+  import useDeals from '@/composables/useDeals'
+  import useUsers from '@/composables/useUsers'
 
-const {
-  task,
-  showModal,
-  isEditing,
-  minimize,
-  showAssociations,
-  saveTask,
-  closeTaskModal
-} = useTasks()
+  const { task, showTaskModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } =
+    useTasks()
 
-let { contact, contacts, getContacts } = useContacts()
+  const textInput = ref(null)
 
-const { getDeals, deals } = useDeals()
-const { getUsers, users } = useUsers()
+  onMounted(() => {
+    textInput.value.focus()
+  })
 
-onMounted(async () => {
-  await getContacts()
-  await getDeals()
-  await getUsers()
-})
+  let { contacts, getContacts } = useContacts()
 
-const disabledTaskForm = computed(() => {
-  return task.value.text.length < 1 || !task.value.date || !task.value.time
-})
+  const { getDeals, deals } = useDeals()
+  const { getUsers, users } = useUsers()
 
-contacts.value = contacts.value.sort(function (a, b) {
-  if (a.firstName < b.firstName) {
-    return -1
-  }
-  if (a.firstName > b.firstName) {
-    return 1
-  }
-  return 0
-})
+  onMounted(async () => {
+    await getContacts()
+    await getDeals()
+    await getUsers()
+  })
 
-// watch(
-//   () => [disabledTaskForm.value],
-//   () => {
-//     if (disabledTaskForm.value) {
-//       showAssociations.value = !disabledTaskForm.value
-//     }
-//   }
-// )
+  const disabledTaskForm = computed(() => {
+    return task.value.text.length < 1 || !task.value.date || !task.value.time
+  })
+
+  contacts.value = contacts.value.sort(function (a, b) {
+    if (a.firstName < b.firstName) {
+      return -1
+    }
+    if (a.firstName > b.firstName) {
+      return 1
+    }
+    return 0
+  })
+
+  // watch(
+  //   () => [disabledTaskForm.value],
+  //   () => {
+  //     if (disabledTaskForm.value) {
+  //       showAssociations.value = !disabledTaskForm.value
+  //     }
+  //   }
+  // )
 </script>
 
 <template>
   <div>
     <form
-      v-if="showModal && task.type !== 'note'"
+      v-if="showTaskModal && task.type !== 'note'"
       class="fixed bottom-[20px] right-[20px] h-auto w-[650px] bg-white shadow-2xl"
       @submit.prevent="saveTask">
       <!--  Header  -->
-      <div
-        class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
+      <div class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">
           <button
             v-if="!minimize"
@@ -88,7 +86,8 @@ contacts.value = contacts.value.sort(function (a, b) {
           v-model="task.text"
           class="w-full p-4 outline-none"
           placeholder="Ingresa tu tarea"
-          type="text" />
+          type="text"
+          ref="textInput" />
         <div class="flex items-start space-x-10 p-4">
           <div class="w-40">
             <div class="text-xs text-slate-600">Fecha de vencimiento</div>
@@ -160,11 +159,8 @@ contacts.value = contacts.value.sort(function (a, b) {
         <!--  Footer  -->
         <hr />
         <div class="flex justify-between p-4">
-          <UIButton
-            :active="!disabledTaskForm"
-            :disabled="disabledTaskForm"
-            type="submit">
-            {{ !isEditing ? "Guardar Tarea" : "Actualizar Tarea" }}
+          <UIButton :active="!disabledTaskForm" :disabled="disabledTaskForm" type="submit">
+            {{ !isEditing ? 'Guardar Tarea' : 'Actualizar Tarea' }}
           </UIButton>
 
           <button
