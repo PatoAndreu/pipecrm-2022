@@ -18,7 +18,7 @@ export default function useActivity() {
   const getActivityByContact = (id: number) => activitiesStore.getActivityByContact(id)
 
   const delayedActivities = computed(() => {
-    return activities?.value?.filter((a) => !a?.completed && !a.pinned && a?.delayed)
+    return activities?.value?.filter((a) => !a.completed && !a.pinned && a.delayed)
   })
 
   const pinnedActivities = computed(() => {
@@ -26,11 +26,11 @@ export default function useActivity() {
   })
 
   const pendingActivities = computed(() => {
-    return activities?.value?.filter((a) => !a?.completed && !a.pinned && !a?.delayed)
+    return activities?.value?.filter((a) => !a.completed && !a.pinned && !a.delayed && a.type !== 'note')
   })
 
   const completedActivities = computed(() => {
-    return activities?.value?.filter((a) => a?.completed && !a.pinned && !a?.delayed)
+    return activities?.value?.filter((a) => a.completed && !a.pinned && !a.delayed || a.type === 'note')
   })
 
   return {

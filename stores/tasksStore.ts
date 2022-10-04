@@ -55,7 +55,15 @@ export const useTasksStore = defineStore("tasks", {
           method: this.isEditing ? "PATCH" : "POST",
           body: { ...this.task }
         })
-        await this.getTasksByContact(contact.value.id)
+
+        const { activeTab, getActivityByContact } = useActivity()
+
+        if (activeTab.value === 'activity') {
+          await getActivityByContact(contact.value.id)
+        } else {
+          await this.getTasksByContact(contact.value.id)
+        }
+
         this.showTaskModal = false
         return response
       } catch (error) {
