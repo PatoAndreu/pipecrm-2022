@@ -19,16 +19,16 @@ export default function useTasks() {
     isEditing,
     minimize,
     showAssociations,
-    activeTab
   } = storeToRefs(tasksStore)
 
   const getTasksByContact = (id: number) => tasksStore.getTasksByContact(id)
   const addTask = (type: string, contact?: IContact): void => tasksStore.addTask(type, contact)
   const saveTask = async () => await tasksStore.saveTask()
   const editTask = (task: ITask): void => tasksStore.editTask(task)
-  const closeTaskModal = (): void => tasksStore.closeTaskModal()
   const changeTaskStatus = async (task: ITask, status: object) => await tasksStore.changeTaskStatus(task, status)
   const deleteTask = async () => await tasksStore.deleteTask()
+
+  const closeTaskModal = (): void => tasksStore.closeTaskModal()
   const openTaskDeleteModal = async (task: ITask) => tasksStore.openTaskDeleteModal(task)
 
   const delayedTasks = computed<ITask[]>(() => {
@@ -52,7 +52,6 @@ export default function useTasks() {
     openDeleteModal,
     isEditing,
     minimize,
-    activeTab,
     showAssociations,
     tasks,
     task,

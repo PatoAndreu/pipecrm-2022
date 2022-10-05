@@ -1,33 +1,32 @@
 <script lang="ts" setup>
-import { onUnmounted, onUpdated, useHead, useRoute } from "#imports"
-import useContacts, { useContactsComponents } from "@/composables/useContacts"
-import { useTasksComponents } from "@/composables/useTasks"
+  import { onUnmounted, onUpdated, useHead, useRoute } from '#imports'
+  import useContacts, { useContactsComponents } from '@/composables/useContacts'
+  import { useTasksComponents } from '@/composables/useTasks'
 
-const { getContact, contact } = useContacts()
+  const { getContact, contact } = useContacts()
 
-const { activeTab, getActivityByContact } = useActivity()
+  const { activeTab } = useActivity()
 
-const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } =
-  useContactsComponents()
+  const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents()
 
-const { All, ActivityMenu } = useActivitiesComponents()
+  const { All, ActivityMenu } = useActivitiesComponents()
+  const { Tasks } = useTasksComponents()
+  const { Notes } = useNotesComponents()
+  const { Meetings } = useMeetingsComponents()
 
-const { Tasks } = useTasksComponents()
-const { Notes } = useNotesComponents()
+  const route = useRoute()
 
-const route = useRoute()
+  await getContact(Number(route.params.id))
 
-await getContact(Number(route.params.id))
-
-onUpdated(() => {
-  useHead({
-    title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
+  onUpdated(() => {
+    useHead({
+      title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
+    })
   })
-})
 
-onUnmounted(async () => {
-  activeTab.value = "activity"
-})
+  onUnmounted(async () => {
+    activeTab.value = 'activity'
+  })
 </script>
 
 <template>
@@ -71,6 +70,11 @@ onUnmounted(async () => {
             <Tasks v-if="activeTab === 'tasks'" />
             <template #fallback> <UILoading /> </template>
           </Suspense>
+
+          <Suspense timeout="0">
+            <Meetings v-if="activeTab === 'meetings'" />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
         </div>
       </div>
     </div>
@@ -78,11 +82,11 @@ onUnmounted(async () => {
 </template>
 
 <style>
-.activities > .activity-container .activity-icon .line {
-  height: 100%;
-}
+  .activities > .activity-container .activity-icon .line {
+    height: 100%;
+  }
 
-.activities > .activity-container:last-child > .activity-icon .line {
-  height: 0;
-}
+  .activities > .activity-container:last-child > .activity-icon .line {
+    height: 0;
+  }
 </style>

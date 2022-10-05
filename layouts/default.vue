@@ -6,9 +6,11 @@
   const { deleteModalOpen } = useUi()
   const { showTaskModal } = useTasks()
   const { showNoteModal } = useNotes()
+  const { showMeetingModal } = useMeetings()
 
   const { TaskModal } = useTasksComponents()
   const { NoteModal } = useNotesComponents()
+  const { MeetingModal } = useMeetingsComponents()
 </script>
 
 <template>
@@ -17,6 +19,7 @@
     <slot />
     <NoteModal v-if="showNoteModal" />
     <TaskModal v-if="showTaskModal" />
+    <MeetingModal v-if="showMeetingModal" />
     <Transition name="modal">
       <DeleteModal v-if="deleteModalOpen" />
     </Transition>

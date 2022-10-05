@@ -31,5 +31,4 @@ export interface TasksState {
   isEditing: boolean
   showAssociations: boolean
   minimize: boolean
-  activeTab: string
 }

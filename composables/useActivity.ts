@@ -26,11 +26,11 @@ export default function useActivity() {
   })
 
   const pendingActivities = computed(() => {
-    return activities?.value?.filter((a) => !a.completed && !a.pinned && !a.delayed && a.type !== 'note')
+    return activities?.value?.filter((a) => !a.completed && !a.pinned && !a.delayed)
   })
 
   const completedActivities = computed(() => {
-    return activities?.value?.filter((a) => a.completed && !a.pinned && !a.delayed || a.type === 'note')
+    return activities?.value?.filter((a) => a.completed && !a.pinned && !a.delayed)
   })
 
   return {
