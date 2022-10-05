@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-  import useTasks, { useTasksComponents } from '@/composables/useTasks'
-  import useNotes, { useNotesComponents } from '@/composables/useNotes'
+  import useTasks from '@/composables/useTasks'
+  import useNotes from '@/composables/useNotes'
   import DeleteModal from '@/components/UI/DeleteModal.vue'
+
+  import TaskModal from '@/components/Tasks/TaskModal.vue'
+  import NoteModal from '@/components/Notes/NoteModal.vue'
+  import MeetingModal from '@/components/Meetings/MeetingModal.vue'
 
   const { deleteModalOpen } = useUi()
   const { showTaskModal } = useTasks()
   const { showNoteModal } = useNotes()
   const { showMeetingModal } = useMeetings()
-
-  const { TaskModal } = useTasksComponents()
-  const { NoteModal } = useNotesComponents()
-  const { MeetingModal } = useMeetingsComponents()
 </script>
 
 <template>

@@ -3,10 +3,6 @@ import { IMeeting } from '@/interfaces/IMeetings';
 import { storeToRefs } from "pinia"
 import { useMeetingsStore } from "@/stores/meetingsStore"
 
-import Meetings from "@/components/Contacts/Id/RightSide/Activities/Meetings/Meetings.vue"
-import Meeting from "@/components/Contacts/Id/RightSide/Activities/Meetings/Meeting.vue"
-import MeetingModal from "@/components/Contacts/Id/RightSide/Activities/Meetings/MeetingModal.vue"
-
 export default function useMeetings() {
   const meetingsStore = useMeetingsStore()
 
@@ -54,13 +50,5 @@ export default function useMeetings() {
     changeMeetingStatus,
     closeMeetingModal,
     openMeetingDeleteModal
-  }
-}
-
-export function useMeetingsComponents() {
-  return {
-    Meetings,
-    Meeting,
-    MeetingModal
   }
 }

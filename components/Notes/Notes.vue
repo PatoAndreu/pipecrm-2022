@@ -1,11 +1,10 @@
 <script lang="ts" setup>
   import useContacts from '@/composables/useContacts'
-  import useNotes, { useNotesComponents } from '@/composables/useNotes'
+  import Note from '@/components/Notes/Note.vue'
 
   const { pinnedNotes, unpinnedNotes, addNote, getNotesByContact } = useNotes()
 
   const { contact } = useContacts()
-  const { Note } = useNotesComponents()
 
   await getNotesByContact(contact.value.id)
 </script>

@@ -1,20 +1,14 @@
 <script lang="ts" setup>
-import useContacts from "@/composables/useContacts"
-import useTasks, { useTasksComponents } from "@/composables/useTasks"
+  import useContacts from '@/composables/useContacts'
+  import useTasks from '@/composables/useTasks'
+  import Task from '@/components/Tasks/Task.vue'
 
-const { contact } = useContacts()
-const { Task } = useTasksComponents()
+  const { contact } = useContacts()
 
-const {
-  pinnedTasks,
-  pendingTasks,
-  completedTasks,
-  delayedTasks,
-  getTasksByContact,
-  addTask
-} = useTasks()
+  const { pinnedTasks, pendingTasks, completedTasks, delayedTasks, getTasksByContact, addTask } =
+    useTasks()
 
-await getTasksByContact(contact.value.id)
+  await getTasksByContact(contact.value.id)
 </script>
 
 <template>

@@ -1,18 +1,21 @@
 <script lang="ts" setup>
   import { onUnmounted, onUpdated, useHead, useRoute } from '#imports'
-  import useContacts, { useContactsComponents } from '@/composables/useContacts'
-  import { useTasksComponents } from '@/composables/useTasks'
+  import useContacts from '@/composables/useContacts'
+
+  import Header from '@/components/Contacts/Id/Header.vue'
+  import Notes from '@/components/Notes/Notes.vue'
+  import Tasks from '@/components/Tasks/Tasks.vue'
+  import Meetings from '@/components/Meetings/Meetings.vue'
+  import ContactInfo from '@/components/Contacts/Id/ContactInfo.vue'
+  import CompanyInfo from '@/components/Contacts/Id/CompanyInfo.vue'
+  import DealsInfo from '@/components/Contacts/Id/DealsInfo.vue'
+  import FollowersInfo from '@/components/Contacts/Id/FollowersInfo.vue'
+  import Activity from '@/components/Contacts/Id/Activity.vue'
+  import ActivityMenu from '@/components/Contacts/Id/Menu.vue'
 
   const { getContact, contact } = useContacts()
 
   const { activeTab } = useActivity()
-
-  const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } = useContactsComponents()
-
-  const { All, ActivityMenu } = useActivitiesComponents()
-  const { Tasks } = useTasksComponents()
-  const { Notes } = useNotesComponents()
-  const { Meetings } = useMeetingsComponents()
 
   const route = useRoute()
 
@@ -57,7 +60,7 @@
         <ActivityMenu />
         <div>
           <Suspense timeout="0">
-            <All v-if="activeTab === 'activity'" />
+            <Activity v-if="activeTab === 'activity'" />
             <template #fallback> <UILoading /> </template>
           </Suspense>
 

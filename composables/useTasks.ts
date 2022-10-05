@@ -4,10 +4,6 @@ import { IContact } from "@/interfaces/IContacts"
 import { ITask } from "@/interfaces/ITasks"
 import { computed } from "@vue/reactivity"
 
-import Tasks from "@/components/Contacts/Id/RightSide/Activities/Tasks/Tasks.vue"
-import Task from "@/components/Contacts/Id/RightSide/Activities/Tasks/Task.vue"
-import TaskModal from "@/components/Contacts/Id/RightSide/Activities/Tasks/TaskModal.vue"
-
 export default function useTasks() {
   const tasksStore = useTasksStore()
 
@@ -67,13 +63,5 @@ export default function useTasks() {
     deleteTask,
     openTaskDeleteModal,
     closeTaskModal
-  }
-}
-
-export function useTasksComponents() {
-  return {
-    Tasks,
-    Task,
-    TaskModal
   }
 }

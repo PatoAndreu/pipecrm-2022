@@ -4,10 +4,6 @@ import { useNotesStore } from "@/stores/notesStore"
 import { IContact } from "@/interfaces/IContacts"
 import useUi from "@/composables/useUi"
 
-import Notes from "@/components/Contacts/Id/RightSide/Activities/Notes/Notes.vue"
-import Note from "@/components/Contacts/Id/RightSide/Activities/Notes/Note.vue"
-import NoteModal from "@/components/Contacts/Id/RightSide/Activities/Notes/NoteModal.vue"
-
 export default function useNotes() {
   const notesStore = useNotesStore()
 
@@ -57,10 +53,3 @@ export default function useNotes() {
   }
 }
 
-export function useNotesComponents() {
-  return {
-    Note,
-    Notes,
-    NoteModal
-  }
-}

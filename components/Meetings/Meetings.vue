@@ -1,10 +1,9 @@
 <script setup lang="ts">
   import useContacts from '@/composables/useContacts'
-  import useMeetings, { useMeetingsComponents } from '@/composables/useMeetings'
-
+  import useMeetings from '@/composables/useMeetings'
+  import Meeting from '@/components/Meetings/Meeting.vue'
   const { getMeetingsByContact, pinnedMeetings, unpinnedMeetings, addMeeting } = useMeetings()
   const { contact } = useContacts()
-  const { Meeting } = useMeetingsComponents()
 
   await getMeetingsByContact(contact.value.id)
 </script>
