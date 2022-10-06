@@ -36,6 +36,7 @@ export const useTasksStore = defineStore("tasks", {
     async getTasksByContact(id: number): Promise<void> {
       try {
         let data: ITask[]
+        await new Promise(r => setTimeout(r, 300));
         ({ data } = await $fetch(`http://pipecrm-api.test/api/tasks/contact/${id}`))
         this.tasks = []
         this.tasks = data

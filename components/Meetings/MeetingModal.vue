@@ -39,16 +39,13 @@
     '4 hora 45 minutos'
   ])
 
-  onMounted(() => {
-    textInput?.value?.focus()
-  })
-
+  const meetingResult = ref(['programada', 'completada', 'reprogramada', 'no asistió', 'cancelada'])
   const { contacts, getContacts } = useContacts()
-
   const { getDeals, deals } = useDeals()
-  const { getUsers, users } = useUsers()
+  const { getUsers } = useUsers()
 
   onMounted(async () => {
+    textInput?.value?.focus()
     await getContacts()
     await getDeals()
     await getUsers()
@@ -56,7 +53,7 @@
 
   const disabledTaskForm = computed(() => {
     return (
-      meeting.value.title?.length < 1 ||
+      (meeting.value.type === 'program' && meeting.value.title?.length < 1) ||
       !meeting.value.date ||
       !meeting.value.time ||
       !meeting.value.owner.id
@@ -79,7 +76,8 @@
     <form
       v-if="showMeetingModal"
       class="fixed bottom-[20px] right-[20px] h-auto w-[650px] bg-white shadow-2xl"
-      @submit.prevent="saveMeeting">
+      @submit.prevent="saveMeeting"
+      @keydown.enter="saveMeeting">
       <!--  Header  -->
       <div class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">
@@ -114,7 +112,26 @@
           class="w-full p-4 outline-none"
           placeholder="Título de la reunión"
           type="text"
-          ref="textInput" />
+          ref="textInput"
+          v-if="meeting.type === 'program'" />
+        <div v-else class="flex w-full space-x-4 p-4">
+          <div class="w-full">
+            <div class="text-xs text-slate-600">Asistentes</div>
+            <UISelectBox
+              v-model:modelValue="meeting.duration"
+              :options="duration"
+              class="mt-2 w-full"
+              type="array" />
+          </div>
+          <div class="w-full">
+            <div class="text-xs text-slate-600">Resultado de la reunión</div>
+            <UISelectBox
+              v-model:modelValue="meeting.result"
+              :options="meetingResult"
+              class="mt-2 w-full"
+              type="array" />
+          </div>
+        </div>
         <div class="flex items-start space-x-10 p-4">
           <div class="w-40">
             <div class="text-xs text-slate-600">Fecha</div>
@@ -124,28 +141,13 @@
             <div class="text-xs text-slate-600">Hora</div>
             <input v-model="meeting.time" class="w-full py-2 text-cyan-600" type="time" />
           </div>
-          <div class="w-max">
+          <div class="w-full">
             <div class="text-xs text-slate-600">Duración</div>
-            <div class="w-60">
-              <UISelectBox
-                v-model:modelValue="meeting.duration"
-                :options="duration"
-                class="mt-2 w-full"
-                type="array" />
-            </div>
-          </div>
-        </div>
-
-        <hr class="mx-4" />
-
-        <div class="flex items-center space-x-8 p-4">
-          <div class="w-60">
-            <div class="text-xs text-slate-600">Organizada por</div>
             <UISelectBox
-              v-model:modelValue="meeting.owner"
-              :options="users"
+              v-model:modelValue="meeting.duration"
+              :options="duration"
               class="mt-2 w-full"
-              type="user" />
+              type="array" />
           </div>
         </div>
 
@@ -154,7 +156,11 @@
         <textarea
           v-model="meeting.description"
           class="w-full p-4 focus:outline-none"
-          placeholder="Empieza a escribir una nota...."
+          :placeholder="
+            meeting.type === 'program'
+              ? 'Envíales una descripción a los asistentes'
+              : 'Describe la reunión'
+          "
           rows="3" />
 
         <!-- showAssociations -->

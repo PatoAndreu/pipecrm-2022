@@ -16,13 +16,25 @@ export default function useMeetings() {
     showAssociations,
   } = storeToRefs(meetingsStore)
 
+  const { closeAllModals } = useUi()
+
   const getMeetingsByContact = (id: number) => meetingsStore.getMeetingsByContact(id)
-  const addMeeting = (type: string, contact?: IContact): void => meetingsStore.addMeeting(type, contact)
+
+  const addMeeting = (type: string, contact?: IContact): void => {
+    closeAllModals()
+    meetingsStore.addMeeting(type, contact)
+  }
   const saveMeeting = async () => await meetingsStore.saveMeeting()
-  const editMeeting = (meeting: IMeeting): void => meetingsStore.editMeeting(meeting)
+
+  const editMeeting = (meeting: IMeeting): void => {
+    closeAllModals()
+    meetingsStore.editMeeting(meeting)
+  }
+
   const changeMeetingStatus = async (meeting: IMeeting, status: object) => await meetingsStore.changeMeetingStatus(meeting, status)
 
   const closeMeetingModal = (): void => meetingsStore.closeMeetingModal()
+
   const openMeetingDeleteModal = async (meeting: IMeeting) => meetingsStore.openTaskDeleteModal(meeting)
 
   const pinnedMeetings = computed<IMeeting[]>(() => {

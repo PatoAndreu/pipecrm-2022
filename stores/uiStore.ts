@@ -1,3 +1,4 @@
+
 import { defineStore } from 'pinia'
 
 export const useUIStore = defineStore('ui', {
@@ -52,6 +53,15 @@ export const useUIStore = defineStore('ui', {
       } else {
         this.errorMessage = true
       }
+    },
+    closeAllModals(): void {
+      const { closeTaskModal } = useTasks()
+      const { closeNoteModal } = useNotes()
+      const { closeMeetingModal } = useMeetings()
+      this.cancelDeleteModal()
+      closeTaskModal()
+      closeNoteModal()
+      closeMeetingModal()
     }
   }
 })

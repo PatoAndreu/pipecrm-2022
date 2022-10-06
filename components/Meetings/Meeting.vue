@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import {
     CalendarIcon,
-    CheckCircleIcon,
     CurrencyDollarIcon,
     DotsHorizontalIcon,
     OfficeBuildingIcon,
@@ -49,9 +48,12 @@
           class="flex w-full justify-between px-2 text-sm hover:text-cyan-600"
           @click="editMeeting(meeting)">
           <div>
-            <span class="font-bold">Reunión </span> asignada a
-            <span class="font-bold">
-              {{ meeting.owner.firstName }} {{ meeting.owner.lastName }}
+            <span class="font-bold" v-if="meeting.type === 'program'"
+              >Reunión programada - {{ meeting.title }}</span
+            >
+            <span class="font-bold" v-else>Reunión registrada - </span>
+            <span class="text-slate-400">
+              por {{ meeting.owner.firstName }} {{ meeting.owner.lastName }}
             </span>
           </div>
         </button>
@@ -93,25 +95,64 @@
 
       <hr />
       <!--  Body    -->
-      <div class="p-4 text-slate-600">
-        <p>{{ meeting?.title }}</p>
-      </div>
-      <div class="bg-amber-50 p-4 text-sm italic" v-if="meeting.description">
+
+      <div class="px-4 py-6 text-sm italic" v-if="meeting.description">
         {{ meeting.description }}
+      </div>
+      <div v-if="meeting.type === 'register'">
+        <hr />
+        <div class="my-2 flex space-x-2">
+          <div class="inline-block space-y-1 py-2 px-4 text-xs">
+            <div class="text-slate-400">Asistentes</div>
+            <button
+              class="group relative flex justify-center hover:text-indigo-600"
+              v-if="meeting.deal">
+              <div
+                class="inner absolute bottom-6 z-50 hidden h-auto w-max space-y-2 rounded bg-indigo-600 p-2 text-left text-white shadow group-hover:block">
+                <div class="flex items-center space-x-1">
+                  <UserIcon class="w-3" />
+                  <div>Patricio Andreu</div>
+                </div>
+                <div class="flex items-center space-x-1">
+                  <UserIcon class="w-3" />
+                  <div>Fernada Pellin</div>
+                </div>
+              </div>
+              <div class="flex items-center font-medium capitalize text-cyan-600">
+                <p>2 asistentes</p>
+              </div>
+            </button>
+          </div>
+
+          <div class="inline-block space-y-1 py-2 px-4 text-xs">
+            <div class="text-slate-400">Resultado</div>
+            <div class="font-medium capitalize text-cyan-600">{{ meeting.result }}</div>
+          </div>
+
+          <div class="inline-block space-y-1 py-2 px-4 text-xs">
+            <div class="text-slate-400">Fecha</div>
+            <div class="font-medium capitalize text-cyan-600">
+              {{ meeting.date }} - {{ meeting.time }}
+            </div>
+          </div>
+
+          <div class="inline-block space-y-1 py-2 px-4 text-xs">
+            <div class="text-slate-400">Duración</div>
+            <div class="font-medium capitalize text-cyan-600">{{ meeting.duration }}</div>
+          </div>
+        </div>
+        <hr />
       </div>
       <!--  Footer    -->
       <div class="flex h-10 items-center space-x-4 px-4 text-xs">
         <div class="group relative flex justify-center hover:text-indigo-600">
           <div
             class="inner absolute bottom-6 z-50 hidden h-auto w-max space-y-2 rounded bg-indigo-600 px-2 py-1 text-left text-white shadow group-hover:block">
-            <p>Fecha de la reunión</p>
+            <p>Fecha de creación</p>
           </div>
           <button class="flex cursor-help items-center">
             <CalendarIcon class="h-4 w-4" />
-            <p class="ml-1">
-              {{ $dayjs(meeting.date).format('ddd DD MMM YYYY') }}
-              a las {{ $dayjs('1/1/1 ' + meeting.time).format('h:mm A') }}
-            </p>
+            <p class="ml-1">{{ $dayjs(meeting.createdAt).format('ddd DD MMMM YYYY H:mm') }}</p>
           </button>
         </div>
 

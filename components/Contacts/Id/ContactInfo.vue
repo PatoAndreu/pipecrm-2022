@@ -16,7 +16,7 @@
   const contactLocal = ref({ ...contact.value })
   const isEditing = ref(false)
   const pending = ref(false)
-  const showContactInfo = ref(true)
+  const showContactInfo = ref(false)
 
   await getContactStatus()
   await getContactStages()

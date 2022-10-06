@@ -8,14 +8,26 @@ export default function useNotes() {
   const notesStore = useNotesStore()
 
   const { notes, note, showNoteModal, openDeleteModal, isEditing, minimize, showAssociations } = storeToRefs(notesStore)
+  const { closeAllModals } = useUi()
 
   const getNotesByContact = (id: number) => notesStore.getNotesByContact(id)
-  const addNote = (contact?: IContact): void => notesStore.addNote(contact)
+
+  const addNote = (contact?: IContact): void => {
+    closeAllModals()
+    notesStore.addNote(contact)
+  }
   const saveNote = async () => await notesStore.saveNote()
+
   const pinOrUnpinNote = async (note: INote, status: boolean) => await notesStore.pinOrUnpinNote(note, status)
-  const editNote = (note: INote): void => notesStore.editNote(note)
+
+  const editNote = (note: INote): void => {
+    closeAllModals()
+    notesStore.editNote(note)
+  }
   const closeNoteModal = (): void => notesStore.closeNoteModal()
+
   const deleteNote = async () => await notesStore.deleteNote()
+
   const openNoteDeleteModal = (note: INote) => notesStore.openNoteDeleteModal(note)
 
   const pinnedNotes = computed<INote[]>(() => {

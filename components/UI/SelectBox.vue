@@ -11,7 +11,7 @@
   interface Props {
     field?: string
     type?: string
-    options: string[] | object
+    options: []
     disabled: boolean
     modelValue?: object | string
     top?: boolean
@@ -88,15 +88,15 @@
       :class="disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'"
       @click="showSelectBox = !showSelectBox"
       :disabled="disabled">
-      <template v-if="type === 'user'">
+      <div v-if="type === 'user'">
         {{ selectedOption?.firstName }} {{ selectedOption?.lastName }}
-      </template>
-      <template v-if="type === 'array'">
+      </div>
+      <div v-if="type === 'array'">
         {{ selectedOption }}
-      </template>
-      <template v-if="type === 'other'">
-        {{ selectedOption?.name }}
-      </template>
+      </div>
+      <div v-if="type === 'other'">
+        {{ selectedOption?.name || 'seleccione...' }}
+      </div>
       <ChevronDownIcon class="absolute right-4 bottom-2 h-5" v-if="!showSelectBox" />
       <ChevronUpIcon class="absolute right-4 bottom-2 h-5" v-else />
     </div>
@@ -123,7 +123,9 @@
           <div
             class="h-10 cursor-pointer p-2 pl-4 hover:bg-cyan-50"
             v-if="!searchInput"
-            @click="setOption(null)"></div>
+            @click="setOption(null)">
+            (Sin valor)
+          </div>
 
           <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
             <div

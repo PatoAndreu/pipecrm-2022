@@ -1,66 +1,82 @@
 <script lang="ts" setup>
-import { ChevronDownIcon, ChevronRightIcon, DotsHorizontalIcon } from "@heroicons/vue/outline"
-import useContacts from "@/composables/useContacts"
-import { ref } from "#imports"
-import useDeals from "~/composables/useDeals"
-import { SymbolKind } from "vscode-languageserver-types"
+  import { ChevronDownIcon, ChevronRightIcon, DotsHorizontalIcon } from '@heroicons/vue/outline'
+  import useContacts from '@/composables/useContacts'
+  import { ref } from '#imports'
+  import useDeals from '@/composables/useDeals'
+  import { IDeal } from '@/interfaces/IDeals'
 
-const { contact, updateContact, getContact } = useContacts()
+  const { contact, getContact } = useContacts()
 
-const { getDeals, addDeal, updateDeal, deals } = useDeals()
+  const { getDeals, updateDeal, deals } = useDeals()
 
-const showDealsInfo = ref(false)
-const isLinkingDeal = ref(false)
-const isEditing = ref(false)
-const pending = ref(false)
-const dealToLink = ref(null)
+  const showDealsInfo = ref(false)
+  const isLinkingDeal = ref(false)
+  const isEditing = ref(false)
+  const pending = ref(false)
+  const dealToLink = ref(null)
 
-const linkDeal = async () => {
-  await getDeals()
-  isLinkingDeal.value = true
-}
+  const linkDeal = async () => {
+    await getDeals()
 
-const cancelLinkDeal = () => {
-  isEditing.value = true
-  isLinkingDeal.value = false
-}
-
-const linkOrUnlinkCompanyToDeal = async (type: string, deal?: object) => {
-  pending.value = true
-  let res = null
-
-  if (type === "unlink") {
-    res = await updateDeal({ ...deal, contact: null })
-  } else {
-    res = await addDeal({ ...dealToLink.value, contact: { ...contact.value } })
+    deals.value = deals.value.filter((deal) => {
+      return !contact.value.deals.some((d) => {
+        return deal.id == d.id
+      })
+    })
+    isLinkingDeal.value = true
   }
 
-  const {
-    data: { errors },
-    response: { status }
-  }: any = res
+  const cancelLinkDeal = () => {
+    isEditing.value = true
+    isLinkingDeal.value = false
+  }
 
-  if (status === 200) {
-    await getContact(contact.value.id)
+  const linkOrUnlinkCompanyToDeal = async (type: string, deal?: IDeal) => {
+    pending.value = true
+    let res = null
+
+    if (type === 'unlink') {
+      res = await updateDeal({
+        ...deal,
+        pipelineStage: { id: deal.pipeline.pipelineStage.id },
+        contact: null
+      })
+    } else {
+      res = await updateDeal({ ...dealToLink.value, contact: { ...contact.value } })
+    }
+
+    const {
+      data: { errors },
+      response: { status }
+    }: any = res
+
+    if (status === 200) {
+      await getContact(contact.value.id)
+      dealToLink.value = null
+    } else {
+      alert(
+        'Lo sentimos existió un problema al intentar vincular el negocio, por favor intente nuevamente'
+      )
+    }
+
     isEditing.value = false
     pending.value = false
     isLinkingDeal.value = false
   }
-}
 
-const formatter = new Intl.NumberFormat("es", {
-  style: "currency",
-  currency: "CLP"
-})
+  const formatter = new Intl.NumberFormat('es', {
+    style: 'currency',
+    currency: 'CLP'
+  })
 
-const getClass = (probabilityOfClose) => {
-  if (probabilityOfClose === "won") {
-    return "bg-green-100"
+  const getClass = (probabilityOfClose) => {
+    if (probabilityOfClose === 'won') {
+      return 'bg-green-100'
+    }
+    if (probabilityOfClose === 'lost') {
+      return 'bg-red-100'
+    }
   }
-  if (probabilityOfClose === "lost") {
-    return "bg-red-100"
-  }
-}
 </script>
 
 <template>
@@ -114,7 +130,7 @@ const getClass = (probabilityOfClose) => {
             </div>
             <div class="text-xs text-slate-500">
               Fecha de cierre:
-              <span class="font-semibold">{{ $dayjs(deal.closeDate).format("DD MMMM YYYY") }}</span>
+              <span class="font-semibold">{{ $dayjs(deal.closeDate).format('DD MMMM YYYY') }}</span>
             </div>
             <div class="text-xs text-slate-500">
               Pipeline: <span class="font-semibold">{{ deal.pipeline.name }}</span>
@@ -137,9 +153,9 @@ const getClass = (probabilityOfClose) => {
           </button>
         </div>
 
-        <!--  Vincular Empresa  -->
+        <!--  Vincular Negocio  -->
         <div v-else v-auto-animate class="mb-4 h-auto items-center">
-          <div class="text-xs text-slate-500 text-cyan-700">Negocios</div>
+          <div class="text-xs text-cyan-700">Negocios</div>
           <UISelectBox v-model:modelValue="dealToLink" :options="deals" class="mt-2"> </UISelectBox>
 
           <div v-auto-animate class="mt-10 flex h-auto w-auto justify-end">
@@ -176,7 +192,7 @@ const getClass = (probabilityOfClose) => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   fill="currentColor"></path>
               </svg>
-              {{ !pending ? "Guardar" : "Guardando..." }}
+              {{ !pending ? 'Guardar' : 'Guardando...' }}
             </button>
           </div>
         </div>

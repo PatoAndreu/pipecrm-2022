@@ -34,6 +34,7 @@ export const useMeetingsStore = defineStore("meetings", {
     async getMeetingsByContact<T>(id: number): Promise<void> {
       try {
         let data: IMeeting[]
+        await new Promise(r => setTimeout(r, 300));
         ({ data } = await $fetch(`http://pipecrm-api.test/api/meetings/contact/${id}`))
         this.meetings = []
         this.meetings = data

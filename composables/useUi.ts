@@ -12,6 +12,8 @@ export default function useTasks() {
   const cancelDeleteModal = () => uiStore.cancelDeleteModal()
   const confirmDeleteModal = () => uiStore.confirmDeleteModal()
 
+  const closeAllModals = () => uiStore.closeAllModals()
+
   return {
     showSearchBox,
     showCreateContactDrawer,
@@ -23,6 +25,7 @@ export default function useTasks() {
     toggleCreateContactDrawer,
     openDeleteModal,
     cancelDeleteModal,
-    confirmDeleteModal
+    confirmDeleteModal,
+    closeAllModals
   }
 }

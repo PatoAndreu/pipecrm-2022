@@ -11,11 +11,9 @@
 <template>
   <div class="p-2 text-slate-500">
     <div class="flex justify-center space-x-4 py-4">
-      <UIButton :active="true" type="submit" @click="addMeeting('register', contact)">
-        Registrar Reunión
-      </UIButton>
-      <UIButton :active="true" type="submit" @click="addMeeting('program', contact)">
-        Crear Reunión
+      <UIButton @click="addMeeting('register', contact)"> Registrar Reunión </UIButton>
+      <UIButton :active="true" @click="addMeeting('program', contact)">
+        Programar Reunión
       </UIButton>
     </div>
 

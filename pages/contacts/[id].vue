@@ -51,7 +51,11 @@
           <template #fallback> <UILoading /> </template>
         </Suspense>
 
-        <DealsInfo />
+        <Suspense timeout="0">
+          <DealsInfo />
+          <template #fallback> <UILoading /> </template>
+        </Suspense>
+
         <FollowersInfo />
       </div>
 

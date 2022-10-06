@@ -48,7 +48,8 @@
     <form
       v-if="showTaskModal && task.type !== 'note'"
       class="fixed bottom-[20px] right-[20px] h-auto w-[650px] bg-white shadow-2xl"
-      @submit.prevent="saveTask">
+      @submit.prevent="saveTask"
+      @keydown.enter="saveTask">
       <!--  Header  -->
       <div class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">

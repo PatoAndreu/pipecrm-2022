@@ -7,7 +7,6 @@
   import NoteModal from '@/components/Notes/NoteModal.vue'
   import MeetingModal from '@/components/Meetings/MeetingModal.vue'
 
-  const { deleteModalOpen } = useUi()
   const { showTaskModal } = useTasks()
   const { showNoteModal } = useNotes()
   const { showMeetingModal } = useMeetings()
@@ -17,12 +16,10 @@
   <div id="default-layout" class="min-h-screen min-w-[1024px]" style="background-color: #f5f8fa">
     <UIHeader />
     <slot />
-    <NoteModal v-if="showNoteModal" />
-    <TaskModal v-if="showTaskModal" />
-    <MeetingModal v-if="showMeetingModal" />
-    <Transition name="modal">
-      <DeleteModal v-if="deleteModalOpen" />
-    </Transition>
+    <NoteModal />
+    <TaskModal />
+    <MeetingModal />
+    <DeleteModal />
   </div>
 </template>
 

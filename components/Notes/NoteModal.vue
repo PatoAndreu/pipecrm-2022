@@ -1,7 +1,5 @@
 <script lang="ts" setup>
   import { ChevronDownIcon, ChevronRightIcon, XIcon } from '@heroicons/vue/outline'
-  import useContacts from '@/composables/useContacts'
-  import useDeals from '@/composables/useDeals'
   import { onMounted, watch } from '#imports'
 
   const {
@@ -21,7 +19,7 @@
     textInput?.value?.focus()
   })
 
-  let { contacts, getContacts } = useContacts()
+  const { contacts, getContacts } = useContacts()
 
   const { getDeals, deals } = useDeals()
 
@@ -49,11 +47,12 @@
 </script>
 
 <template>
-  <div>
+  <transition name="modal-animation">
     <form
-      v-if="showNoteModal"
+      v-show="showNoteModal"
       class="fixed bottom-2 left-1/2 mr-10 h-auto w-[650px] bg-white shadow-2xl"
-      @submit.prevent="saveNote">
+      @submit.prevent="saveNote"
+      @keydown.enter="saveNote">
       <!--  Header  -->
       <div class="flex w-full items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">
@@ -76,7 +75,7 @@
         </button>
       </div>
       <!--  Content  -->
-      <div v-if="!minimize">
+      <div v-show="!minimize">
         <textarea
           v-model="note.text"
           class="w-full p-4 focus:outline-none"
@@ -102,6 +101,7 @@
         </div>
         <!--  Footer  -->
         <hr />
+
         <div class="flex justify-between p-4">
           <UIButton :active="!disabledNoteForm" :disabled="disabledNoteForm" type="submit">
             {{ !isEditing ? 'Guardar Nota' : 'Actualizar Nota' }}
@@ -122,5 +122,5 @@
         </div>
       </div>
     </form>
-  </div>
+  </transition>
 </template>

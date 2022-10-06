@@ -4,15 +4,17 @@ import { IUser } from "~/interfaces/IUsers"
 
 interface Pipeline {
   readonly id: number
-  name: string
-  order: number
+  name?: string
+  order?: number
   pipelineStage: PipelineStage
 }
 
-interface PipelineStage extends Pipeline {
-  probabilityOfClose: string
-  pipelineId: number
-  order: number
+interface PipelineStage {
+  readonly id: number
+  name?: string
+  order?: number
+  probabilityOfClose?: string
+  pipelineId?: number
 }
 
 export interface IDeal {
@@ -25,6 +27,7 @@ export interface IDeal {
   company: ICompany
   owner: IUser
   pipeline: Pipeline
+  pipelineStage?: PipelineStage
   createdAt: string
   updatedAt: string
 }
