@@ -3,7 +3,7 @@ import { ITask, TasksState } from "@/interfaces/ITasks"
 import useContacts from "@/composables/useContacts"
 import { IContact } from "@/interfaces/IContacts"
 
-const initialTask = {
+const initialTask: ITask = {
   id: null,
   text: "",
   pinned: false,
@@ -31,13 +31,13 @@ export const useTasksStore = defineStore("tasks", {
     isEditing: false,
     minimize: false,
     showAssociations: false,
-    activeTab: "notes"
   }),
   actions: {
     async getTasksByContact(id: number): Promise<void> {
       try {
         let data: ITask[]
-          ; ({ data } = await $fetch(`http://pipecrm-api.test/api/tasks/contact/${id}`))
+        await new Promise(r => setTimeout(r, 300));
+        ({ data } = await $fetch(`http://pipecrm-api.test/api/tasks/contact/${id}`))
         this.tasks = []
         this.tasks = data
       } catch (error) {
@@ -55,7 +55,15 @@ export const useTasksStore = defineStore("tasks", {
           method: this.isEditing ? "PATCH" : "POST",
           body: { ...this.task }
         })
-        await this.getTasksByContact(contact.value.id)
+
+        const { activeTab, getActivityByContact } = useActivity()
+
+        if (activeTab.value === 'activity') {
+          await getActivityByContact(contact.value.id)
+        } else {
+          await this.getTasksByContact(contact.value.id)
+        }
+
         this.showTaskModal = false
         return response
       } catch (error) {
@@ -122,7 +130,12 @@ export const useTasksStore = defineStore("tasks", {
       this.task = {
         ...initialTask,
         type: type,
-        owner: { id: 1 },
+        owner: {
+          id: 1,
+          firstName: "Patricio",
+          lastName: "Andreu",
+          email: "patricioandreu@gmail.com",
+        },
         contact: contact
       }
       this.showTaskModal = false

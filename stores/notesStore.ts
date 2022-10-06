@@ -31,7 +31,8 @@ export const useNotesStore = defineStore('notes', {
     async getNotesByContact(id: number): Promise<void> {
       try {
         let data: INote[]
-          ; ({ data } = await $fetch(`http://pipecrm-api.test/api/notes/contact/${id}`))
+        await new Promise(r => setTimeout(r, 300));
+        ; ({ data } = await $fetch(`http://pipecrm-api.test/api/notes/contact/${id}`))
         this.notes = []
         this.notes = data
       } catch (error) {

@@ -1,163 +1,149 @@
 <script setup lang="ts">
-import { XIcon } from "@heroicons/vue/outline";
-import { useContactsStore } from "@/stores/contactsStore";
-import useContacts from "@/composables/useContacts";
-import useUsers from "@/composables/useUsers";
-import { ref } from "@vue/reactivity";
+  import { XIcon } from '@heroicons/vue/outline'
+  import { useContactsStore } from '@/stores/contactsStore'
+  import useContacts from '@/composables/useContacts'
+  import useUsers from '@/composables/useUsers'
+  import { ref } from '@vue/reactivity'
 
-const contactStore = useContactsStore();
+  const contactStore = useContactsStore()
 
-const {
-        showDrawer,
-        isEditing,
-        contact,
-        contactStatus,
-        contactLifeCycleStage,
-        disabledFormContact,
-        saveContact,
-        updateContact,
-        getContacts,
-        resetContact
-      } = useContacts();
+  const {
+    showDrawer,
+    isEditing,
+    contact,
+    contactStatus,
+    contactLifeCycleStage,
+    disabledFormContact,
+    saveContact,
+    updateContact,
+    getContacts,
+    resetContact
+  } = useContacts()
 
-const { users, getUsers } = useUsers();
+  const { users, getUsers } = useUsers()
 
-let errorsMessages = ref<string[]>([]);
+  let errorsMessages = ref<string[]>([])
 
-await getUsers();
+  await getUsers()
 
-contactStore.$subscribe((mutation, state) => {
-  if (state.showDrawer)
-    errorsMessages.value = [];
-}, { detached: true });
+  contactStore.$subscribe(
+    (mutation, state) => {
+      if (state.showDrawer) errorsMessages.value = []
+    },
+    { detached: true }
+  )
 
-const saveOrUpdateContact = async () => {
-  if (!isEditing.value)
-    afterPost(await saveContact());
-  else
-    afterPost(await updateContact(contact.value));
-};
-
-const afterPost = (res) => {
-  const { data: { errors }, response: { status } }: any = res;
-
-  if (status === 200) {
-    isEditing.value  = false;
-    showDrawer.value = false;
-    getContacts();
-    resetContact();
-  } else {
-    errorsMessages.value = errors;
+  const saveOrUpdateContact = async () => {
+    if (!isEditing.value) afterPost(await saveContact())
+    else afterPost(await updateContact(contact.value))
   }
-};
 
+  const afterPost = (res) => {
+    const {
+      data: { errors },
+      response: { status }
+    }: any = res
+
+    if (status === 200) {
+      isEditing.value = false
+      showDrawer.value = false
+      getContacts()
+      resetContact()
+    } else {
+      errorsMessages.value = errors
+    }
+  }
 </script>
 <template>
-  <Transition duration="550" name="drawer" appear>
-    <div v-if="showDrawer"
-         class="w-[500px] fixed h-auto z-10 min-h-screen  shadow-xl right-0 top-12 bg-white inner">
-
+  <Transition :duration="550" name="drawer" appear>
+    <div
+      v-if="showDrawer"
+      class="inner fixed right-0 top-12 z-10 h-auto min-h-screen w-[500px] bg-white shadow-xl">
       <!-- Header -->
-      <div class="flex justify-between bg-cyan-500 h-16 items-center">
-        <div class="text-white text-lg font-semibold pl-4">
-          {{ !isEditing ? "Agregar" : "Actualizar" }}
+      <div class="flex h-16 items-center justify-between bg-cyan-500">
+        <div class="pl-4 text-lg font-semibold text-white">
+          {{ !isEditing ? 'Agregar' : 'Actualizar' }}
           contacto
         </div>
-        <XIcon class="
-            mr-4
-            h-6
-            text-white
-            cursor-pointer
-            transition-all
-            hover:text-slate-300
-          " @click="showDrawer = false" />
+        <XIcon
+          class="mr-4 h-6 cursor-pointer text-white transition-all hover:text-slate-300"
+          @click="showDrawer = false" />
       </div>
 
       <!-- Formulario -->
-      <div v-for="(error, key) in errorsMessages" :key="key" class="w-[90%] bg-red-400 text-white mx-auto my-4 p-4 rounded">
+      <div
+        v-for="(error, key) in errorsMessages"
+        :key="key"
+        class="mx-auto my-4 w-[90%] rounded bg-red-400 p-4 text-white">
         <div v-for="(e, k) in error" :key="k" class="my-2">
-          <p>
-            - {{ e }}
-          </p>
+          <p>- {{ e }}</p>
         </div>
       </div>
       <form @submit.prevent="saveOrUpdateContact">
-        <div class="p-10 text-slate-600 text-[14px] overflow-scroll h-screen">
-
+        <div class="h-screen overflow-scroll p-10 text-[14px] text-slate-600">
           <div class="mb-6">
-            <label class="block mb-2">Correo</label>
-            <input type="email" class="
-              w-full
-              h-10
-              rounded-sm
-              bg-slate-100
-              border border-slate-200
-              p-2
-            " v-model="contact.email" />
+            <label class="mb-2 block">Correo</label>
+            <input
+              type="email"
+              class="h-10 w-full rounded-sm border border-slate-200 bg-slate-100 p-2"
+              v-model="contact.email" />
           </div>
 
           <div class="mb-6">
-            <label class="block mb-2">Nombre</label>
-            <input type="text" class="
-              w-full
-              h-10
-              rounded-sm
-              bg-slate-100
-              border border-slate-200
-              p-2
-            " v-model="contact.firstName" />
+            <label class="mb-2 block">Nombre</label>
+            <input
+              type="text"
+              class="h-10 w-full rounded-sm border border-slate-200 bg-slate-100 p-2"
+              v-model="contact.firstName" />
           </div>
 
           <div class="mb-6">
-            <label class="block mb-2">Apellido</label>
-            <input type="text" class="
-              w-full
-              h-10
-              rounded-sm
-              bg-slate-100
-              border border-slate-200
-              p-2
-            " v-model="contact.lastName" />
+            <label class="mb-2 block">Apellido</label>
+            <input
+              type="text"
+              class="h-10 w-full rounded-sm border border-slate-200 bg-slate-100 p-2"
+              v-model="contact.lastName" />
           </div>
 
           <div class="mb-6">
-            <label class="block mb-2">Número de teléfono (opcional)</label>
-            <input type="text" class="
-              w-full
-              h-10
-              rounded-sm
-              bg-slate-100
-              border border-slate-200
-              p-2
-            " v-model="contact.mobilePhoneNumber" />
+            <label class="mb-2 block">Número de teléfono (opcional)</label>
+            <input
+              type="text"
+              class="h-10 w-full rounded-sm border border-slate-200 bg-slate-100 p-2"
+              v-model="contact.mobilePhoneNumber" />
           </div>
 
           <div class="mb-6">
-            <UISelectBox :options="users" field="firstName" type="user"
-                         v-model:modelValue="contact.owner" :disabled="disabledFormContact">
+            <UISelectBox
+              :options="users"
+              field="firstName"
+              type="user"
+              v-model:modelValue="contact.owner"
+              :disabled="disabledFormContact">
               <template #label>
-                <label class="block mb-2">Propietario del contacto (opcional)</label>
-              </template>
-            </UISelectBox>
-
-          </div>
-
-          <div class="mb-6">
-            <UISelectBox :options="contactLifeCycleStage"
-                         v-model:modelValue="contact.contactLifeCycleStage"
-                         :disabled="disabledFormContact">
-              <template #label>
-                <label class="block mb-2">Etapa del ciclo de vida (opcional)</label>
+                <label class="mb-2 block">Propietario del contacto (opcional)</label>
               </template>
             </UISelectBox>
           </div>
 
           <div class="mb-6">
-            <UISelectBox :options="contactStatus"
-                         v-model:modelValue="contact.contactStatus"
-                         :disabled="disabledFormContact">
+            <UISelectBox
+              :options="contactLifeCycleStage"
+              v-model:modelValue="contact.contactLifeCycleStage"
+              :disabled="disabledFormContact">
               <template #label>
-                <label class="block mb-2">Estado del lead (opcional)</label>
+                <label class="mb-2 block">Etapa del ciclo de vida (opcional)</label>
+              </template>
+            </UISelectBox>
+          </div>
+
+          <div class="mb-6">
+            <UISelectBox
+              :options="contactStatus"
+              v-model:modelValue="contact.contactStatus"
+              :disabled="disabledFormContact">
+              <template #label>
+                <label class="mb-2 block">Estado del lead (opcional)</label>
               </template>
             </UISelectBox>
           </div>
@@ -165,28 +151,25 @@ const afterPost = (res) => {
           <div class="h-32"></div>
         </div>
 
-
         <!-- Footer -->
-        <div class="flex  fixed bottom-0 p-4 bg-slate-100 w-[500px] text-sm space-x-5"
-             :class="!isEditing ? ' justify-center':'justify-between'">
+        <div
+          class="fixed bottom-0 flex w-[500px] space-x-5 bg-slate-100 p-4 text-sm"
+          :class="!isEditing ? ' justify-center' : 'justify-between'">
+          <UIButton type="button" @click="showDrawer = false"> Cancelar </UIButton>
 
-          <UIButton type="button" @click="showDrawer = false">
-            Cancelar
-          </UIButton>
-
-          <UIButton type="button" @click="showDrawer = false" :disabled="disabledFormContact"
-                    v-if="!isEditing">
+          <UIButton
+            type="button"
+            @click="showDrawer = false"
+            :disabled="disabledFormContact"
+            v-if="!isEditing">
             Crear y agregar otro
           </UIButton>
 
           <UIButton type="submit" :active="!disabledFormContact" :disabled="disabledFormContact">
-            {{ !isEditing ? "Crear" : "Actualizar" }}
+            {{ !isEditing ? 'Crear' : 'Actualizar' }}
           </UIButton>
-
         </div>
       </form>
-
     </div>
   </Transition>
 </template>
-

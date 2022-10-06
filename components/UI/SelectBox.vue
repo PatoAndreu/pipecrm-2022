@@ -1,84 +1,84 @@
 <script setup lang="ts">
-import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "@heroicons/vue/outline"
-import { onMounted, onUpdated, computed, ref } from "#imports"
+  import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from '@heroicons/vue/outline'
+  import { onMounted, onUpdated, computed, ref } from '#imports'
 
-let selectedOption = ref(null)
-let searchInput = ref("")
-let showSelectBox = ref(false)
+  let selectedOption = ref(null)
+  let searchInput = ref('')
+  let showSelectBox = ref(false)
 
-const emit = defineEmits(["update:modelValue"])
+  const emit = defineEmits(['update:modelValue'])
 
-interface Props {
-  field?: string
-  type?: string
-  options: []
-  disabled: boolean
-  modelValue?: object
-  top?: boolean
-}
+  interface Props {
+    field?: string
+    type?: string
+    options: []
+    disabled: boolean
+    modelValue?: object | string
+    top?: boolean
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  field: "name",
-  type: "other",
-  options: null,
-  disabled: false,
-  modelValue: null,
-  top: true,
-})
+  const props = withDefaults(defineProps<Props>(), {
+    field: 'name',
+    type: 'other',
+    options: null,
+    disabled: false,
+    modelValue: null,
+    top: true
+  })
 
-onMounted(async () => {
-  const handleEscape = (e: { key: string }) => {
-    if (e.key === "Esc" || e.key === "Escape") {
-      showSelectBox.value = false
+  onMounted(async () => {
+    const handleEscape = (e: { key: string }) => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        showSelectBox.value = false
+      }
     }
-  }
-  document.addEventListener("keydown", handleEscape)
+    document.addEventListener('keydown', handleEscape)
 
-  if (props.modelValue) {
-    selectedOption.value = props.modelValue
-  }
-})
+    if (props.modelValue) {
+      selectedOption.value = props.modelValue
+    }
+  })
 
-onUpdated(async () => {
-  if (props.modelValue) {
-    selectedOption.value = props.modelValue
-  }
-})
+  onUpdated(async () => {
+    if (props.modelValue) {
+      selectedOption.value = props.modelValue
+    }
+  })
 
-const setOption = (option) => {
-  selectedOption.value = { ...option }
-  emit("update:modelValue", option ? option : {})
-  showSelectBox.value = false
-  searchInput.value = ""
-}
+  const setOption = (option) => {
+    selectedOption.value = option ? { ...option } : null
+    emit('update:modelValue', option ? option : null)
+    showSelectBox.value = false
+    searchInput.value = ''
+  }
 
-const searchCriteria = computed(() => {
-  if (!searchInput) {
-    return props.options
-  }
-  if (props.type === "user") {
-    return props.options.filter(
-      (option) =>
-        option.firstName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-        option.lastName.toLowerCase().includes(searchInput.value.toLowerCase())
-    )
-  }
-  if (props.type === "array") {
+  const searchCriteria = computed(() => {
+    if (!searchInput) {
+      return props.options
+    }
+    if (props.type === 'user') {
+      return props.options.filter(
+        (option) =>
+          option.firstName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+          option.lastName.toLowerCase().includes(searchInput.value.toLowerCase())
+      )
+    }
+    if (props.type === 'array') {
+      return props.options.filter((option) =>
+        option.toLowerCase().includes(searchInput.value.toLowerCase())
+      )
+    }
     return props.options.filter((option) =>
-      option.toLowerCase().includes(searchInput.value.toLowerCase())
+      option[props.field].toLowerCase().includes(searchInput.value.toLowerCase())
     )
-  }
-  return props.options.filter((option) =>
-    option[props.field].toLowerCase().includes(searchInput.value.toLowerCase())
-  )
-})
+  })
 
-const getClass = (option) => {
-  if (props.type === "array") {
-    return selectedOption.value.toLowerCase() === option.toLowerCase() ? "bg-cyan-50" : ""
+  const getClass = (option) => {
+    if (props.type === 'array') {
+      return selectedOption?.value?.toLowerCase() === option.toLowerCase() ? 'bg-cyan-50' : ''
+    }
+    return selectedOption.value?.id === option.id ? 'bg-cyan-50' : ''
   }
-  return selectedOption.value?.id === option.id ? "bg-cyan-50" : ""
-}
 </script>
 <template>
   <div class="relative w-full">
@@ -88,15 +88,15 @@ const getClass = (option) => {
       :class="disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'"
       @click="showSelectBox = !showSelectBox"
       :disabled="disabled">
-      <template v-if="type === 'user'">
+      <div v-if="type === 'user'">
         {{ selectedOption?.firstName }} {{ selectedOption?.lastName }}
-      </template>
-      <template v-if="type === 'array'">
+      </div>
+      <div v-if="type === 'array'">
         {{ selectedOption }}
-      </template>
-      <template v-if="type === 'other'">
-        {{ selectedOption?.name }}
-      </template>
+      </div>
+      <div v-if="type === 'other'">
+        {{ selectedOption?.name || 'seleccione...' }}
+      </div>
       <ChevronDownIcon class="absolute right-4 bottom-2 h-5" v-if="!showSelectBox" />
       <ChevronUpIcon class="absolute right-4 bottom-2 h-5" v-else />
     </div>
@@ -123,7 +123,9 @@ const getClass = (option) => {
           <div
             class="h-10 cursor-pointer p-2 pl-4 hover:bg-cyan-50"
             v-if="!searchInput"
-            @click="setOption(null)"></div>
+            @click="setOption(null)">
+            (Sin valor)
+          </div>
 
           <template v-for="option in searchCriteria" v-if="searchCriteria.length > 0">
             <div

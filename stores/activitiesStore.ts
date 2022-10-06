@@ -11,7 +11,8 @@ export const useActivitiesStore = defineStore("activity", {
     async getActivityByContact(id: number): Promise<void> {
       try {
         let data: IActivity[]
-        ;({ data } = await $fetch(`http://pipecrm-api.test/api/contact/activity/${id}`))
+        await new Promise(r => setTimeout(r, 300));
+        ; ({ data } = await $fetch(`http://pipecrm-api.test/api/contact/activity/${id}`))
         this.activities = []
         this.activities = data
       } catch (error) {

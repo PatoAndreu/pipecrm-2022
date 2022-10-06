@@ -1,33 +1,35 @@
 <script lang="ts" setup>
-import { onUnmounted, onUpdated, useHead, useRoute } from "#imports"
-import useContacts, { useContactsComponents } from "@/composables/useContacts"
-import { useTasksComponents } from "@/composables/useTasks"
+  import { onUnmounted, onUpdated, useHead, useRoute } from '#imports'
+  import useContacts from '@/composables/useContacts'
 
-const { getContact, contact } = useContacts()
+  import Header from '@/components/Contacts/Id/Header.vue'
+  import Notes from '@/components/Notes/Notes.vue'
+  import Tasks from '@/components/Tasks/Tasks.vue'
+  import Meetings from '@/components/Meetings/Meetings.vue'
+  import ContactInfo from '@/components/Contacts/Id/ContactInfo.vue'
+  import CompanyInfo from '@/components/Contacts/Id/CompanyInfo.vue'
+  import DealsInfo from '@/components/Contacts/Id/DealsInfo.vue'
+  import FollowersInfo from '@/components/Contacts/Id/FollowersInfo.vue'
+  import Activity from '@/components/Contacts/Id/Activity.vue'
+  import ActivityMenu from '@/components/Contacts/Id/Menu.vue'
 
-const { activeTab, getActivityByContact } = useActivity()
+  const { getContact, contact } = useContacts()
 
-const { Header, ContactInfo, CompanyInfo, DealsInfo, FollowersInfo } =
-  useContactsComponents()
+  const { activeTab } = useActivity()
 
-const { All, ActivityMenu } = useActivitiesComponents()
+  const route = useRoute()
 
-const { Tasks } = useTasksComponents()
-const { Notes } = useNotesComponents()
+  await getContact(Number(route.params.id))
 
-const route = useRoute()
-
-await getContact(Number(route.params.id))
-
-onUpdated(() => {
-  useHead({
-    title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
+  onUpdated(() => {
+    useHead({
+      title: `${contact.value.firstName} ${contact.value.lastName} | Información del contacto`
+    })
   })
-})
 
-onUnmounted(async () => {
-  activeTab.value = "activity"
-})
+  onUnmounted(async () => {
+    activeTab.value = 'activity'
+  })
 </script>
 
 <template>
@@ -49,7 +51,11 @@ onUnmounted(async () => {
           <template #fallback> <UILoading /> </template>
         </Suspense>
 
-        <DealsInfo />
+        <Suspense timeout="0">
+          <DealsInfo />
+          <template #fallback> <UILoading /> </template>
+        </Suspense>
+
         <FollowersInfo />
       </div>
 
@@ -58,7 +64,7 @@ onUnmounted(async () => {
         <ActivityMenu />
         <div>
           <Suspense timeout="0">
-            <All v-if="activeTab === 'activity'" />
+            <Activity v-if="activeTab === 'activity'" />
             <template #fallback> <UILoading /> </template>
           </Suspense>
 
@@ -71,6 +77,11 @@ onUnmounted(async () => {
             <Tasks v-if="activeTab === 'tasks'" />
             <template #fallback> <UILoading /> </template>
           </Suspense>
+
+          <Suspense timeout="0">
+            <Meetings v-if="activeTab === 'meetings'" />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
         </div>
       </div>
     </div>
@@ -78,11 +89,11 @@ onUnmounted(async () => {
 </template>
 
 <style>
-.activities > .activity-container .activity-icon .line {
-  height: 100%;
-}
+  .activities > .activity-container .activity-icon .line {
+    height: 100%;
+  }
 
-.activities > .activity-container:last-child > .activity-icon .line {
-  height: 0;
-}
+  .activities > .activity-container:last-child > .activity-icon .line {
+    height: 0;
+  }
 </style>

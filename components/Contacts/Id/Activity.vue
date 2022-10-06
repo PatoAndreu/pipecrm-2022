@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-  import useTasks, { useTasksComponents } from '@/composables/useTasks'
-  import useNotes, { useNotesComponents } from '@/composables/useNotes'
+  import Note from '@/components/Notes/Note.vue'
+  import Task from '@/components/Tasks/Task.vue'
 
-  const { Task } = useTasksComponents()
-  const { Note } = useNotesComponents()
   const { contact } = useContacts()
   const {
     getActivityByContact,

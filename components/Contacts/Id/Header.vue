@@ -1,52 +1,51 @@
 <script setup lang="ts">
-import { ChevronDownIcon, DotsHorizontalIcon, UserIcon } from "@heroicons/vue/outline"
+  import { ChevronDownIcon, DotsHorizontalIcon, UserIcon } from '@heroicons/vue/outline'
 
-const { contact, updateContact, getContact, deleteContact } = useContacts()
+  const { contact, updateContact, getContact, deleteContact } = useContacts()
 
-const { users, getUsers, resetUser } = useUsers()
+  const { users, getUsers, resetUser } = useUsers()
 
-const router = useRouter()
+  const router = useRouter()
 
-const show = ref(false)
+  const show = ref(false)
 
-onBeforeMount(async () => {
-  await getUsers()
-})
+  onBeforeMount(async () => {
+    await getUsers()
+  })
 
-const owner = ref({ ...contact.value.owner })
+  const owner = ref({ ...contact.value.owner })
 
-const cancel = () => {
-  show.value = false
-  resetUser()
-}
+  const cancel = () => {
+    show.value = false
+    resetUser()
+  }
 
-const transferOwnership = async () => {
-  contact.value.owner = { ...owner.value }
-  await updateContact(contact.value)
-  await getContact(contact.value.id)
-  show.value = false
-}
+  const transferOwnership = async () => {
+    contact.value.owner = { ...owner.value }
+    await updateContact(contact.value)
+    await getContact(contact.value.id)
+    show.value = false
+  }
 
-const deleteContactLocal = async () => {
-  if (
-    confirm(
-      `¿Esta seguro que desea eliminar a ${contact.value.firstName} ${contact.value.lastName} ?`
-    ) == true
-  ) {
-    const res = await deleteContact()
-    const {
-      response: { status }
-    }: any = res
-    if (status === 200) {
-      router.push({ path: "/contacts" })
+  const deleteContactLocal = async () => {
+    if (
+      confirm(
+        `¿Esta seguro que desea eliminar a ${contact.value.firstName} ${contact.value.lastName} ?`
+      ) == true
+    ) {
+      const res = await deleteContact()
+      const {
+        response: { status }
+      }: any = res
+      if (status === 200) {
+        router.push({ path: '/contacts' })
+      }
     }
   }
-}
 </script>
 
 <template>
-  <div
-    class="mt-2 flex h-20 items-center justify-between rounded border border-slate-200 bg-white">
+  <div class="mt-2 flex h-20 items-center justify-between rounded border border-slate-200 bg-white">
     <div>
       <div class="ml-4 flex items-center text-xl font-semibold text-cyan-600">
         <div>{{ contact.firstName }} {{ contact.lastName }}</div>
@@ -61,8 +60,7 @@ const deleteContactLocal = async () => {
 
     <div class="mr-4">
       <div class="flex">
-        <div
-          class="flex h-9 w-9 items-center justify-center rounded-full border bg-slate-100">
+        <div class="flex h-9 w-9 items-center justify-center rounded-full border bg-slate-100">
           <UserIcon class="h-5 text-cyan-600" />
         </div>
         <div class="ml-2">
@@ -120,9 +118,7 @@ const deleteContactLocal = async () => {
                 @click="deleteContactLocal">
                 Eliminar
               </li>
-              <li class="w-full py-2 pl-2 hover:bg-cyan-500 hover:text-white">
-                Fusionar
-              </li>
+              <li class="w-full py-2 pl-2 hover:bg-cyan-500 hover:text-white">Fusionar</li>
             </ul>
           </div>
         </button>
@@ -132,27 +128,27 @@ const deleteContactLocal = async () => {
 </template>
 
 <style>
-.dropdown-container:after {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-top: 1px solid #dedede;
-  border-right: 0 solid red;
-  border-bottom: 0 solid red;
-  border-left: 1px solid #dedede;
-  top: 14px;
-  right: 5%;
-  content: "";
-  transform: rotate(45deg);
-  margin-top: -25px;
-  background: white;
-}
+  .dropdown-container:after {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-top: 1px solid #dedede;
+    border-right: 0 solid red;
+    border-bottom: 0 solid red;
+    border-left: 1px solid #dedede;
+    top: 14px;
+    right: 5%;
+    content: '';
+    transform: rotate(45deg);
+    margin-top: -25px;
+    background: white;
+  }
 
-.triangle {
-  border-color: transparent transparent red transparent;
-  border-style: solid;
-  border-width: 0px 10px 10px 10px;
-  height: 0px;
-  width: 0px;
-}
+  .triangle {
+    border-color: transparent transparent red transparent;
+    border-style: solid;
+    border-width: 0px 10px 10px 10px;
+    height: 0px;
+    width: 0px;
+  }
 </style>

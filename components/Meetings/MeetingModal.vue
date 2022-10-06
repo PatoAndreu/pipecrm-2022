@@ -6,21 +6,46 @@
   import useDeals from '@/composables/useDeals'
   import useUsers from '@/composables/useUsers'
 
-  const { task, showTaskModal, isEditing, minimize, showAssociations, saveTask, closeTaskModal } =
-    useTasks()
+  const {
+    meeting,
+    showMeetingModal,
+    isEditing,
+    minimize,
+    showAssociations,
+    saveMeeting,
+    closeMeetingModal
+  } = useMeetings()
 
   const textInput = ref(null)
+  const duration = ref([
+    '15 minutos',
+    '30 minutos',
+    '45 minutos',
+    '1 hora',
+    '1 hora 15 minutos',
+    '1 hora 30 minutos',
+    '1 hora 45 minutos',
+    '2 horas',
+    '2 hora 15 minutos',
+    '2 hora 30 minutos',
+    '2 hora 45 minutos',
+    '3 horas',
+    '3 hora 15 minutos',
+    '3 hora 30 minutos',
+    '3 hora 45 minutos',
+    '4 horas',
+    '4 hora 15 minutos',
+    '4 hora 30 minutos',
+    '4 hora 45 minutos'
+  ])
 
-  onMounted(() => {
-    textInput?.value?.focus()
-  })
-
-  let { contacts, getContacts } = useContacts()
-
+  const meetingResult = ref(['programada', 'completada', 'reprogramada', 'no asistió', 'cancelada'])
+  const { contacts, getContacts } = useContacts()
   const { getDeals, deals } = useDeals()
-  const { getUsers, users } = useUsers()
+  const { getUsers } = useUsers()
 
   onMounted(async () => {
+    textInput?.value?.focus()
     await getContacts()
     await getDeals()
     await getUsers()
@@ -28,7 +53,10 @@
 
   const disabledTaskForm = computed(() => {
     return (
-      task.value.text.length < 1 || !task.value.date || !task.value.time || !task.value.owner.id
+      (meeting.value.type === 'program' && meeting.value.title?.length < 1) ||
+      !meeting.value.date ||
+      !meeting.value.time ||
+      !meeting.value.owner.id
     )
   })
 
@@ -46,9 +74,10 @@
 <template>
   <div>
     <form
-      v-if="showTaskModal && task.type !== 'note'"
+      v-if="showMeetingModal"
       class="fixed bottom-[20px] right-[20px] h-auto w-[650px] bg-white shadow-2xl"
-      @submit.prevent="saveTask">
+      @submit.prevent="saveMeeting"
+      @keydown.enter="saveMeeting">
       <!--  Header  -->
       <div class="flex min-w-fit items-center justify-between bg-indigo-800 py-2 px-4 text-white">
         <div class="flex items-center justify-center">
@@ -66,9 +95,12 @@
             @click="minimize = false">
             <ChevronRightIcon class="w-6" />
           </button>
-          <p class="font-semibold tracking-wider">Tarea</p>
+          <p class="font-semibold tracking-wider" v-if="meeting.type === 'program'">
+            Programar reunión
+          </p>
+          <p class="font-semibold tracking-wider" v-else>Registrar reunión</p>
         </div>
-        <button type="button" @click.prevent="closeTaskModal">
+        <button type="button" @click.prevent="closeMeetingModal">
           <XIcon class="h-6" />
         </button>
       </div>
@@ -76,60 +108,59 @@
       <!--  Content  -->
       <div v-show="!minimize">
         <input
-          v-model="task.text"
+          v-model="meeting.title"
           class="w-full p-4 outline-none"
-          placeholder="Ingresa tu tarea"
+          placeholder="Título de la reunión"
           type="text"
-          ref="textInput" />
+          ref="textInput"
+          v-if="meeting.type === 'program'" />
+        <div v-else class="flex w-full space-x-4 p-4">
+          <div class="w-full">
+            <div class="text-xs text-slate-600">Asistentes</div>
+            <UISelectBox
+              v-model:modelValue="meeting.duration"
+              :options="duration"
+              class="mt-2 w-full"
+              type="array" />
+          </div>
+          <div class="w-full">
+            <div class="text-xs text-slate-600">Resultado de la reunión</div>
+            <UISelectBox
+              v-model:modelValue="meeting.result"
+              :options="meetingResult"
+              class="mt-2 w-full"
+              type="array" />
+          </div>
+        </div>
         <div class="flex items-start space-x-10 p-4">
           <div class="w-40">
-            <div class="text-xs text-slate-600">Fecha de vencimiento</div>
-            <input v-model="task.date" class="w-full py-2 text-cyan-600" type="date" />
+            <div class="text-xs text-slate-600">Fecha</div>
+            <input v-model="meeting.date" class="w-full py-2 text-cyan-600" type="date" />
           </div>
           <div class="w-max">
             <div class="text-xs text-slate-600">Hora</div>
-            <input v-model="task.time" class="w-full py-2 text-cyan-600" type="time" />
+            <input v-model="meeting.time" class="w-full py-2 text-cyan-600" type="time" />
           </div>
-        </div>
-
-        <hr class="mx-4" />
-
-        <div class="flex items-center space-x-8 p-4">
-          <div class="w-32">
-            <div class="text-xs text-slate-600">Tipo</div>
-            <select v-model="task.type" class="min-w-fit py-2 text-cyan-600">
-              <option value="call">Llamada</option>
-              <option value="email">Correo</option>
-              <option value="other">Otro</option>
-            </select>
-          </div>
-
-          <div class="w-32">
-            <div class="text-xs text-slate-600">Prioridad</div>
-            <select v-model="task.priority" class="min-w-fit py-2 text-cyan-600">
-              <option value="null">Ninguno</option>
-              <option value="low">Baja</option>
-              <option value="medium">Media</option>
-              <option value="high">Alta</option>
-            </select>
-          </div>
-
-          <div class="w-60">
-            <div class="text-xs text-slate-600">Asignado a</div>
+          <div class="w-full">
+            <div class="text-xs text-slate-600">Duración</div>
             <UISelectBox
-              v-model:modelValue="task.owner"
-              :options="users"
+              v-model:modelValue="meeting.duration"
+              :options="duration"
               class="mt-2 w-full"
-              type="user" />
+              type="array" />
           </div>
         </div>
 
         <hr class="mx-4" />
 
         <textarea
-          v-model="task.note"
+          v-model="meeting.description"
           class="w-full p-4 focus:outline-none"
-          placeholder="Empieza a escribir una nota...."
+          :placeholder="
+            meeting.type === 'program'
+              ? 'Envíales una descripción a los asistentes'
+              : 'Describe la reunión'
+          "
           rows="3" />
 
         <!-- showAssociations -->
@@ -139,14 +170,14 @@
           <div class="w-full">
             <div class="text-xs text-cyan-700">Contacto</div>
             <UISelectBox
-              v-model:modelValue="task.contact"
+              v-model:modelValue="meeting.contact"
               :options="contacts"
               class="mt-2"
               type="user" />
           </div>
           <div class="w-full">
             <div class="text-xs text-cyan-700">Negocio</div>
-            <UISelectBox v-model:modelValue="task.deal" :options="deals" class="mt-2" />
+            <UISelectBox v-model:modelValue="meeting.deal" :options="deals" class="mt-2" />
           </div>
         </div>
         <!--  Footer  -->

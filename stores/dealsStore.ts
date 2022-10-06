@@ -51,6 +51,17 @@ export const useDealsStore = defineStore("deals", {
         return error;
       }
     },
+    async deleteDeal(deal: IDeal): Promise<void> {
+      try {
+        return await $fetch(`http://pipecrm-api.test/api/deals/${deal.id}`,
+          {
+            method: "DELETE"
+          });
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    },
   }
 
 });

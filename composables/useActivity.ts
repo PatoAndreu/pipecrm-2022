@@ -4,9 +4,6 @@ import { useActivitiesStore } from "@/stores/activitiesStore"
 import { storeToRefs } from "pinia"
 import dayjs from "dayjs"
 
-import All from "@/components/Contacts/Id/RightSide/Activities/All.vue"
-import ActivityMenu from "@/components/Contacts/Id/RightSide/Activities/Menu.vue"
-
 export default function useActivity() {
   const activitiesStore = useActivitiesStore()
 
@@ -18,7 +15,7 @@ export default function useActivity() {
   const getActivityByContact = (id: number) => activitiesStore.getActivityByContact(id)
 
   const delayedActivities = computed(() => {
-    return activities?.value?.filter((a) => !a?.completed && !a.pinned && a?.delayed)
+    return activities?.value?.filter((a) => !a.completed && !a.pinned && a.delayed)
   })
 
   const pinnedActivities = computed(() => {
@@ -26,11 +23,11 @@ export default function useActivity() {
   })
 
   const pendingActivities = computed(() => {
-    return activities?.value?.filter((a) => !a?.completed && !a.pinned && !a?.delayed)
+    return activities?.value?.filter((a) => !a.completed && !a.pinned && !a.delayed)
   })
 
   const completedActivities = computed(() => {
-    return activities?.value?.filter((a) => a?.completed && !a.pinned && !a?.delayed)
+    return activities?.value?.filter((a) => a.completed && !a.pinned && !a.delayed)
   })
 
   return {
@@ -41,12 +38,5 @@ export default function useActivity() {
     pendingActivities,
     completedActivities,
     getActivityByContact
-  }
-}
-
-export function useActivitiesComponents() {
-  return {
-    All,
-    ActivityMenu
   }
 }
