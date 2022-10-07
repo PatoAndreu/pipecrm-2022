@@ -6,7 +6,9 @@ import { IContact } from "@/interfaces/IContacts";
 export const useDealsStore = defineStore("deals", {
   state: (): IDealStore => ({
     deal: null,
-    deals: null
+    deals: null,
+    pipeline: null,
+    tabSelected: "all",
   }),
   actions: {
     async getDealsByContact(contact: Ref<IContact>): Promise<void> {
@@ -61,6 +63,20 @@ export const useDealsStore = defineStore("deals", {
         console.error(error);
         return error;
       }
+    },
+
+    async getPipelineByUser(pipelineId: number, userId?: number): Promise<void> {
+      try {
+        let data: [];
+        ({ data } = await $fetch(`http://pipecrm-api.test/api/pipeline/${pipelineId}/user/${userId}`));
+        this.pipeline = data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    setTabSelected(tab: string): void {
+      this.tabSelected = tab
     },
   }
 

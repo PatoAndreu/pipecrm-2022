@@ -7,6 +7,7 @@ interface Pipeline {
   name?: string
   order?: number
   pipelineStage: PipelineStage
+  pipelineStages: PipelineStage[]
 }
 
 interface PipelineStage {
@@ -15,6 +16,7 @@ interface PipelineStage {
   order?: number
   probabilityOfClose?: string
   pipelineId?: number
+  deals?: IDeal[] | null
 }
 
 export interface IDeal {
@@ -35,4 +37,6 @@ export interface IDeal {
 export interface IDealStore {
   deal: IDeal
   deals: IDeal[]
+  tabSelected: string
+  pipeline: Pipeline
 }
