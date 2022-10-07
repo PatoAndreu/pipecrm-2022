@@ -1,18 +1,50 @@
 <script setup lang="ts">
   import { ViewGridIcon, ViewListIcon } from '@heroicons/vue/solid'
-  const { getPipelineByUser, pipeline } = useDeals()
+  import Deal from '@/components/Deals/BoardDeal.vue'
+  import Draggable from 'vuedraggable'
+  const { getPipelineByUser, pipeline, updateDeal } = useDeals()
 
   await getPipelineByUser(1, 1)
+
+  const getStageTotal = (stage) => {
+    return stage.deals.reduce((sum: number, current) => sum + current.amount, 0)
+  }
+
+  const sortDeals = async (e, stage) => {
+    const item = e.added || e.moved
+    const index = item?.newIndex
+
+    const prevCard = stage.deals[index - 1]
+    const nextCard = stage.deals[index + 1]
+    const deal = stage.deals[index]
+
+    if (deal) {
+      let order = deal?.order
+
+      if (prevCard && nextCard) {
+        order = (prevCard.order + nextCard.order) / 2
+      } else if (prevCard) {
+        order = prevCard.order + prevCard.order / 2
+      } else if (nextCard) {
+        order = nextCard.order / 2
+      }
+
+      await updateDeal({
+        ...deal,
+        pipeline: { id: pipeline.value.id },
+        pipelineStage: stage,
+        order: order
+      })
+      await getPipelineByUser(1, 1)
+    }
+  }
 
   const formatter = new Intl.NumberFormat('es', {
     style: 'currency',
     currency: 'CLP'
   })
-
-  const getStageTotal = (stage) => {
-    return stage.deals.reduce((sum, current) => sum + current.amount, 0)
-  }
 </script>
+
 <template>
   <div class="bg-white">
     <!-- Header -->
@@ -62,24 +94,18 @@
               <div>({{ stage.deals.length }})</div>
             </header>
             <main class="flex-grow overflow-auto bg-slate-100 py-2 text-white">
-              <div v-for="deal in stage.deals" :key="deal.id" class="px-2 py-1">
-                <div
-                  draggable="true"
-                  class="h-24 space-y-1 rounded-md border bg-white p-2 text-sm"
-                  style="color: #33475b">
-                  <div class="font-bold" style="color: #0091ae">{{ deal.name }}</div>
-
-                  <div>
-                    <span class="font-bold">Valor: </span>
-                    $ {{ formatter.format(deal.amount) }}
-                  </div>
-
-                  <div>
-                    <span class="font-bold">Fecha de cierre: </span>
-                    {{ $dayjs(deal.closeDate).format('D/M/YYYY') }}
-                  </div>
-                </div>
-              </div>
+              <Draggable
+                group="deals"
+                v-model="stage.deals"
+                item-key="id"
+                class="px-2 py-1"
+                drag-class="drag"
+                ghost-class="ghost"
+                @change="sortDeals($event, stage)">
+                <template #item="{ element }">
+                  <Deal :deal="element" />
+                </template>
+              </Draggable>
             </main>
             <footer class="border-t bg-white p-4 text-center font-bold" style="color: #33475b">
               <span>Total: </span>

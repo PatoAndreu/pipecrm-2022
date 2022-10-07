@@ -24,6 +24,7 @@ export interface IDeal {
   name: string
   amount: number
   priority: string
+  order: number
   closeDate: string
   contact: IContact
   company: ICompany
