@@ -16,7 +16,8 @@
 <template>
   <div class="bg-white">
     <!-- Header -->
-    <div class="flex h-20 w-full items-center justify-between border-b-2 p-10">
+    <div
+      class="sticky top-12 flex h-20 w-full items-center justify-between border-b-2 bg-white p-10">
       <div class="flex items-center space-x-2">
         <h1 class="mr-4">Negocios</h1>
 
@@ -47,23 +48,46 @@
         <button class="btn-active">Crear negocio</button>
       </div>
     </div>
-    <div class="mt-2 px-10">
-      <!-- Board Header -->
-      <div class="flex" style="background-color: rgb(245, 248, 250)">
-        <div class="w-72 border" v-for="stage in pipeline.pipelineStages" :key="stage.id">
-          <div class="relative flex flex-col" style="height: 100%">
-            <header class="bg-teal-500 p-4 text-center font-bold text-white">Header</header>
-            <main
-              class="flex flex-grow items-center justify-center bg-teal-600 text-white"
-              style="min-height: 100%">
-              Main
+    <!-- Board  -->
+    <div
+      class="ml-10 mr-10 mt-2 overflow-auto"
+      style="height: calc(((((100vh - 54px) - 20px) - 35px) - 20px) - 20px)">
+      <main class="flex h-full">
+        <div class="border" v-for="stage in pipeline.pipelineStages" :key="stage.id">
+          <div
+            class="flex w-72 flex-col justify-between"
+            style="height: calc(((((100vh - 54px) - 20px) - 35px) - 20px) - 20px); color: #33475b">
+            <header class="flex h-10 w-72 items-center justify-between border-y p-6 text-sm">
+              <div>{{ stage.name }}</div>
+              <div>({{ stage.deals.length }})</div>
+            </header>
+            <main class="flex-grow overflow-auto bg-slate-100 py-2 text-white">
+              <div v-for="deal in stage.deals" :key="deal.id" class="px-2 py-1">
+                <div
+                  draggable="true"
+                  class="h-24 space-y-1 rounded-md border bg-white p-2 text-sm"
+                  style="color: #33475b">
+                  <div class="font-bold" style="color: #0091ae">{{ deal.name }}</div>
+
+                  <div>
+                    <span class="font-bold">Valor: </span>
+                    $ {{ formatter.format(deal.amount) }}
+                  </div>
+
+                  <div>
+                    <span class="font-bold">Fecha de cierre: </span>
+                    {{ $dayjs(deal.closeDate).format('D/M/YYYY') }}
+                  </div>
+                </div>
+              </div>
             </main>
-            <footer class="bottom-0 bg-teal-500 p-4 text-center font-bold text-white">
-              Footer
+            <footer class="border-t bg-white p-4 text-center font-bold" style="color: #33475b">
+              <span>Total: </span>
+              <span>$ {{ formatter.format(getStageTotal(stage)) }}</span>
             </footer>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   </div>
 </template>

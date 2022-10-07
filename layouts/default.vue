@@ -6,9 +6,11 @@
 </script>
 
 <template>
-  <div id="default-layout" class="min-w-[1024px]" style="background-color: #f5f8fa">
+  <div id="default-layout" class="min-h-screen min-w-[1024px]">
     <UIHeader />
-    <slot />
+    <div id="main-content">
+      <slot />
+    </div>
     <NoteModal />
     <TaskModal />
     <MeetingModal />
