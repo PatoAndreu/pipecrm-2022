@@ -1,36 +1,22 @@
-import { IContact } from "~/interfaces/IContacts"
-import { ICompany } from "~/interfaces/ICompany"
-import { IUser } from "~/interfaces/IUsers"
+import { IContact } from "@/interfaces/IContacts"
+import { ICompany } from "@/interfaces/ICompany"
+import { IUser } from "@/interfaces/IUsers"
+import { IPipeline, IPipelineStage } from "@/interfaces/IPipelines"
 
-interface Pipeline {
-  readonly id: number
-  name?: string
-  order?: number
-  pipelineStage: PipelineStage
-  pipelineStages: PipelineStage[]
-}
-
-interface PipelineStage {
-  readonly id: number
-  name?: string
-  order?: number
-  probabilityOfClose?: string
-  pipelineId?: number
-  deals?: IDeal[] | null
-}
 
 export interface IDeal {
   readonly id: number
   name: string
-  amount: number
-  priority: string
-  order: number
+  amount?: number
+  priority?: string
+  type?: string
+  order?: number
   closeDate: string
   contact: IContact
   company: ICompany
   owner: IUser
-  pipeline: Pipeline
-  pipelineStage?: PipelineStage
+  pipeline: IPipeline
+  pipelineStage?: IPipelineStage
   createdAt: string
   updatedAt: string
 }
@@ -39,5 +25,5 @@ export interface IDealStore {
   deal: IDeal
   deals: IDeal[]
   tabSelected: string
-  pipeline: Pipeline
+  pipeline: IPipeline
 }

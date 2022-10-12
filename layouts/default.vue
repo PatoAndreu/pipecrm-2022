@@ -3,6 +3,11 @@
   import TaskModal from '@/components/Tasks/TaskModal.vue'
   import NoteModal from '@/components/Notes/NoteModal.vue'
   import MeetingModal from '@/components/Meetings/MeetingModal.vue'
+
+  const { showNoteModal } = useNotes()
+  const { showTaskModal } = useTasks()
+  const { showMeetingModal } = useMeetings()
+  const { deleteModalOpen } = useUi()
 </script>
 
 <template>
@@ -11,10 +16,10 @@
     <div id="main-content">
       <slot />
     </div>
-    <NoteModal />
-    <TaskModal />
-    <MeetingModal />
-    <DeleteModal />
+    <NoteModal v-if="showNoteModal" />
+    <TaskModal v-if="showTaskModal" />
+    <MeetingModal v-if="showMeetingModal" />
+    <DeleteModal v-if="deleteModalOpen" />
   </div>
 </template>
 
@@ -22,6 +27,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,600&display=swap');
   body {
     font-family: 'Nunito', sans-serif;
+    color: #33475b;
   }
 </style>
 <style scoped>

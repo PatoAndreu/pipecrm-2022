@@ -81,19 +81,17 @@
       </div>
     </div>
     <!-- Board  -->
-    <div
-      class="ml-10 mr-10 mt-2 overflow-auto"
-      style="height: calc(((((100vh - 54px) - 20px) - 35px) - 20px) - 20px)">
-      <main class="flex h-full">
+    <div class="ml-10 mr-10 mt-2 overflow-auto">
+      <main class="z-0 flex">
         <div class="border" v-for="stage in pipeline.pipelineStages" :key="stage.id">
           <div
             class="flex w-72 flex-col justify-between"
-            style="height: calc(((((100vh - 54px) - 20px) - 35px) - 20px) - 20px); color: #33475b">
+            style="height: calc(100vh - 145px); color: #33475b">
             <header class="flex h-10 w-72 items-center justify-between border-y p-6 text-sm">
               <div>{{ stage.name }}</div>
               <div>({{ stage.deals.length }})</div>
             </header>
-            <main class="flex-grow overflow-auto bg-slate-100 py-2 text-white">
+            <main class="flex-grow overflow-y-scroll bg-slate-100 py-2 text-white">
               <Draggable
                 group="deals"
                 v-model="stage.deals"

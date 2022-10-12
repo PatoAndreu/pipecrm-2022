@@ -29,6 +29,14 @@ export const useDealsStore = defineStore("deals", {
         console.error(error);
       }
     },
+    async getDeal(id: number): Promise<void> {
+      try {
+        const { data } = await $fetch(`http://pipecrm-api.test/api/deals/${id}`);
+        this.deal = data
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async addDeal(deal: IDeal): Promise<void> {
       try {
         return await $fetch(`http://pipecrm-api.test/api/deals`,
