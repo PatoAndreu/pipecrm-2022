@@ -15,5 +15,13 @@ export const usePipelinesStore = defineStore("pipelines", {
         console.error(error);
       }
     },
+    async getPipelinesStages(pipeline: number): Promise<void> {
+      try {
+        const { data } = await $fetch(`http://pipecrm-api.test/api/pipelines/${pipeline}`);
+        this.pipeline = data
+      } catch (error) {
+        console.error(error);
+      }
+    },
   }
 });

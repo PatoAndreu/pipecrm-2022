@@ -15,6 +15,7 @@
     disabled: boolean
     modelValue?: object | string
     top?: boolean
+    allowNull?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +24,8 @@
     options: null,
     disabled: false,
     modelValue: null,
-    top: true
+    top: true,
+    allowNull: false
   })
 
   onMounted(async () => {
@@ -122,7 +124,7 @@
         <div class="mt-2 max-h-60 overflow-y-scroll">
           <div
             class="h-10 cursor-pointer p-2 pl-4 hover:bg-cyan-50"
-            v-if="!searchInput"
+            v-if="!searchInput && !allowNull"
             @click="setOption(null)">
             (Sin valor)
           </div>

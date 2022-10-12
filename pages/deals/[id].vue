@@ -51,44 +51,7 @@
         </header>
         <main class="mt-6 text-sm font-normal">
           <DealInfo />
-          <div class="text-xl">{{ deal.name }}</div>
-          <div class="pt-2">
-            <span>Valor: </span>
-            <span class="font-semibold">$ {{ formatter.format(deal.amount) }}</span>
-          </div>
-          <div>
-            <span>Fecha de cierre: </span>
-            <span class="font-semibold">{{ $dayjs(deal.closeDate).format('D/M/YYYY') }}</span>
-          </div>
-          <div>
-            <span>Etapa: </span>
-            <span class="font-semibold">{{ deal.pipelineStage.name }}</span>
-          </div>
         </main>
-      </div>
-      <hr />
-      <div class="p-4 text-sm font-light">
-        <h3 class="font-bold text-[#007a8c]">Acerca de este negocio</h3>
-        <div class="pt-4">
-          <span class="text-xs text-[#516f90]">Propietario del negocio</span>
-          <div class="pt-1 font-medium">{{ deal.owner.firstName }} {{ deal.owner.lastName }}</div>
-        </div>
-
-        <div class="pt-4">
-          <span class="text-xs text-[#516f90]">Tipo de negocio</span>
-          <div class="pt-1 font-medium">
-            {{ deal.type === 'new customer' ? 'Cliente nuevo' : 'Cliente existente' }}
-          </div>
-        </div>
-        <div class="pt-4">
-          <span class="text-xs text-[#516f90]">Prioridad</span>
-          <div class="flex items-center justify-start space-x-1 pt-2 font-medium">
-            <span class="h-2 w-2 rounded-full" :class="getPriorityClass(deal.priority)"></span>
-            <span class="capitalize text-gray-800">
-              {{ translatePriority(deal.priority) }}
-            </span>
-          </div>
-        </div>
       </div>
     </div>
 

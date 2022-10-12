@@ -5,12 +5,15 @@ export default function usePipelines() {
 
   const pipelinesStore = usePipelinesStore();
 
-  const { pipelines } = storeToRefs(pipelinesStore);
+  const { pipeline, pipelines } = storeToRefs(pipelinesStore);
 
   const getPipelines = () => pipelinesStore.getPipelines();
+  const getPipelinesStages = (pipeline: number) => pipelinesStore.getPipelinesStages(pipeline);
 
   return {
+    pipeline,
     pipelines,
     getPipelines,
+    getPipelinesStages
   }
 }

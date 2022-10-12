@@ -22,6 +22,7 @@
     "@vueuse/core": "^9.2.0",
     "dayjs": "^1.11.5",
     "floating-vue": "^2.0.0-beta.20",
+    "nuxi": "^3.0.0-rc.11",
     "vuedraggable": "^4.1.0"
   },
   "web-types": "./web-types.json"
