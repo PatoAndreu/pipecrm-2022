@@ -6,15 +6,16 @@
   let searchInput = ref('')
   let showSelectBox = ref(false)
 
-  const emit = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue', 'change'])
 
   interface Props {
     field?: string
     type?: string
     options: []
     disabled: boolean
-    modelValue?: object | string
+    modelValue?: object | string | null
     top?: boolean
+    allowNull?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +24,8 @@
     options: null,
     disabled: false,
     modelValue: null,
-    top: true
+    top: true,
+    allowNull: true
   })
 
   onMounted(async () => {
@@ -34,7 +36,7 @@
     }
     document.addEventListener('keydown', handleEscape)
 
-    if (props.modelValue) {
+    if (props.modelValue.id) {
       selectedOption.value = props.modelValue
     }
   })
@@ -43,11 +45,17 @@
     if (props.modelValue) {
       selectedOption.value = props.modelValue
     }
+
+    if (!props.modelValue.id && !props.allowNull) {
+      selectedOption.value = { ...props.options[0] }
+    }
+    // console.log(selectedOption.value)
   })
 
   const setOption = (option) => {
     selectedOption.value = option ? { ...option } : null
-    emit('update:modelValue', option ? option : null)
+    emits('update:modelValue', option ? option : null)
+    emits('change', option ? option : null)
     showSelectBox.value = false
     searchInput.value = ''
   }
@@ -74,10 +82,12 @@
   })
 
   const getClass = (option) => {
+    console.log(selectedOption.value.id)
+
     if (props.type === 'array') {
-      return selectedOption?.value?.toLowerCase() === option.toLowerCase() ? 'bg-cyan-50' : ''
+      return selectedOption.value?.toLowerCase() === option.toLowerCase() ? 'bg-cyan-50' : ''
     }
-    return selectedOption.value?.id === option.id ? 'bg-cyan-50' : ''
+    return selectedOption.value.id === option.id ? 'bg-cyan-50' : ''
   }
 </script>
 <template>
@@ -122,7 +132,7 @@
         <div class="mt-2 max-h-60 overflow-y-scroll">
           <div
             class="h-10 cursor-pointer p-2 pl-4 hover:bg-cyan-50"
-            v-if="!searchInput"
+            v-if="!searchInput && allowNull"
             @click="setOption(null)">
             (Sin valor)
           </div>

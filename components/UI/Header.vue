@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { useUIStore } from "~~/stores/uiStore"
-import { SearchIcon } from "@heroicons/vue/outline"
-import { ILink } from "@/interfaces/IUi"
+  import { useUIStore } from '~~/stores/uiStore'
+  import { SearchIcon } from '@heroicons/vue/outline'
+  import { ILink } from '@/interfaces/IUi'
 
-const uiStore = useUIStore()
+  const uiStore = useUIStore()
 
-const menu: ILink[] = [
-  {
-    name: "Contactos",
-    url: "/contacts"
-  },
-  {
-    name: "Login",
-    url: "/login"
-  },
-  {
-    name: "Contact",
-    url: "/"
-  }
-]
+  const menu: ILink[] = [
+    {
+      name: 'Contactos',
+      url: '/contacts'
+    },
+    {
+      name: 'Login',
+      url: '/login'
+    },
+    {
+      name: 'Contact',
+      url: '/'
+    }
+  ]
 </script>
 
 <template>
@@ -33,6 +33,7 @@ const menu: ILink[] = [
               <img src="/img/logo-solo.png" class="h-6 px-4" alt="PipeCrm" />
             </NuxtLink>
             <UIDropdownMenu name="Contactos" :links="menu" />
+            <UIDropdownMenu name="Ventas" :links="[{ name: 'Negocios', url: '/deals' }]" />
             <UIDropdownMenu name="Informes" :links="menu" />
           </div>
         </div>

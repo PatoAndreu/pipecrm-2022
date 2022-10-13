@@ -1,35 +1,46 @@
-<script lang="ts" setup>
-  import { ChevronDownIcon, ChevronRightIcon, PencilAltIcon } from '@heroicons/vue/outline'
-  import useContacts from '@/composables/useContacts'
-  import { ref } from '#imports'
+<script setup lang="ts">
+  import useDeals from '@/composables/useDeals'
+  import usePipelines from '@/composables/usePipelines'
+  import { ChevronRightIcon, ChevronDownIcon, PencilAltIcon } from '@heroicons/vue/outline'
 
-  const {
-    contact,
-    contactStatus,
-    contactLifeCycleStage,
-    getContact,
-    updateContact,
-    getContactStatus,
-    getContactStages
-  } = useContacts()
+  const { getDeal, deal, formatter, getPriorityClass, translatePriority, updateDeal } = useDeals()
+  const { getPipelines, pipelines, getPipelinesStages, pipeline } = usePipelines()
+  const route = useRoute()
 
-  const contactLocal = ref({ ...contact.value })
+  await getDeal(Number(route.params.id))
+  await getPipelines()
+  const dealLocal = ref({ ...deal.value })
   const isEditing = ref(false)
   const pending = ref(false)
-  const showContactInfo = ref(true)
+  const showDealInfo = ref(true)
 
-  await getContactStatus()
-  await getContactStages()
+  const filteredPipelineStages = computed(() => {
+    const pipeline = pipelines?.value?.find(
+      (pipeline) => pipeline.id == dealLocal.value.pipeline.id
+    )
+    return pipeline?.pipelineStages
+  })
 
-  const cancelEdit = () => {
-    contactLocal.value = { ...contact.value }
+  const setPipelineStage = (e) => {
+    if (e.id !== dealLocal.value.pipelineStage.id) {
+      dealLocal.value.pipelineStage = { id: null, name: null }
+    }
+  }
+
+  const editForm = () => {
+    showDealInfo.value = true
+    isEditing.value = true
+  }
+
+  const cancelEdit = async () => {
+    dealLocal.value = { ...deal.value }
     isEditing.value = false
   }
 
-  const updateContactInfo = async () => {
+  const updateDealInfo = async () => {
     pending.value = true
 
-    const res = await updateContact(contactLocal.value)
+    const res = await updateDeal(dealLocal.value)
 
     const {
       data: { errors },
@@ -39,84 +50,89 @@
     if (status === 200) {
       isEditing.value = false
       pending.value = false
-      await getContact(contact.value.id)
+      await getDeal(Number(route.params.id))
     }
   }
 </script>
 
 <template>
-  <div v-auto-animate class="h-auto rounded border bg-white px-3 py-2">
+  <div v-auto-animate class="h-auto rounded bg-white px-3 py-2" v-if="deal">
     <div class="flex items-center justify-between py-2">
       <!--    Header    -->
       <button
         class="flex items-center text-cyan-700 hover:text-cyan-500"
-        @click="showContactInfo = !showContactInfo">
-        <ChevronRightIcon v-if="!showContactInfo" class="mr-1 h-5" />
+        @click="showDealInfo = !showDealInfo">
+        <ChevronRightIcon v-if="!showDealInfo" class="mr-1 h-5" />
         <ChevronDownIcon v-else class="mr-1 h-5" />
         <div class="text-xs font-semibold">INFORMACIÓN</div>
       </button>
       <PencilAltIcon
-        v-if="showContactInfo && !isEditing && contact"
+        v-if="showDealInfo && !isEditing && deal"
         class="h-5 cursor-pointer text-cyan-600 hover:text-cyan-500"
         @click="isEditing = true" />
     </div>
     <div v-auto-animate>
-      <div v-if="showContactInfo" v-auto-animate class="mt-3">
+      <div v-if="showDealInfo" v-auto-animate class="mt-3">
         <hr />
         <!-- Formulario-->
-        <form v-auto-animate class="py-4 text-sm" @submit.prevent="updateContactInfo">
+        <form v-auto-animate class="py-4 text-sm" @submit.prevent="updateDealInfo">
           <div v-auto-animate class="mb-4 h-12 items-center">
             <div class="text-xs text-cyan-700">Nombre</div>
-            <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.firstName }}</div>
+            <div v-if="!isEditing" class="pt-2 text-slate-600">{{ dealLocal.name }}</div>
             <input
               v-else
-              v-model="contactLocal.firstName"
+              v-model="dealLocal.name"
               class="mt-1 h-8 w-full rounded-sm border border-slate-200 bg-slate-100 pl-2"
               type="text" />
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-cyan-700">Apellidos</div>
-            <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.lastName }}</div>
+            <div class="text-xs text-cyan-700">Valor</div>
+            <div v-if="!isEditing" class="pt-2 text-slate-600">{{ dealLocal.amount }}</div>
             <input
               v-else
-              v-model="contactLocal.lastName"
+              v-model="dealLocal.amount"
               class="mt-1 h-8 w-full rounded-sm border border-slate-200 bg-slate-100 pl-2"
               type="text" />
           </div>
 
           <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-cyan-700">Email</div>
-            <div v-if="!isEditing" class="pt-2 text-slate-600">{{ contactLocal.email }}</div>
-            <input
-              v-else
-              v-model="contactLocal.email"
-              class="mt-1 h-8 w-full rounded-sm border border-slate-200 bg-slate-100 pl-2"
-              type="text" />
-          </div>
-
-          <div v-auto-animate class="mb-4 h-12 items-center">
-            <div class="text-xs text-cyan-700">Etapa del ciclo de vida</div>
+            <div class="text-xs text-cyan-700">Fecha de cierre</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">
-              {{ contactLocal.contactLifeCycleStage?.name }}
+              {{ $dayjs(dealLocal.closeDate).format('D/M/YYYY') }}
+            </div>
+            <input
+              v-else
+              v-model="dealLocal.closeDate"
+              class="mt-1 h-8 w-full rounded-sm border border-slate-200 bg-slate-100 pl-2"
+              type="date" />
+          </div>
+
+          <div v-auto-animate :class="{ 'pt-2': isEditing }" class="mb-4 h-12 items-center">
+            <div class="text-xs text-cyan-700">Pipeline</div>
+            <div v-if="!isEditing" class="pt-2 text-slate-600">
+              {{ dealLocal.pipeline.name }}
             </div>
             <UISelectBox
               v-else
-              v-model:modelValue="contactLocal.contactLifeCycleStage"
-              :options="contactLifeCycleStage"
+              v-model:modelValue="dealLocal.pipeline"
+              :options="pipelines"
+              :allowNull="false"
+              @change="setPipelineStage"
               class="mt-2">
             </UISelectBox>
           </div>
 
-          <div v-auto-animate :class="isEditing ? 'pt-2' : ''" class="h-12 items-center">
-            <div class="text-xs text-cyan-700">Estado del lead</div>
+          <div v-auto-animate :class="{ 'pt-6': isEditing }" class="mb-4 h-12 items-center">
+            <div class="text-xs text-cyan-700">Etapa</div>
             <div v-if="!isEditing" class="pt-2 text-slate-600">
-              {{ contactLocal.contactStatus?.name }}
+              {{ dealLocal.pipelineStage.name }}
             </div>
             <UISelectBox
               v-else
-              v-model:modelValue="contactLocal.contactStatus"
-              :options="contactStatus"
+              v-model:modelValue="dealLocal.pipelineStage"
+              :options="filteredPipelineStages"
+              :allowNull="false"
               class="mt-2">
             </UISelectBox>
           </div>
@@ -136,7 +152,7 @@
               :disabled="pending"
               class="inline-flex items-center rounded bg-indigo-600 px-4 py-2 text-sm font-semibold leading-6 text-white shadow transition duration-150 ease-in-out hover:shadow-lg"
               type="submit"
-              @click="updateContactInfo">
+              @click="updateDealInfo">
               <svg
                 v-show="pending"
                 class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"

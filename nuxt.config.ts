@@ -18,10 +18,14 @@ export default defineNuxtConfig({
   },
   css: ["@/assets/css/main.css"],
   modules: [
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    '@nuxtjs/tailwindcss'
   ],
   plugins: [
     "@/plugins/dayjs.ts"
-  ]
+  ],
+  buildModules: [
+    'floating-vue/nuxt',
+  ],
 
 });
