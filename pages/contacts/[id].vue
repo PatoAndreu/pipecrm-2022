@@ -33,7 +33,7 @@
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-10">
+  <div class="mx-auto md:px-10 lg:container">
     <!--  Header  -->
     <Header />
 

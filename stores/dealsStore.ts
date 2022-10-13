@@ -31,6 +31,7 @@ export const useDealsStore = defineStore("deals", {
     },
     async getDeal(id: number): Promise<void> {
       try {
+        await new Promise(r => setTimeout(r, 300));
         const { data } = await $fetch(`http://pipecrm-api.test/api/deals/${id}`);
         this.deal = data
       } catch (error) {

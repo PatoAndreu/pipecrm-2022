@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import useDeals from '@/composables/useDeals'
   import {
     ChevronLeftIcon,
     ChevronDownIcon,
@@ -8,12 +7,6 @@
   } from '@heroicons/vue/outline'
 
   import DealInfo from '@/components/Deals/id/DealInfo.vue'
-
-  const { getDeal, deal, formatter, getPriorityClass, translatePriority } = useDeals()
-
-  const route = useRoute()
-
-  await getDeal(Number(route.params.id))
 </script>
 <template>
   <div class="flex justify-between" style="height: calc(100vh - 60px)">
@@ -49,8 +42,12 @@
             </VDropdown>
           </div>
         </header>
-        <main class="mt-6 text-sm font-normal">
-          <DealInfo />
+        <hr />
+        <main class="text-sm font-normal">
+          <Suspense timeout="0">
+            <DealInfo />
+            <template #fallback> <UILoading /> </template>
+          </Suspense>
         </main>
       </div>
     </div>

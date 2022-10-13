@@ -2,24 +2,17 @@
   import useDeals from '@/composables/useDeals'
   import usePipelines from '@/composables/usePipelines'
   import { ChevronRightIcon, ChevronDownIcon, PencilAltIcon } from '@heroicons/vue/outline'
-  import { log } from 'console'
 
   const { getDeal, deal, formatter, getPriorityClass, translatePriority, updateDeal } = useDeals()
   const { getPipelines, pipelines, getPipelinesStages, pipeline } = usePipelines()
   const route = useRoute()
 
+  await getDeal(Number(route.params.id))
+  await getPipelines()
   const dealLocal = ref({ ...deal.value })
   const isEditing = ref(false)
   const pending = ref(false)
   const showDealInfo = ref(true)
-  const stages = ref([])
-
-  onMounted(async () => {
-    await getDeal(Number(route.params.id))
-    await getPipelines()
-    // await getPipelinesStages(Number(dealLocal.value.pipeline.id))
-    stages.value = pipelines?.value.filter((pipeline) => pipeline.id == dealLocal.value.pipeline.id)
-  })
 
   const filteredPipelineStages = computed(() => {
     const pipeline = pipelines?.value?.find(
@@ -28,27 +21,20 @@
     return pipeline?.pipelineStages
   })
 
-  watch(
-    () => dealLocal.value.pipeline,
-    (newQuestion, oldQuestion) => {
-      if (newQuestion.id !== oldQuestion.id) {
-        dealLocal.value.pipelineStage = {}
-      }
-    },
-    { deep: true }
-  )
+  const setPipelineStage = (e) => {
+    if (e.id !== dealLocal.value.pipelineStage.id) {
+      dealLocal.value.pipelineStage = { id: null, name: null }
+    }
+  }
 
   const editForm = () => {
     showDealInfo.value = true
     isEditing.value = true
-    console.log(filteredPipelineStages.value)
   }
 
-  const cancelEdit = () => {
+  const cancelEdit = async () => {
     dealLocal.value = { ...deal.value }
     isEditing.value = false
-    console.log(deal.value.pipelineStage)
-    console.log(dealLocal.value.pipelineStage)
   }
 
   const updateDealInfo = async () => {
@@ -70,10 +56,12 @@
 </script>
 
 <template>
-  <div v-auto-animate class="h-auto rounded bg-white px-3 py-2">
+  <div v-auto-animate class="h-auto rounded bg-white px-3 py-2" v-if="deal">
     <div class="flex items-center justify-between py-2">
       <!--    Header    -->
-      <button class="flex items-center text-cyan-700 hover:text-cyan-500" @click="editForm">
+      <button
+        class="flex items-center text-cyan-700 hover:text-cyan-500"
+        @click="showDealInfo = !showDealInfo">
         <ChevronRightIcon v-if="!showDealInfo" class="mr-1 h-5" />
         <ChevronDownIcon v-else class="mr-1 h-5" />
         <div class="text-xs font-semibold">INFORMACIÓN</div>
@@ -129,12 +117,11 @@
               v-else
               v-model:modelValue="dealLocal.pipeline"
               :options="pipelines"
-              :allowNull="true"
+              :allowNull="false"
+              @change="setPipelineStage"
               class="mt-2">
             </UISelectBox>
           </div>
-
-          <!-- <pre>{{ dealLocal }}</pre> -->
 
           <div v-auto-animate :class="{ 'pt-6': isEditing }" class="mb-4 h-12 items-center">
             <div class="text-xs text-cyan-700">Etapa</div>
@@ -145,6 +132,7 @@
               v-else
               v-model:modelValue="dealLocal.pipelineStage"
               :options="filteredPipelineStages"
+              :allowNull="false"
               class="mt-2">
             </UISelectBox>
           </div>
@@ -189,6 +177,5 @@
         </form>
       </div>
     </div>
-    <pre>{{ dealLocal.pipelineStage }}</pre>
   </div>
 </template>
